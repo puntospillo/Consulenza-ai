@@ -97,6 +97,12 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 
 **Sync automatico Consulenza→Intervento**: in `Rle` (tabella ore progetto), la funzione `syncInt(entry, project)` crea/aggiorna/rimuove un Intervento collegato (campo `entry.linkedInterventoId`) ogni volta che una time-entry ha `billingStatus==='contratto'` e `contractId` impostato, così le ore scalano davvero il contratto (tramite la stessa logica di `KI`/`JI` usata in Assistenza). Richiede che `appState`/`setAppState` (lo stato globale e il suo setter da `jle`) siano passati come prop fino a `Rle`, attraverso `Ple`. Se la time-entry non ha un tecnico assegnato, **alla prima sincronizzazione** chiede il nome con `prompt()` (solo una volta: i sync successivi su una entry già collegata non richiedono più input).
 
+**IMPORTANTE — niente doppio conteggio**: `KI()` calcola il consumo di un contratto **solo** dai record in `e.interventi` (incluso il tipo `consulenza`, popolato dal sync sopra). NON deve più leggere direttamente `qI()` (le time-entries Consulenza) per evitare di contare due volte le stesse ore — è già successo una volta (bug corretto il 19/06/2026). `qI()` esiste ancora come funzione ma non va più usato per il calcolo di `KI`.
+
+**Backfill storico**: in `Tle` (Import & Impostazioni) c'è un bottone "Sincronizza ore Consulenza su contratti" che crea retroattivamente gli Interventi collegati per le time-entries `billingStatus==='contratto'` già esistenti ma senza `linkedInterventoId` (caso tipico: dati registrati prima che il sync automatico esistesse).
+
+**`qle` (modal Registra/Modifica ore Consulenza)**: ora supporta sia creazione che modifica tramite il prop opzionale `initial` (se presente, precompila i campi, mostra "Modifica voce ore" come titolo, e preserva `id`/`linkedInterventoId` al salvataggio). In `Rle` l'editing delle righe non è più inline: la matita apre `qle` in modalità edit; solo Ore/Tariffa/Stato restano modificabili al volo direttamente nella tabella.
+
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
 ## Attenzione
