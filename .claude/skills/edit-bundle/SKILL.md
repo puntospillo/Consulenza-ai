@@ -103,6 +103,14 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 
 **`qle` (modal Registra/Modifica ore Consulenza)**: ora supporta sia creazione che modifica tramite il prop opzionale `initial` (se presente, precompila i campi, mostra "Modifica voce ore" come titolo, e preserva `id`/`linkedInterventoId` al salvataggio). In `Rle` l'editing delle righe non è più inline: la matita apre `qle` in modalità edit; solo Ore/Tariffa/Stato restano modificabili al volo direttamente nella tabella.
 
+**Convenzioni Assistenza consolidate (19-20/06/2026):**
+- **Ordinamento interventi**: ovunque si elenchino interventi singoli (mle, ple, vL/Ele) si ordina per **data di inserimento** (`createdAt`) decrescente, NON per data intervento. Pattern: `.sort((e,t)=>(t.createdAt??\`\`).localeCompare(e.createdAt??\`\`))`.
+- **Costo/Ricavi/Margine/Margine%**: ovunque si mostra il costo di un intervento (`ZI(intervento,tecnici)`) si mostra anche il ricavo figurativo (`uL(intervento,contratti)`), il margine (`ricavi-costo`) e la margine% (`ricavi>0?margine/ricavi*100:0`). Componenti coinvolti: `mle` (lista interventi), `ble` (Report Assistenza: cards in alto, riepilogo per cliente, righe tabella), `xle` (Statistiche Assistenza: cards in alto e tabelle per categoria via `h()`), `_le` (Fornitori, via `QI()` estesa con ticket/ricavi), `Ele` (Fatture Fornitori).
+- **`uL(intervento,contratti)`** ha sempre un `return 0` finale esplicito per il caso `gratuito` — NON rimuoverlo, altrimenti torna `undefined` e qualsiasi somma con `+=` diventa `NaN` (bug reale corretto il 19/06/2026).
+- **N° Ticket vicino al N° intervento**: quando una tabella elenca interventi singoli e non ha già una colonna Ticket, va aggiunta subito dopo la colonna N°.
+- **Attenzione ai colSpan**: ogni volta che si aggiunge una colonna a una tabella, va aggiornato anche il `colSpan` della riga "nessun risultato" — è facile sbagliare il conteggio (succedeva il 20/06/2026 sia in `_le` che in `Ele`).
+- **`F9(state)`** è l'hook condiviso di filtro Interventi usato da `ble` e `xle`: include già client/tecnico/fornitore/tipo/modalità/stato/fatturazione/periodo. Se manca un filtro "per tipo" in un report Assistenza, controllare prima se è già incluso qui (probabilmente sì) prima di aggiungerlo di nuovo.
+
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
 ## Attenzione
