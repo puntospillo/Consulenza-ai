@@ -95,6 +95,8 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 
 **Regola di business "interventi da assegnare"** (vedi anche memoria `consulenza-ai-interventi-da-assegnare`): SEMPRE `stato==='da_assegnare'` OPPURE `!tecnicoId` (nessun tecnico assegnato), non solo lo stato. Variabile `daAss` in `mle` implementa questa unione.
 
+**Sync automatico Consulenza→Intervento**: in `Rle` (tabella ore progetto), la funzione `syncInt(entry, project)` crea/aggiorna/rimuove un Intervento collegato (campo `entry.linkedInterventoId`) ogni volta che una time-entry ha `billingStatus==='contratto'` e `contractId` impostato, così le ore scalano davvero il contratto (tramite la stessa logica di `KI`/`JI` usata in Assistenza). Richiede che `appState`/`setAppState` (lo stato globale e il suo setter da `jle`) siano passati come prop fino a `Rle`, attraverso `Ple`. Se la time-entry non ha un tecnico assegnato, **alla prima sincronizzazione** chiede il nome con `prompt()` (solo una volta: i sync successivi su una entry già collegata non richiedono più input).
+
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
 ## Attenzione
