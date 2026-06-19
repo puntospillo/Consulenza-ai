@@ -90,6 +90,10 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 - `Hle` = Report Consulenza (tabulati, con export CSV)
 - `Ple` = vista dettaglio Progetto Consulenza
 - `Rle` = tabella ore/time-entries dentro un Progetto
+- `mle` = vista Interventi (Assistenza, lista/tabella + filtri)
+- `cle` = form Nuovo/Modifica Intervento (modal aperto da `mle`)
+
+**Regola di business "interventi da assegnare"** (vedi anche memoria `consulenza-ai-interventi-da-assegnare`): SEMPRE `stato==='da_assegnare'` OPPURE `!tecnicoId` (nessun tecnico assegnato), non solo lo stato. Variabile `daAss` in `mle` implementa questa unione.
 
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
