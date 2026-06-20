@@ -92,6 +92,7 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 - `Rle` = tabella ore/time-entries dentro un Progetto
 - `mle` = vista Interventi (Assistenza, lista/tabella + filtri)
 - `cle` = form Nuovo/Modifica Intervento (modal aperto da `mle`)
+- `Zle` = vista Progetti (Consulenza, pagina full-size con la stessa logica di raggruppamento cliente→gruppo→progetto che prima viveva solo nella sidebar; rimossa dalla sidebar il 20/06/2026, ora è una voce di menu propria subito sotto Dashboard)
 
 **Regola di business "interventi da assegnare"** (vedi anche memoria `consulenza-ai-interventi-da-assegnare`): SEMPRE `stato==='da_assegnare'` OPPURE `!tecnicoId` (nessun tecnico assegnato), non solo lo stato. Variabile `daAss` in `mle` implementa questa unione.
 
