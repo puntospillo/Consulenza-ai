@@ -92,7 +92,8 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 - `Rle` = tabella ore/time-entries dentro un Progetto
 - `mle` = vista Interventi (Assistenza, lista/tabella + filtri)
 - `cle` = form Nuovo/Modifica Intervento (modal aperto da `mle`)
-- `Zle` = vista Progetti (Consulenza, pagina full-size con la stessa logica di raggruppamento cliente→gruppo→progetto che prima viveva solo nella sidebar; rimossa dalla sidebar il 20/06/2026, ora è una voce di menu propria subito sotto Dashboard)
+- `Zle` = vista Progetti (Consulenza, pagina full-size con la stessa logica di raggruppamento cliente→gruppo→progetto che prima viveva solo nella sidebar; rimossa dalla sidebar il 20/06/2026, ora è una voce di menu propria subito sotto Dashboard). Ha filtri cliente/gruppo/progetto; i gruppi sono evidenziati con riga verde e badge "N da fare" se contengono progetti con todos aperti (somma di `HI(progetto).openTodos`).
+- `WI(ore)` = converte ore in ticket (`Math.round(ore*4)`). Da mostrare sempre accanto a qualunque cifra di ore-da-contratto (residue/usate/contrattate) in Contratti (`D9`, card KPI in `ple`) e nel form Intervento (`cle`).
 
 **Regola di business "interventi da assegnare"** (vedi anche memoria `consulenza-ai-interventi-da-assegnare`): SEMPRE `stato==='da_assegnare'` OPPURE `!tecnicoId` (nessun tecnico assegnato), non solo lo stato. Variabile `daAss` in `mle` implementa questa unione.
 
