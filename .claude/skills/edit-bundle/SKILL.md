@@ -111,6 +111,10 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 - **Attenzione ai colSpan**: ogni volta che si aggiunge una colonna a una tabella, va aggiornato anche il `colSpan` della riga "nessun risultato" — è facile sbagliare il conteggio (succedeva il 20/06/2026 sia in `_le` che in `Ele`).
 - **`F9(state)`** è l'hook condiviso di filtro Interventi usato da `ble` e `xle`: include già client/tecnico/fornitore/tipo/modalità/stato/fatturazione/periodo. Se manca un filtro "per tipo" in un report Assistenza, controllare prima se è già incluso qui (probabilmente sì) prima di aggiungerlo di nuovo.
 
+**ATTENZIONE — due cose diverse si chiamano "ticket", non confonderle (chiarito il 20/06/2026):**
+- **`t.numeroTicket`** = il numero ticket dell'helpdesk inserito manualmente sull'intervento (campo testo libero). È QUESTO il campo "Ticket" che va sempre mostrato di fianco al N° intervento in ogni vista, ed è già incluso nella ricerca testuale di `mle`.
+- **`lL(intervento)`** = ticket CALCOLATI dal consumo ore (1 ora tecnica onsite/remoto → N ticket, è una metrica derivata, non un campo dati). Quando si mostra questo valore (somme aggregate di "ticket consumati" in Statistiche/Report/Fornitori), l'etichetta deve essere **"Ticket cons."**, mai solo "Ticket" — altrimenti si confonde con `numeroTicket`. Errore reale fatto e poi corretto il 20/06/2026 in `_le`, `xle`, `ble`, `mle` (card riepilogo).
+
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
 ## Attenzione
