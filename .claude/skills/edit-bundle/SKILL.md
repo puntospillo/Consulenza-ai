@@ -126,6 +126,28 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
+## ATTENZIONE CRITICA — il CSS è pre-compilato, non generato al volo
+
+Il CSS di Tailwind è in un `<style rel="stylesheet" crossorigin>` (dopo il `<script>` principale, non prima) ed è stato **compilato una volta in fase di build**, includendo solo le classi usate nel codice sorgente originale. **Non c'è nessun motore Tailwind a runtime nel browser**: se nel JSX scrivo una classe che non esisteva già da qualche parte nel bundle originale, quella classe non avrà NESSUNA regola CSS — l'elemento risulta invisibile/non stilizzato, senza alcun errore in console (bug successo realmente il 20-21/06/2026 con `bg-violet-600`/`hover:bg-violet-700` sul bottone "Guida": sfondo trasparente, testo bianco invisibile).
+
+**Prima di usare una classe Tailwind "nuova" (colore, opacità frazionaria, valore arbitrario `[...]`, ecc.), verificarne l'esistenza nel CSS compilato:**
+```bash
+python3 -c "
+data=open('index.html',encoding='utf-8').read()
+i=data.find('<style rel=\"stylesheet\"');s=data.find('>',i)+1;e=data.find('</style>',s)
+open('/tmp/realapp.css','w').write(data[s:e])
+"
+grep -oE '\.NOME-CLASSE-ESCAPED\{[^}]*\}' /tmp/realapp.css
+```
+(NB: NON usare il tag `<style:...>` di LibreOffice/OpenDocument che appare altrove nel file per i template di stampa — è XML estraneo dentro stringhe JS, non il CSS dell'app.)
+
+**Conseguenze pratiche:**
+- Sfondi pieni "-600/-700" sicuramente compilati e verificati: `blue`, `emerald`, `rose`, `indigo` (solo `-600`, niente hover `-700` per indigo). `violet`/`amber`/`teal`/`purple`/`pink`/`cyan`/`orange` ecc. esistono solo come testo o sfondi chiari (-50/-100), **non** come sfondo pieno per bottoni.
+- z-index disponibili: solo `z-10`, `z-40`, `z-50` (niente valori arbitrari `z-[60]` ecc.). I modali (`X9`, `b9`) sono tutti `z-50`: un elemento fixed che deve restare sopra un modale aperto deve essere anch'esso `z-50` **e** renderizzato più in basso nell'albero JSX (l'ordine nel DOM decide chi vince a parità di z-index).
+- `whitespace-pre-line` e `leading-relaxed` NON esistono; usare `whitespace-pre-wrap` e `leading-snug` per testo multi-riga.
+- `bg-white/25`, `bg-white/20`, `bg-white/30` non esistono; `bg-white/70` sì.
+- Quando in dubbio, riusare una combinazione di classi già presente altrove nel bundle (copiare da un bottone esistente) invece di comporne una nuova a mano.
+
 ## Attenzione
 
 - I parametri a singola lettera vengono **shadowati** di continuo in closure annidate (es. `e`, `t`, `n`, `r` cambiano significato dentro ogni `.map()`/`.reduce()` annidato). Prima di riusare una variabile "esterna" dentro una closure profonda, verifica che non sia già stata ridichiarata con `let`/destructuring nello stesso scope — altrimenti referenzi il valore sbagliato.
