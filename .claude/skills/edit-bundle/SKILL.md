@@ -72,6 +72,8 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 - `n` / `r` = pagina attiva lato Consulenza (`dashboard`, `clients`, `tecnici`, `stats`, `report`, `registers`, `sync`)
 - `c` / `l` = pagina attiva lato Assistenza (`a_dashboard`, `a_anagrafica`, `a_contracts`, `a_interventi`, `a_tecnici`, `a_fornitori`, `a_fatture`, `a_report`, `a_stats`, `a_import`)
 
+**Regola margine Consulenza (fissata il 20/06/2026)**: SOLO in Consulenza, `margine = imponibile - (costo tecnico + spese)`. `HI(progetto, tecnici=[])` ora accetta un secondo parametro tecnici e sottrae `cL(progetto,tecnici)` dal margine in tutti e 3 i rami (internal/fixed/hourly); espone anche `costoTec` nel suo oggetto di ritorno. **Ogni chiamata a `HI()` deve passare l'array tecnici** — i 4 punti che la chiamano sono `Mle` (dashboard, 2 volte), `Nle` (Clienti), `Ple` (dettaglio progetto). Se in futuro si aggiunge una nuova chiamata a `HI()`, ricordarsi il secondo argomento, altrimenti il margine torna sbagliato silenziosamente (default `[]` → costoTec=0). Questa regola NON si applica ad Assistenza, che ha formule di margine proprie e separate.
+
 **Funzioni di calcolo riutilizzabili:**
 - `KI(e,t,n,r)` — calcolo uso/residuo ore di un contratto Assistenza (per tipo: tecnica/sistemistico/specialistico/consulenza). Ritorna `{perType, totaleContratto, totaleUsate, totaleResiduo, pctResiduo, inScadenza, esaurito}`. `esaurito` è vero se `(contrattate>0 || usate>0) && residuo<=0` (fixato per coprire anche contratti a 0 ore con interventi scalati)
 - `JI(e,t)` — wrapper di `KI` per un contratto: `JI(state, contract)`
