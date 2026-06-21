@@ -1,0 +1,105 @@
+# Manuale Utente — Assistenza & Consulenza (NPS Computer)
+
+Gestionale per attività di assistenza tecnica e consulenza IT/AI. App web, dati sincronizzati su OneDrive tramite login Microsoft.
+
+URL: https://puntospillo.github.io/Consulenza-ai/
+
+---
+
+## 1. Accesso e modalità
+
+All'apertura, l'app richiede il login con account Microsoft (MSAL/Azure AD). I dati vengono letti e scritti su un file Excel nel proprio OneDrive — non serve un database esterno.
+
+In alto a sinistra trovi due bottoni per passare da una modalità all'altra:
+
+- **Assistenza** (preimpostata all'avvio) — clienti, contratti, interventi tecnici, tecnici, fornitori, fatture fornitori, report e statistiche.
+- **Consulenza** — progetti, registrazione ore, fatturazione, report e statistiche.
+
+Sono due aree distinte con menu separati, ma condividono l'anagrafica Tecnici e i Clienti.
+
+---
+
+## 2. Modulo Assistenza
+
+### 2.1 Dashboard
+Panoramica generale: interventi recenti, contratti in scadenza/esauriti, indicatori principali.
+
+### 2.2 Clienti
+Anagrafica clienti: ragione sociale, codice cliente, referente, P.IVA, indirizzo, contatti, note.
+
+### 2.3 Contratti
+Elenco contratti di assistenza per cliente. Ogni contratto definisce un monte ore per tipologia (Assistenza Tecnica, Sistemistico, Specialistico, Consulenza) e un costo totale.
+
+- **Barra "Ore residue"**: un'unica barra per contratto, con segmento verde per le ore di assistenza usate e segmento blu per le ore di consulenza/contratto usate. A fianco delle ore è sempre indicato anche il numero di **ticket** corrispondente (1 ora = 4 ticket).
+- Un contratto viene segnalato **"Esaurito"** (bordo/badge rosso) quando le ore residue totali sono ≤ 0, **"In scadenza"** (badge giallo) quando restano ≤15% delle ore.
+- Cliccando su un contratto si apre il **dettaglio**: ore contrattate/usate/residue (con conversione in ticket), utilizzo per tipologia, elenco di tutti gli interventi collegati (con N°, N° Ticket, descrizione, costo, incasso, margine, margine%) e i bottoni Chiudi/Riapri/Modifica/Stampa.
+- Solo i contratti **aperti** (non chiusi) compaiono nei menu di selezione quando si crea un nuovo intervento o una voce ore a contratto; un contratto già collegato resta visibile anche se chiuso, etichettato "(chiuso)".
+
+### 2.4 Interventi
+Elenco di tutti gli interventi tecnici, ordinati per **data di inserimento più recente in alto**.
+
+- Filtri rapidi per stato, oltre a filtri estesi per cliente/tecnico/fornitore/tipo/modalità/periodo e ricerca testuale per N°, N° ticket o descrizione.
+- **"Da assegnare"**: il bottone lampeggia e mostra un contatore quando ci sono interventi con stato "da assegnare" **oppure senza tecnico assegnato** — questa è la definizione ufficiale di "da assegnare" in tutta l'app.
+- Ogni riga mostra, oltre a N°/Ticket/Cliente/Data/Tecnico/Tipo/Ore: **Costo, Ricavi, Margine, Margine%**. Se l'intervento è a contratto, il numero del contratto compare sotto il N° intervento.
+- **Nuovo Intervento / Nuova Richiesta**: form con dati cliente, tecnico, modalità (a contratto / fuori contratto / gratuito), tipo, ore, ecc. Se selezioni "a contratto", appare il riepilogo delle **ore residue totali** del contratto (con ticket equivalenti), per sapere subito quanta capacità resta.
+- **Annulla intervento**: disponibile direttamente dentro la scheda di modifica (non serve tornare all'elenco).
+
+### 2.5 Tecnici / Fornitori
+Anagrafica tecnici (interni, esterni, da fornitore) con costo orario, e fornitori con relativo ambito (assistenza/consulenza/entrambi). La tabella Fornitori mostra anche: interventi, ticket consumati, ore, costo, ricavi, margine e margine%.
+
+### 2.6 Fatture Fornitori
+Per ogni fornitore, elenco degli interventi svolti dai suoi tecnici, con possibilità di inserire l'importo fatturato e passare la voce a "fatturato". Mostra N°, N° Ticket, costo stimato, ricavi, margine, margine%. È possibile cercare per N° intervento o N° ticket.
+
+### 2.7 Report
+Report dettagliato per cliente, con filtri estesi (incluso il tipo) e ricerca testuale. I blocchi cliente sono ordinati per attività più recente; all'interno di ciascun blocco gli interventi sono ordinati per data di inserimento più recente. In alto: interventi, ore, ticket, costo tecnici, **ricavi da contratto**, **ricavi totali**, margine, margine%. Esportabile in CSV e stampabile.
+
+### 2.8 Statistiche
+Analisi incrociate su interventi, con gli stessi filtri estesi del Report. Tabelle "per tecnico / per cliente / per tipo / per stato" con interventi, ore, ticket, costo, ricavi, margine, margine%. Grafici: ore per tecnico, ore per cliente. Riepilogo ore/importi sui contratti attivi.
+
+### 2.9 Import & Impostazioni
+Importazione massiva da Excel di fornitori/tecnici/clienti/contratti/interventi (con modello scaricabile). La casella **"Forza sovrascrittura"** aggiorna i record già esistenti invece di saltarli. Il bottone **"Sincronizza ore Consulenza su contratti"** crea gli Interventi mancanti per le ore di Consulenza già fatturate "a contratto" in passato, così il consumo dei contratti torna corretto. Qui si configurano anche numerazione interventi, soglia di scadenza contratti e SLA per tipo.
+
+---
+
+## 3. Modulo Consulenza
+
+### 3.1 Dashboard
+Panoramica progetti: ore fatturabili/interne, imponibile, da contratto, da fatturare, in sospeso, spese, costo tecnici, margine. Elenco progetti raggruppati per cliente, con scadenze e attività da fare in evidenza.
+
+### 3.2 Progetti
+Tutti i progetti raggruppati per Cliente → Gruppo → Progetto, con filtri per cliente/gruppo/progetto.
+
+- I **gruppi** sono evidenziati con una riga verde; se contengono progetti con attività ("da fare") aperte, mostrano un badge col conteggio totale.
+- Ogni riga progetto mostra contatori per **Prompt**, **Note** e **Da fare** (stesso stile del badge "da fare").
+- Cliccando su un progetto si entra nel dettaglio: ore, costi, costo tecnico, da contratto, da fatturare, in sospeso, margine — con piena possibilità di vedere e modificare tutte le ore registrate.
+
+### 3.3 Registra ore
+All'interno di un progetto, sezione "Ore & Fatturazione" (o "Ore dedicate" per i progetti interni). Premendo la matita su una riga si apre una finestra dedicata con tutti i campi (data, tipo, descrizione, tecnico, modello AI, tariffa, stato fatturazione, contratto); Ore/Tariffa/Stato restano comunque modificabili al volo direttamente in tabella.
+
+- Selezionando **"Contratto"** come stato fatturazione e poi un contratto specifico, la **Tariffa €/h si compila automaticamente** col valore orario del contratto (costo totale ÷ ore contrattate).
+- Quando una voce ore viene fatturata "a Contratto", l'app crea/aggiorna automaticamente un **Intervento collegato** in Assistenza (visibile anche lì), così le ore scalano davvero il monte ore del contratto. Se manca il tecnico, viene richiesto una sola volta.
+- Solo i contratti **aperti** del cliente compaiono nel menu di selezione (un contratto già collegato resta visibile anche se chiuso).
+
+### 3.4 Clienti
+Elenco clienti consulenza con, per ciascuno: ore lavorate, imponibile, da fatturare, spese, costo tecnico, margine, ed elenco progetti collegati.
+
+### 3.5 Report
+Report per cliente/progetto con filtri (incluso tecnico e tipo consulenza), ordinato per data di inserimento più recente in alto. Per ogni voce: data, tecnico, costo tecnico, ore, tariffa, imponibile, IVA, totale. Esportabile in CSV, stampabile.
+
+### 3.6 Statistiche
+Due viste, selezionabili con un bottone, nella stessa pagina:
+
+- **Progetti esterni** (vista predefinita): analisi su ricavi, margine, distribuzione per cliente/progetto, utilizzo modelli AI, andamento mensile, efficienza ore/ricavo, costo tecnici. Card in alto: ore, costo tecnici, imponibile, **da contratto**, da fatturare, in sospeso, margine, margine%.
+- **Progetti interni**: vista separata e con filtri propri (cliente, periodo) per i progetti senza fatturazione (studio, R&D, preparazione) — ore totali, spese, costo tecnico, grafico ore per progetto, grafico utilizzo modelli AI, tabella dettaglio con nome progetto completo.
+
+### 3.7 Spese e Note / OneDrive
+Registrazione spese extra per progetto e note libere. La sezione OneDrive mostra lo stato della sincronizzazione cloud.
+
+---
+
+## 4. Concetti trasversali importanti
+
+- **Margine (solo Consulenza)**: sempre calcolato come `imponibile − (costo tecnico + spese)`, in ogni punto dell'app (Dashboard, Clienti, Dettaglio progetto, Statistiche).
+- **N° Ticket** = numero ticket dell'helpdesk inserito a mano sull'intervento — sempre visibile accanto al N° intervento. Diverso dai **"ticket consumati"**, che sono calcolati dalle ore (1 ora = 4 ticket): quest'ultimo è sempre etichettato "Ticket cons." per non confonderlo col primo.
+- **"Da assegnare"** = stato `da_assegnare` OPPURE nessun tecnico assegnato — vale ovunque nell'app, non solo nel filtro omonimo.
+- **Versione app**: visibile in basso nel menu laterale (es. "v4.9.1"); aumenta a ogni aggiornamento pubblicato.
