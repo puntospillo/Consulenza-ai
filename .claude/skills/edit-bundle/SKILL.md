@@ -122,6 +122,8 @@ Variabili a singola lettera sono riusate ovunque nel bundle con significati dive
 - **`t.numeroTicket`** = il numero ticket dell'helpdesk inserito manualmente sull'intervento (campo testo libero). È QUESTO il campo "Ticket" che va sempre mostrato di fianco al N° intervento in ogni vista, ed è già incluso nella ricerca testuale di `mle`.
 - **`lL(intervento)`** = ticket CALCOLATI dal consumo ore (1 ora tecnica onsite/remoto → N ticket, è una metrica derivata, non un campo dati). Quando si mostra questo valore (somme aggregate di "ticket consumati" in Statistiche/Report/Fornitori), l'etichetta deve essere **"Ticket cons."**, mai solo "Ticket" — altrimenti si confonde con `numeroTicket`. Errore reale fatto e poi corretto il 20/06/2026 in `_le`, `xle`, `ble`, `mle` (card riepilogo).
 
+**Aiuto contestuale (`HLP`)**: oggetto globale `var HLP={chiave_pagina:[titolo,testo],...}` definito subito prima di `function jle(){`. Contiene un testo di aiuto per ogni chiave di pagina (sia Assistenza `a_*` sia Consulenza). Un bottone fisso "?" in basso a destra (sempre visibile, dentro `jle`, stato `showHelp/setShowHelp`) apre un modal (`X9`) con `HLP[o===\`assistance\`?c:n]`. Per aggiungere/aggiornare un testo di aiuto, basta modificare la voce corrispondente in `HLP` — non serve toccare il bottone né il modal. Tenere `HLP` in sync col contenuto di `MANUALE-UTENTE.md`.
+
 **Per ritrovare una funzione dopo un redeploy/rebuild**: cerca per testo visibile nell'interfaccia (es. `grep -oE '.{0,30}children:\`Statistiche Assistenza\`.{0,30}' index.html`), non fidarti dei nomi minificati salvati qui — possono cambiare se il progetto viene rigenerato.
 
 ## Attenzione
