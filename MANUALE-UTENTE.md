@@ -43,6 +43,7 @@ Elenco di tutti gli interventi tecnici, ordinati per **data di inserimento più 
 - Ogni riga mostra, oltre a N°/Ticket/Cliente/Data/Tecnico/Tipo/Ore: **Costo, Ricavi, Margine, Margine%**. Se l'intervento è a contratto, il numero del contratto compare sotto il N° intervento.
 - **Nuovo Intervento / Nuova Richiesta**: form con dati cliente, tecnico, modalità (a contratto / fuori contratto / gratuito), tipo, ore, ecc. Se selezioni "a contratto", appare il riepilogo delle **ore residue totali** del contratto (con ticket equivalenti), per sapere subito quanta capacità resta.
 - **Annulla intervento**: disponibile direttamente dentro la scheda di modifica (non serve tornare all'elenco).
+- **Allegati PDF**: nella scheda di modifica di un intervento già salvato, puoi allegare file PDF (es. rapportini firmati, foto, documenti del cliente). Vengono caricati su OneDrive nella stessa cartella dei dati dell'app, in una sottocartella `Allegati/<numero intervento>`; ogni allegato è apribile/scaricabile dal link e può essere eliminato singolarmente. Non disponibile per un intervento non ancora salvato la prima volta.
 
 ### 2.5 Tecnici / Fornitori
 Anagrafica tecnici (interni, esterni, da fornitore) con costo orario, e fornitori con relativo ambito (assistenza/consulenza/entrambi). La tabella Fornitori mostra anche: interventi, ticket consumati, ore, costo, ricavi, margine e margine%.
