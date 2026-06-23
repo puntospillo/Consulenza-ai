@@ -68,7 +68,7 @@ Importazione massiva da Excel di fornitori/tecnici/clienti/contratti/interventi 
 Panoramica progetti: ore fatturabili/interne, imponibile, da contratto, da fatturare, in sospeso, spese, costo tecnici, margine. Elenco progetti raggruppati per cliente, con scadenze e attività da fare in evidenza.
 
 ### 3.2 Progetti
-Tutti i progetti raggruppati per Cliente → Gruppo → Progetto, con filtri per cliente/gruppo/progetto.
+Tutti i progetti raggruppati per Cliente → Gruppo → Progetto. **Filtri** (gli stessi del Report, sezione 3.5): cliente, gruppo, progetto, stato fatturazione, stato progetto (Lead/In corso/Attesa pagamento/Completato/Archiviato), tipo consulenza, tecnico, modello AI, periodo (dal/al), interno/esterno.
 
 - I **gruppi** sono evidenziati con una riga verde; se contengono progetti con attività ("da fare") aperte, mostrano un badge col conteggio totale.
 - Ogni riga progetto mostra contatori per **Prompt**, **Note** e **Da fare** (stesso stile del badge "da fare").
@@ -86,7 +86,7 @@ All'interno di un progetto, sezione "Ore & Fatturazione" (o "Ore dedicate" per i
 Elenco clienti consulenza con, per ciascuno: ore lavorate, imponibile, da fatturare, spese, costo tecnico, margine, ed elenco progetti collegati.
 
 ### 3.5 Report
-Report per cliente/progetto con filtri (incluso tecnico e tipo consulenza), ordinato per data di inserimento più recente in alto. Per ogni voce: data, tecnico, costo tecnico, ore, tariffa, imponibile, IVA, totale. Esportabile in CSV, stampabile.
+Report per cliente/progetto. **Filtri** (gli stessi della sezione Progetti, 3.2): cliente, gruppo, progetto, stato fatturazione, stato progetto, tipo consulenza, tecnico, modello AI, periodo (dal/al), interno/esterno. Ordinato per data di inserimento più recente in alto. Per ogni voce: data, tecnico, costo tecnico, ore, tariffa, imponibile, IVA, totale. Esportabile in CSV, stampabile.
 
 ### 3.6 Statistiche
 Due viste, selezionabili con un bottone, nella stessa pagina:
