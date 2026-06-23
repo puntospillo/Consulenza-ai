@@ -73,6 +73,7 @@ Tutti i progetti raggruppati per Cliente → Gruppo → Progetto, con filtri per
 - I **gruppi** sono evidenziati con una riga verde; se contengono progetti con attività ("da fare") aperte, mostrano un badge col conteggio totale.
 - Ogni riga progetto mostra contatori per **Prompt**, **Note** e **Da fare** (stesso stile del badge "da fare").
 - Cliccando su un progetto si entra nel dettaglio: ore, costi, costo tecnico, da contratto, da fatturare, in sospeso, margine — con piena possibilità di vedere e modificare tutte le ore registrate.
+- Tab **Allegati**: carica PDF, Word, Excel, PowerPoint, immagini e altri file (max ~4MB ciascuno), salvati su OneDrive nella stessa cartella dei dati dell'app; ogni allegato è apribile o eliminabile singolarmente.
 
 ### 3.3 Registra ore
 All'interno di un progetto, sezione "Ore & Fatturazione" (o "Ore dedicate" per i progetti interni). Premendo la matita su una riga si apre una finestra dedicata con tutti i campi (data, tipo, descrizione, tecnico, modello AI, tariffa, stato fatturazione, contratto); Ore/Tariffa/Stato restano comunque modificabili al volo direttamente in tabella.
