@@ -55,7 +55,7 @@ Per ogni fornitore, elenco degli interventi svolti dai suoi tecnici, con possibi
 ### 2.7 Report
 Report dettagliato per cliente, con filtri estesi (incluso il tipo) e ricerca testuale. I blocchi cliente sono ordinati per attività più recente; all'interno di ciascun blocco gli interventi sono ordinati per data di inserimento più recente. In alto: interventi, ore, ticket, costo tecnici, **ricavi da contratto**, **ricavi totali**, margine, margine%. Esportabile in CSV e stampabile.
 
-**Stampa per cliente** (flag attivo di default): quando spuntato, la versione stampata nasconde i riquadri riepilogativi in alto e ogni riferimento a costo tecnico/margine/margine% (sia nelle intestazioni per cliente che nella tabella) — restano visibili ore, ricavi, descrizioni. Disattivando il flag la stampa mostra tutto come sullo schermo.
+**Stampa per cliente** (flag attivo di default): quando spuntato, la versione stampata nasconde i riquadri riepilogativi in alto e ogni riferimento a costo tecnico/margine/margine% (sia nelle intestazioni per cliente che nella tabella) — restano visibili ore, ricavi, descrizioni. Disattivando il flag la stampa mostra tutto come sullo schermo. La stampa si apre in una finestra separata (niente URL dell'app nel PDF) e il file salvato si chiama "NPS Report Assistenza".
 
 ### 2.8 Statistiche
 Analisi incrociate su interventi, con gli stessi filtri estesi del Report. Tabelle "per tecnico / per cliente / per tipo / per stato" con interventi, ore, ticket, costo, ricavi, margine, margine%. Grafici: ore per tecnico, ore per cliente. Riepilogo ore/importi sui contratti attivi.
@@ -91,7 +91,7 @@ Elenco clienti consulenza con, per ciascuno: ore lavorate, imponibile, da fattur
 ### 3.5 Report
 Report per cliente/progetto. **Filtri** (gli stessi della sezione Progetti, 3.2): cliente, gruppo, progetto, stato fatturazione, stato progetto, tipo consulenza, tecnico, modello AI, periodo (dal/al), interno/esterno. Ordinato per data di inserimento più recente in alto. Per ogni voce: data, tecnico, costo tecnico, ore, tariffa, imponibile, IVA, totale. Esportabile in CSV, stampabile.
 
-**Stampa per cliente** (flag attivo di default): quando spuntato, la versione stampata nasconde la colonna "Costo tecnico" e il totale "Costo tecnici" nel riepilogo generale — restano visibili ore, imponibile, IVA, totale. Disattivando il flag la stampa mostra tutto come sullo schermo.
+**Stampa per cliente** (flag attivo di default): quando spuntato, la versione stampata nasconde la colonna "Costo tecnico" e il totale "Costo tecnici" nel riepilogo generale — restano visibili ore, imponibile, IVA, totale. Disattivando il flag la stampa mostra tutto come sullo schermo. La stampa si apre in una finestra separata (niente URL dell'app nel PDF) e il file salvato si chiama "NPS " + il titolo del report.
 
 ### 3.6 Statistiche
 Due viste, selezionabili con un bottone, nella stessa pagina:
