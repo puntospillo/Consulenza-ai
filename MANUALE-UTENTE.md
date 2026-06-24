@@ -60,8 +60,11 @@ Report dettagliato per cliente, con filtri estesi (incluso il tipo) e ricerca te
 ### 2.8 Statistiche
 Analisi incrociate su interventi, con gli stessi filtri estesi del Report. Tabelle "per tecnico / per cliente / per tipo / per stato" con interventi, ore, ticket, costo, ricavi, margine, margine%. Grafici: ore per tecnico, ore per cliente. Riepilogo ore/importi sui contratti attivi.
 
-### 2.9 Import & Impostazioni
-Importazione massiva da Excel di fornitori/tecnici/clienti/contratti/interventi (con modello scaricabile). La casella **"Forza sovrascrittura"** aggiorna i record già esistenti invece di saltarli. Il bottone **"Sincronizza ore Consulenza su contratti"** crea gli Interventi mancanti per le ore di Consulenza già fatturate "a contratto" in passato, così il consumo dei contratti torna corretto. Qui si configurano anche numerazione interventi, soglia di scadenza contratti e SLA per tipo.
+### 2.9 Impostazioni
+Voce di menu unica, identica sia in Assistenza che in Consulenza (stessa pagina, raggiungibile da entrambi i menu — vedi anche sezione 3.8). Contiene due blocchi:
+
+- **OneDrive & Backup**: stato login Microsoft, Salva/Carica manuale su OneDrive, configurazione Entra/Graph (Client ID, percorso file), backup/ripristino manuale via file JSON.
+- **Import Excel & Configurazione**: importazione massiva da Excel di fornitori/tecnici/clienti/contratti/interventi (con modello scaricabile). La casella **"Forza sovrascrittura"** aggiorna i record già esistenti invece di saltarli. Il bottone **"Sincronizza ore Consulenza su contratti"** crea gli Interventi mancanti per le ore di Consulenza già fatturate "a contratto" in passato, così il consumo dei contratti torna corretto. Qui si configurano anche numerazione interventi, soglia di scadenza contratti e SLA per tipo.
 
 ---
 
@@ -99,8 +102,11 @@ Due viste, selezionabili con un bottone, nella stessa pagina:
 - **Progetti esterni** (vista predefinita): analisi su ricavi, margine, distribuzione per cliente/progetto, utilizzo modelli AI, andamento mensile, efficienza ore/ricavo, costo tecnici. Card in alto: ore, costo tecnici, imponibile, **da contratto**, da fatturare, in sospeso, margine, margine%.
 - **Progetti interni**: vista separata e con filtri propri (cliente, periodo) per i progetti senza fatturazione (studio, R&D, preparazione) — ore totali, spese, costo tecnico, grafico ore per progetto, grafico utilizzo modelli AI, tabella dettaglio con nome progetto completo.
 
-### 3.7 Spese e Note / OneDrive
-Registrazione spese extra per progetto e note libere. La sezione OneDrive mostra lo stato della sincronizzazione cloud.
+### 3.7 Spese e Note
+Registrazione spese extra per progetto e note libere.
+
+### 3.8 Impostazioni
+Stessa voce di menu e stessa pagina della sezione 2.9 (Assistenza) — login/sync/backup OneDrive + import Excel e configurazione. Da qui o da lì il contenuto è identico.
 
 ---
 
