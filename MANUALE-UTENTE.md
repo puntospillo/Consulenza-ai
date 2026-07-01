@@ -39,7 +39,9 @@ Elenco contratti di assistenza per cliente. Ogni contratto definisce un monte or
 ### 2.4 Interventi
 Elenco di tutti gli interventi tecnici, ordinati per **data di inserimento più recente in alto**.
 
-- Filtri rapidi per stato, oltre a filtri estesi per cliente/tecnico/fornitore/tipo/modalità/periodo e ricerca testuale per N°, N° ticket o descrizione.
+- Filtri rapidi per stato, oltre a filtri estesi per cliente/tecnico/fornitore/tipo/modalità/periodo, filtro fatturazione cliente (Tutti / Da fatturare / Listino) e ricerca testuale per N°, N° ticket o descrizione.
+- **Sospeso**: non è più uno degli stati, ma un contrassegno indipendente. Nella scheda intervento c'è un bottone "Sospeso" di fianco allo Stato: un intervento può quindi essere ad es. "In lavorazione" e sospeso allo stesso tempo. Nell'elenco compare un badge viola "Sospeso" accanto allo stato; il filtro rapido "Sospesi" e la casella "In sospeso" della Dashboard usano questo contrassegno. Nei Report e nelle Statistiche c'è il bottone "Solo sospesi". I vecchi interventi con stato "In sospeso" vengono convertiti automaticamente (stato "Aperto" + contrassegno Sospeso).
+- **Allegati in elenco**: se un intervento ha allegati, sotto le icone di stampa/modifica/eliminazione compare un'icona rossa con il numero di allegati presenti.
 - **"Da assegnare"**: il bottone lampeggia e mostra un contatore quando ci sono interventi con stato "da assegnare" **oppure senza tecnico assegnato** — questa è la definizione ufficiale di "da assegnare" in tutta l'app.
 - Ogni riga mostra, oltre a N°/Ticket/Cliente/Data/Tecnico/Tipo/Ore: **Costo, Ricavi, Margine, Margine%**. Se l'intervento è a contratto, il numero del contratto compare sotto il N° intervento.
 - **Nuovo Intervento / Nuova Richiesta**: form con dati cliente, tecnico, modalità (a contratto / fuori contratto / gratuito), tipo, ore, ecc. Se selezioni "a contratto", appare il riepilogo delle **ore residue totali** del contratto (con ticket equivalenti), per sapere subito quanta capacità resta.
@@ -50,7 +52,7 @@ Elenco di tutti gli interventi tecnici, ordinati per **data di inserimento più 
 Anagrafica tecnici (interni, esterni, da fornitore) con costo orario, e fornitori con relativo ambito (assistenza/consulenza/entrambi). La tabella Fornitori mostra anche: interventi, ticket consumati, ore, costo, ricavi, margine e margine%.
 
 ### 2.6 Fatture Fornitori
-Per ogni fornitore, elenco degli interventi svolti dai suoi tecnici, con possibilità di inserire l'importo fatturato e passare la voce a "fatturato". Mostra N°, N° Ticket, costo stimato, ricavi, margine, margine%. È possibile cercare per N° intervento o N° ticket.
+Per ogni fornitore, elenco degli interventi svolti dai suoi tecnici, con possibilità di inserire l'importo fatturato e passare la voce a "fatturato". Mostra N°, N° Ticket, costo stimato, ricavi, margine, margine%. È possibile cercare per N° intervento o N° ticket. Gli interventi svolti da **tecnici interni** non compaiono mai qui (né nell'avviso "in attesa di fattura del fornitore" della pagina Interventi): questa sezione riguarda solo i tecnici di fornitori esterni.
 
 ### 2.7 Report
 Report dettagliato per cliente, con filtri estesi (incluso il tipo) e ricerca testuale. I blocchi cliente sono ordinati per attività più recente; all'interno di ciascun blocco gli interventi sono ordinati per data di inserimento più recente. In alto: interventi, ore, ticket, costo tecnici, **ricavi da contratto**, **ricavi totali**, margine, margine%. Esportabile in CSV e stampabile.
