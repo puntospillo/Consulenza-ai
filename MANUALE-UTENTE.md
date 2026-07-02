@@ -22,7 +22,7 @@ Sono due aree distinte con menu separati, ma condividono l'anagrafica Tecnici e 
 ## 2. Modulo Assistenza
 
 ### 2.1 Dashboard
-Panoramica generale: interventi recenti, contratti in scadenza/esauriti, indicatori principali.
+Panoramica generale: interventi recenti, contratti in scadenza/esauriti, indicatori principali. In alto a destra il bottone verde **"Nuovo intervento"** apre direttamente il form di creazione (accanto, se presenti, l'avviso "contratti esauriti").
 
 ### 2.2 Clienti
 Anagrafica clienti: ragione sociale, codice cliente, referente, P.IVA, indirizzo, contatti, note.
@@ -95,6 +95,8 @@ Elenco clienti consulenza con, per ciascuno: ore lavorate, imponibile, da fattur
 
 ### 3.5 Report
 Report per cliente/progetto. **Filtri** (gli stessi della sezione Progetti, 3.2): cliente, gruppo, progetto, stato fatturazione, stato progetto, tipo consulenza, tecnico, modello AI, periodo (dal/al), interno/esterno. Ordinato per data di inserimento più recente in alto. Per ogni voce: data, tecnico, costo tecnico, ore, tariffa, imponibile, IVA, totale. Esportabile in CSV, stampabile.
+
+**Escludi contratti**: bottone accanto a "Stampa per cliente" che toglie dal report (video, CSV e stampa) tutte le voci ore fatturate "a Contratto"; quando attivo compare il parametro "Contratti esclusi" nell'intestazione.
 
 **Stampa per cliente** (flag attivo di default): quando spuntato, la versione stampata nasconde la colonna "Costo tecnico" e il totale "Costo tecnici" nel riepilogo generale — restano visibili ore, imponibile, IVA, totale. Disattivando il flag la stampa mostra tutto come sullo schermo. La stampa si apre in una finestra separata (niente URL dell'app nel PDF) e il file salvato si chiama "NPS " + il titolo del report.
 
