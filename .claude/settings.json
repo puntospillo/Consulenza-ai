@@ -1,7 +1,21 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:8765/index.html)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\n\" http://localhost:8765/index.html)",
+      "Bash(curl *)",
+      "Bash(git *)",
+      "Bash(python3 *)",
+      "Bash(node *)",
+      "Bash(npm *)",
+      "Bash(grep *)",
+      "Bash(wc *)",
+      "Bash(ls *)",
+      "Bash(mkdir *)",
+      "Bash(cd *)",
+      "Edit",
+      "Write",
+      "Read"
     ]
   }
 }
