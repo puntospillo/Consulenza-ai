@@ -543,7 +543,7 @@ modes:{
   ['Consultare tanti documenti con risposte citate','📚 <b>Gemini Notebook</b> (prima si chiamava NotebookLM)','“Nei 12 manuali, cosa dice la procedura di reso?”'],
   ['Documento lungo o piccola app con anteprima','📝 <b>Canvas</b>','“Crea un calcolatore dei preventivi”'],
   ['Ricerca sul web con fonti e report finale','🔎 <b>Deep Research</b>','“Incentivi 2026 per le piccole imprese: requisiti e scadenze”'],
-  ['Compiti in più passaggi svolti da un agente','⚡ <b>Gemini Spark</b> (dove disponibile, piani a pagamento)','“Ogni lunedì prepara il riepilogo delle email dei fornitori”'],
+  ['Compiti in più passaggi svolti da un agente, anche sul web','🚀 <b>Antigravity</b> (anche con il browser)'+DL+' · <i>Gemini Spark non è disponibile in Italia e nell’UE</i>','“Raccogli i prezzi da questi 10 siti in un Excel”'],
   ['App complete da pubblicare online, anche con database e accesso','🛠️ <b>Google AI Studio</b> › Build','“Un’app per gestire le richieste di ferie del reparto”'],
   ['Lavorare su una cartella del computer, elaborare dati in locale, creare app','🚀 <b>Antigravity</b> (app per computer)'+DL,'“Unisci i 12 Excel di questa cartella”']
  ]) + rule('File su Google Drive → <b>Gemini dentro Fogli/Documenti</b>. Tanti documenti da consultare → <b>Gemini Notebook</b>. App online → <b>AI Studio</b>. Cartelle del computer → <b>Antigravity</b>.')
@@ -605,7 +605,7 @@ personal:{
 verify:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
   `<b>Ricerca sul web</b>: per fatti recenti (leggi, prezzi, scadenze) chiedi <i>“cerca sul web”</i> o attiva la ricerca da ${mp('+')}. Nella risposta compaiono le <b>fonti</b>: aprile e controlla.`,
-  `<b>Deep research</b> (da ${mp('+')}): per temi importanti produce un report con citazioni; puoi limitare la ricerca a siti affidabili.`,
+  `<b>Deep research</b> (da ${mp('+')}, e ora anche in Work e Codex): per temi importanti produce un report con citazioni; puoi limitare la ricerca a siti affidabili e usare anche i tuoi file.`,
   '<b>Progetti</b> con i documenti ufficiali: l’AI risponde partendo da quelli, non dalla memoria generale.',
   '<b>Calcoli</b>: chiedi di <i>“eseguire il codice”</i>; puoi aprire il codice e vedere come ha calcolato.',
   '<b>Seconda opinione</b>: incolla la risposta in una <b>chat temporanea</b> e chiedi di trovare gli errori.'
@@ -645,7 +645,7 @@ tokens:{
   '<b>Scegli il modello</b>: quello veloce per richieste semplici; quelli più potenti o con ragionamento hanno un numero di richieste al giorno più basso.',
   '<b>Deep Research, immagini e video</b> hanno limiti giornalieri propri: usali per ciò che conta.',
   '<b>Gemini Notebook e Notebook</b>: le fonti restano nel notebook, non serve ricaricarle in ogni chat.',
-  '<b>Antigravity</b>: la quota dipende dal piano; chiudi i compiti finiti e apri una conversazione nuova per ogni lavoro diverso.',
+  '<b>Antigravity</b>: il livello gratuito ha limiti che si ricaricano ogni poche ore, con un tetto settimanale; AI Pro ne dà di più. Gli agenti in parallelo consumano la quota più in fretta: chiudi i compiti finiti e apri una conversazione nuova per ogni lavoro diverso.',
   '<b>Modifica il prompt</b> (icona matita) invece di aggiungere messaggi di correzione.'
  ])
 },
@@ -668,7 +668,7 @@ file:{
  gemini: stepsL(TOOLS.gemini.c,[
   `Premi ${mp('+')} nella casella → <b>Carica file</b> dal computer, oppure <b>Aggiungi da Drive</b>.`,
   'Scrivi la richiesta nello stesso messaggio.',
-  'Gemini risponde in chat. Per le tabelle usa <b>Esporta in Fogli</b>; per testi lunghi chiedi di usare <b>Canvas</b> e poi esporta in Documenti.',
+  `Gemini risponde in chat. Per le tabelle usa <b>Esporta in Fogli</b> (in basso a destra della tabella); per i testi ${mp('Condividi ed esporta › Esporta in Documenti')}; dal Canvas puoi esportare anche in Presentazioni.`,
   'Il file è già su Google Drive? Aprilo in Fogli, Documenti o Presentazioni e usa il pannello <b>Gemini</b> in alto a destra: lavora direttamente sul file.',
   'Devi consultare tanti documenti (manuali, normative, procedure)? Usa <b>Gemini Notebook</b>: risponde solo con quei documenti e cita i passaggi.'
  ])
@@ -767,15 +767,15 @@ md:{
 install:{
  chatgpt: `<p><b>Strumento: l’app ChatGPT per computer</b>. Contiene <b>Chat</b>, <b>Work</b> (agente per documenti, fogli, presentazioni e cartelle) e <b>Codex</b> (per creare app e programmi). Non serve il Terminale.</p>` + stepsL(TOOLS.chatgpt.c,[
   'Scarica l’app da <b>chatgpt.com/download</b> (Mac o Windows), installala e accedi con il tuo account ChatGPT.',
-  'Nella casella di scrittura passi da <b>Chat</b> a <b>Work</b>; la sezione <b>Codex</b> è a parte.',
-  'Quando Work o Codex devono lavorare sui file, scegli o apri la <b>cartella di lavoro</b> e concedi il permesso solo a quella.',
-  'Prima di modificare file o eseguire comandi ti chiedono conferma. <b>All’inizio lascia attiva la modalità che chiede sempre.</b>'
+  'Per lavorare sui file <b>apri una cartella</b> (o crea un progetto e collegagli la cartella), poi scegli <b>Work</b> dal selettore di modalità. La sezione <b>Codex</b> è a parte.',
+  'Sotto la casella di scrittura c’è il controllo dei <b>permessi</b>: lascia <b>Chiedi approvazione</b>, così si ferma prima di uscire dalla cartella o fare azioni importanti.',
+  `Le modalità più libere (“Approva per me”, “Accesso completo”) vanno attivate apposta in ${mp('Impostazioni › Generale › Permessi')}: <b>all’inizio non attivarle</b>.`
  ]) + rule('<b>Chat</b> per domande e pochi file. <b>Work</b> per documenti, fogli, presentazioni e cartelle. <b>Codex</b> per creare app e programmi.'),
  claude: `<p><b>Strumento: l’app Claude per computer</b>. Contiene <b>Chat</b>, <b>Cowork</b> e <b>Claude Code</b>, senza installare altro.</p>` + stepsL(TOOLS.claude.c,[
   'Scarica l’app da <b>claude.com/download</b> (Mac o Windows), installala e accedi.',
   'In alto trovi le modalità: <b>Chat</b>, <b>Cowork</b> e <b>Code</b>.',
   '<b>Cowork</b>: nella casella premi <b>Lavora in un progetto o cartella</b> e scegli la cartella. Scegliendola autorizzi Claude a leggere e scrivere lì.',
-  '<b>Modalità di approvazione</b> di Cowork: <b>Manuale</b> (chiede per ogni azione), <b>Automatica</b> (procede con controlli di sicurezza), <b>Salta</b> (non chiede). <b>All’inizio usa Manuale.</b>',
+  '<b>Modalità di approvazione</b> di Cowork, nella casella: <b>Manuale</b> (predefinita, chiede prima delle azioni) oppure <b>Automatica</b> (procede e controlla la sicurezza di ogni azione). <b>All’inizio usa Manuale.</b> Quando scegli una cartella puoi aggiungere anche <b>istruzioni per quella cartella</b>.',
   '<b>Code</b>: scegli una cartella e chiedi di creare app, programmi, automazioni.'
  ]) + rule('<b>Chat</b> per file che puoi allegare. <b>Cowork</b> per lavorare su cartelle e documenti. <b>Code</b> per creare app e programmi.'),
  gemini: `<p><b>Strumento: Google Antigravity</b>, l’app di Google con agenti che lavorano sulle cartelle del computer. Dal 18 giugno 2026 ha sostituito Gemini CLI per gli account personali.</p>` + stepsL(TOOLS.gemini.c,[
@@ -784,7 +784,7 @@ install:{
   'Nella barra laterale premi l’icona della <b>cartella con il +</b> → <b>New Project</b> → <b>Add Folder</b> e scegli la cartella di lavoro: gli agenti vedono solo le cartelle del progetto.',
   'Scrivi il compito nella chat e premi Invio.',
   'Antigravity chiede conferma prima delle azioni importanti: leggi sempre cosa sta per fare.'
- ]) + `<p class="hint">Antigravity è pensato soprattutto per creare software, ma funziona su qualsiasi cartella. Su Mac Google sta provando anche <b>Gemini Spark</b> sui file locali, per ora solo con alcuni piani e in alcuni paesi.</p>` + rule('File su Drive → <b>Gemini in Fogli/Documenti</b>. File da allegare → <b>App Gemini</b>. Cartelle del computer, dati riservati o app → <b>Antigravity</b>.')
+ ]) + `<p class="hint">Antigravity è pensato soprattutto per creare software, ma funziona su qualsiasi cartella. C’è un <b>livello gratuito</b> con limiti che si ricaricano ogni poche ore; con Google AI Pro i limiti sono più alti. L’agente <b>Gemini Spark</b>, che su Mac lavora anche sui file, <b>non è disponibile in Italia e nell’UE</b>.</p>` + rule('File su Drive → <b>Gemini in Fogli/Documenti</b>. File da allegare → <b>App Gemini</b>. Cartelle del computer, dati riservati o app → <b>Antigravity</b>.')
 },
 /* ---- Mini-app in chat (livello 1) ---- */
 appChat:{
@@ -870,8 +870,8 @@ appFull:{
 /* ---- Agenti: dove e come ---- */
 agent:{
  chatgpt: `<h3 style="margin-top:0">Work nell’app per computer (consigliato)</h3>` + stepsL(TOOLS.chatgpt.c,[
-  'Apri l’app ChatGPT per computer e nella casella passa da <b>Chat</b> a <b>Work</b>.',
-  'Scegli la <b>cartella di prova</b> e concedi l’accesso solo a quella.',
+  'Apri l’app ChatGPT per computer e <b>apri la cartella di prova</b> (o un progetto collegato a quella cartella).',
+  'Scegli <b>Work</b> dal selettore di modalità e controlla che i permessi sotto la casella siano su <b>Chiedi approvazione</b>.',
   'Incolla il prompt e invia.',
   'Work mostra i passi e i file che crea; prima delle azioni importanti chiede conferma. Puoi fermarlo in ogni momento.',
   'A fine lavoro trovi i file nella cartella <b>risultati</b>. Leggi il report finale.'
@@ -888,7 +888,7 @@ agent:{
   'Scrivi (o incolla) il prompt nella chat e premi Invio.',
   'L’agente mostra il piano e i passi; prima delle azioni importanti chiede conferma.',
   'A fine lavoro trovi i file nella cartella <b>risultati</b>.'
- ]) + `<h3>Online</h3><ul><li><b>Gemini Spark</b>: l’agente personale di Gemini per compiti in più passaggi, anche programmati. Per ora solo con alcuni piani (AI Pro, Ultra) e in alcuni paesi.</li><li><b>Deep Research</b>: ricerche lunghe sul web con report e fonti.</li><li><b>File su Google Drive</b>: apri Drive, Fogli o Documenti e usa il pannello Gemini.</li></ul>`
+ ]) + `<h3>Online</h3><ul><li><b>Gemini Spark</b>, l’agente personale di Gemini, <b>non è disponibile in Italia e nell’UE</b>: per i compiti in più passaggi usa Antigravity.</li><li><b>Deep Research</b>: ricerche lunghe sul web con report e fonti.</li><li><b>File su Google Drive</b>: apri Drive, Fogli o Documenti e usa il pannello Gemini.</li></ul>`
 },
 /* ---- File di istruzioni dell’agente ---- */
 agentMd:{
@@ -943,7 +943,7 @@ const WHERE = {
  local:   {chatgpt:'🗂️ Work (app ChatGPT per computer)', claude:'🤝 Cowork', gemini:'🚀 Antigravity', any:'💻 Agente sul computer'},
  docs:    {chatgpt:'📁 Progetto di ChatGPT con i documenti', claude:'📁 Progetto di Claude con i documenti', gemini:'📚 Gemini Notebook', any:'📁 Progetto con i documenti'},
  web:     {chatgpt:'🔎 Deep research', claude:'🔎 Ricerca', gemini:'🔎 Deep Research', any:'🔎 Ricerca approfondita'},
- agentweb:{chatgpt:'🗂️ Work con il browser integrato', claude:'🌐 Claude in Chrome', gemini:'⚡ Gemini Spark (dove disponibile)', any:'🔁 Agente online'},
+ agentweb:{chatgpt:'🗂️ Work con il browser integrato', claude:'🌐 Claude in Chrome', gemini:'🚀 Antigravity con il browser', any:'🔁 Agente online'},
  app:     {chatgpt:'💻 Codex (app ChatGPT per computer)', claude:'💻 Claude Code', gemini:'🚀 Antigravity', any:'💻 Agente per creare app'},
  appchat: {chatgpt:'📝 Canvas', claude:'✨ Artifact', gemini:'📝 Canvas', any:'📝 App creata nella chat'},
  appfull: {chatgpt:'🌍 Sites, oppure Codex + pubblicazione', claude:'💻 Claude Code + pubblicazione', gemini:'🛠️ Google AI Studio › Build', any:'🌍 Strumento per app online'},
@@ -955,7 +955,7 @@ const ASST = () => byTool({chatgpt:'Skill o Progetto', claude:'Progetto dedicato
 const NEED = {
  local:   {chatgpt:'⬇ Per le cartelle serve l’app ChatGPT per computer (Work), da chatgpt.com/download', claude:'⬇ Serve l’app Claude per computer, da claude.com/download', gemini:'⬇ Serve l’app Antigravity, da antigravity.google/download', any:'⬇ Serve installare un’app sul computer'},
  app:     {chatgpt:'⬇ Serve l’app ChatGPT per computer (sezione Codex)', claude:'⬇ Serve l’app Claude per computer (scheda Code)', gemini:'⬇ Serve l’app Antigravity, da antigravity.google/download', any:'⬇ Serve installare un’app sul computer'},
- agentweb:{chatgpt:'Nessuna installazione: Work funziona anche nel browser', claude:'⬇ Serve l’estensione Claude in Chrome', gemini:'Nessuna installazione: funziona nel browser', any:''},
+ agentweb:{chatgpt:'Nessuna installazione: Work funziona anche nel browser', claude:'⬇ Serve l’estensione Claude in Chrome', gemini:'⬇ Serve l’app Antigravity, da antigravity.google/download', any:''},
  office:  {chatgpt:'Nessuna installazione: funziona nel browser', claude:'⬇ Serve il componente aggiuntivo per Office', gemini:'Nessuna installazione: funziona nel browser', any:''},
  appfull: {chatgpt:'Sites: nessuna installazione · Codex: serve l’app per computer', claude:'⬇ Serve l’app Claude per computer (scheda Code)', gemini:'Nessuna installazione: funziona nel browser', any:''}
 };
@@ -2641,7 +2641,7 @@ L({id:'p5-chatbot', p:'p5', t:'Chatbot o agente?', sub:'La differenza che quasi 
   gemini:[
    ['💬 <b>App Gemini</b> (non è un agente)','Online, sui file caricati','Domande e lavori su pochi file'],
    ['🔎 <b>Deep Research</b>','Online','Ricerche lunghe con report e fonti'],
-   ['⚡ <b>Gemini Spark</b> (dove disponibile)','Online (su Mac anche file locali, in prova)','Compiti in più passaggi, anche programmati'],
+   ['⚡ <b>Gemini Spark</b>','Online','Non disponibile in Italia e nell’UE'],
    ['📂 <b>Gemini in Drive e Fogli</b>','Nei tuoi file Google','Lavori su file e cartelle già in Google Drive'],
    ['🚀 <b>Antigravity</b>','Sul tuo computer, nelle cartelle del progetto','Tanti file, cartelle, dati riservati, mini-app e app']]
  })) : `<p>Ogni strumento ha i suoi agenti. Scegli il tuo per vedere quali sono e quando usarli:</p><div class="actions">${toolButtons()}</div>`)}
@@ -3010,7 +3010,7 @@ Mostrami il testo prima di salvarlo.`, `Questo prompt va incollato <b>direttamen
 
 /* ---------- CONCLUSIONE ---------- */
 /* Versione della guida: aggiornarla a ogni modifica */
-const REV = '2.0';
+const REV = '2.1';
 const RIC_CAT = {tutti:'Tutti', excel:'📊 Excel e dati', documenti:'📄 Word e PDF', ppt:'📽️ Presentazioni', testi:'✉️ Email e testi', ricerca:'🔎 Ricerca e decisioni', app:'🛠️ App e strumenti', agenti:'🔁 Agenti e automazioni', organizzazione:'🗓️ Riunioni, progetti, persone'};
 const RIC_LVL = {tutti:{l:'Tutti i livelli'}, base:{l:'Base', c:'#16a34a'}, intermedio:{l:'Intermedio', c:'#d97706'}, avanzato:{l:'Avanzato', c:'#dc2626'}};
 const RICETTE = [
@@ -3768,7 +3768,7 @@ L({id:'fine-glossario', p:'fine', t:'Glossario completo', sub:'Tutte le parole d
   ['claude','<b>Claude Code</b>','Agente di Claude per creare app, programmi e automazioni.'],
   ['claude','<b>Claude in Chrome</b>','Estensione del browser con cui Claude svolge compiti sui siti web.'],
   ['gemini','<b>Antigravity</b>','App di Google con agenti che lavorano sulle cartelle del computer e creano app.'],
-  ['gemini','<b>Gemini Spark</b>','Agente personale di Gemini per compiti in più passaggi (solo alcuni piani e paesi).'],
+  ['gemini','<b>Gemini Spark</b>','Agente personale di Gemini per compiti in più passaggi (non disponibile in Italia e nell’UE).'],
   ['*','<b>Deep Research / Ricerca</b>','Ricerca lunga sul web che produce un report con le fonti.'],
   ['*','<b>Loop agentico</b>','Il ciclo dell’agente: osserva → decide → agisce → verifica, ripetuto fino al risultato.'],
   ['*','<b>Human in the loop</b>','I momenti in cui l’agente deve fermarsi e chiedere a una persona.'],
