@@ -126,6 +126,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 .md-view .fm{background:#f5f3ff;border:1px dashed #a78bfa;border-radius:8px;padding:8px 12px;font:13px/1.5 ui-monospace,Menlo,monospace;color:#5b21b6;margin-bottom:10px;white-space:pre-wrap}
 .tree{font:14.5px/1.8 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#0b1220;color:#e2e8f0;border-radius:12px;padding:14px 18px;white-space:pre}
 .tree b{color:#93c5fd}.tree i{color:#94a3b8;font-style:normal}
+/* Niente scorrimento orizzontale della pagina su telefono */
+#page>*,.grid2>*,.grid3>*,.form>*,.steps>li,.how-body,.tab-body{min-width:0}
+.tree{overflow-x:auto;max-width:100%}
+code,.path{overflow-wrap:anywhere}
+.card p,.card li,.note,.warn,.keys{overflow-wrap:break-word}
 .diagram svg{width:100%;height:auto;max-height:470px;display:block;margin:0 auto;font-family:inherit}
 .clickable{cursor:pointer}
 .scale{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
@@ -143,7 +148,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 .pc:hover{box-shadow:var(--sh)}.pc b{display:block;color:var(--pc);font-size:13px}.pc span{font-size:14px}
 /* Navigazione lezioni */
 .lnav{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:6px;padding:16px 0 0;border-top:1px solid var(--line)}
-.lnav .btn{padding:13px 20px;font-size:16px}
+.lnav .btn{padding:13px 20px;font-size:16px;white-space:normal;max-width:100%}
+.btn{max-width:100%}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0f1b2d;color:#fff;padding:10px 18px;border-radius:10px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:50}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 /* Strumento scelto */
@@ -242,8 +248,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 .qz-end h2{margin:6px 0 4px;font-size:24px}.qz-end p{margin:0 0 6px}
 .qz-confetti{text-align:center;font-size:30px;letter-spacing:6px;margin-top:12px;animation:qzIn .6s ease}
 .qz-review{border-top:1px solid var(--line);padding:12px 0}.qz-review:first-child{border-top:0;padding-top:0}
-.rev-tag{display:inline-block;margin-top:4px;background:#1e3a5f;color:#93c5fd;border:0;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:700;cursor:pointer}
-.rev-tag:hover{background:#2563eb;color:#fff}
+.rev-tag{display:inline-block;margin-top:4px;background:#1e3a5f;color:#93c5fd;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:700}
 @media (max-width:1000px){.letters,.pillar-cards,.levels{grid-template-columns:repeat(2,1fr)}.plan{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:860px){
  .app{grid-template-columns:1fr}
@@ -311,7 +316,7 @@ Questa è una **frase in grassetto** e questa è normale.
   map:{rows:[]},
   app:{nome:'',livello:'chat',problema:'',input:'',output:'',sensibili:'si'},
   agente:{obiettivo:'',strumenti:'',passi:'',controlli:'',seFallisce:'',maxTent:3,umano:'',output:''},
-  cmd:{progetto:'',scopo:'',regole:'',comandi:''},
+  cmd:{progetto:'',scopo:'',regole:'',comandi:'',dettagli:''},
   ric:{f:'tutti',l:'tutti'},
   qz:{fase:'home',set:[],i:0,risposte:[],ordine:[]},
   tok:{msg:30,parole:200,pagine:20,ogni:6},
@@ -510,7 +515,7 @@ modes:{
   ['Domande, testi, email, traduzioni','💬 <b>Chat</b>','“Riscrivi questa mail in tono più cortese”'],
   ['Analizzare 1–10 file (Excel, PDF, Word, PowerPoint) e ricevere un file nuovo','💬 <b>Chat</b> con file allegati','“Da questo Excel crea un riepilogo per mese e ridammelo in .xlsx”'],
   ['Lavorare per settimane sullo stesso tema, con gli stessi documenti','📁 <b>Progetti</b>','Progetto “Bando regionale 2026”'],
-  ['Un compito o una procedura da fare sempre uguale, anche per i colleghi','🧩 <b>Skill</b> (sezione Plugin)','Skill “traduttore email”, skill “report mensile”'],
+  ['Un compito o una procedura da fare sempre uguale, anche per i colleghi','🧩 <b>Skill</b> (Plugin, piani aziendali) oppure 📁 <b>Progetto</b> dedicato','Skill “traduttore email”, skill “report mensile”'],
   ['Scrivere un documento lungo o una piccola app con anteprima','📝 <b>Canvas</b>','“Crea un calcolatore dei preventivi”'],
   ['Ricerca sul web con fonti e report finale','🔎 <b>Deep research</b>','“Incentivi 2026 per le piccole imprese: requisiti e scadenze”'],
   ['Lavoro lungo che produce documenti, fogli e presentazioni, anche su una <b>cartella del computer</b> o sui siti web','🗂️ <b>Work</b> (per le cartelle: app per computer)'+DL,'“Crea un Excel con i dati delle 40 fatture PDF di questa cartella”'],
@@ -626,7 +631,7 @@ tokens:{
   '<b>Scegli il modello</b> dal selettore: quello veloce per richieste semplici, quello con ragionamento (“Thinking”) solo per analisi complesse. Hanno limiti di utilizzo diversi.',
   '<b>Work, Codex, Deep research e immagini</b> consumano molto più di una normale chat: usali per lavori che lo valgono.',
   '<b>Limiti</b>: quando ti avvicini o raggiungi un limite, ChatGPT lo segnala e indica quando si ricarica.',
-  '<b>Codex</b>: nelle sessioni lunghe usa <code>/compact</code> per riassumere la conversazione e <code>/status</code> per vedere l’uso (dove disponibili), oppure apri un nuovo compito.',
+  '<b>Codex</b>: scrivi <code>/status</code> per vedere i limiti e l’uso; quando una conversazione diventa lunga apri un nuovo thread ripartendo da un riassunto (nella versione a riga di comando c’è anche <code>/compact</code>).',
   '<b>Progetti</b>: carica i documenti una volta nel progetto invece di allegarli in ogni chat.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
@@ -692,12 +697,15 @@ project:{
 },
 /* ---- Assistenti ---- */
 assistant:{
- chatgpt: note('I GPT personalizzati vanno in pensione','<p style="margin:4px 0 0">Da settembre 2026 gli account personali non possono più creare nuovi GPT e OpenAI li sta sostituendo con <b>Skill</b> e <b>Plugin</b>. I GPT già esistenti funzionano ancora per un periodo. Per un assistente nuovo usa una Skill.</p>') + stepsL(TOOLS.chatgpt.c,[
-  `Apri ${mp('Plugin › Skill › Crea')}.`,
+ chatgpt: note('I GPT personalizzati vanno in pensione','<p style="margin:4px 0 0">Gli account personali non possono più creare nuovi GPT: OpenAI li sta sostituendo con <b>Skill</b> e <b>Plugin</b>, disponibili nei <b>piani aziendali</b> (Business, Enterprise, Edu). I GPT già esistenti funzionano ancora per un periodo.</p>') + `<h3>Con un piano aziendale: una Skill</h3>` + stepsL(TOOLS.chatgpt.c,[
+  `Apri ${mp('barra laterale › Plugin › scheda Skill › Crea')}.`,
   '<b>Il modo più facile</b>: scegli <b>Crea con la chat</b> e descrivi il compito: ChatGPT ti fa domande e scrive la skill. In Work puoi anche scrivere <code>@skill-creator</code>.',
-  'Oppure scegli <b>Crea con l’editor</b> e incolla le istruzioni create qui sotto, o <b>Carica dal computer</b> un file SKILL.md.',
-  'Per usarla scrivi <b>@</b> e il nome della skill in una chat, oppure lascia che ChatGPT la scelga da solo quando la richiesta corrisponde.',
-  'Per un uso limitato a un tema puoi anche creare un <b>Progetto dedicato</b> con le istruzioni.'
+  'Oppure <b>Crea con l’editor</b> e incolla le istruzioni create qui sotto.',
+  'Per usarla scrivi <b>@</b> e il nome della skill in una chat, oppure lascia che ChatGPT la scelga da sola.'
+ ]) + `<h3>Con un piano personale (Plus, Pro): un Progetto dedicato</h3>` + stepsL(TOOLS.chatgpt.c,[
+  'Crea un progetto con il nome del compito (es. “Traduttore email”).',
+  'Incolla nelle <b>Istruzioni</b> del progetto il testo creato qui sotto e aggiungi eventuali file di riferimento.',
+  'Ogni volta che serve quel compito apri una chat <b>dentro quel progetto</b>.'
  ]),
  claude: `<p>Claude non ha i “GPT”. Hai due strade:</p>` + stepsL(TOOLS.claude.c,[
   '<b>Progetto dedicato</b>: crea un progetto “Traduttore email”, incolla le istruzioni create qui sotto e usa le chat di quel progetto.',
@@ -714,12 +722,13 @@ assistant:{
 },
 /* ---- Skill: installare e usare ---- */
 skillUse:{
- chatgpt: `<h3 style="margin-top:0">In ChatGPT (Chat e Work)</h3>` + stepsL(TOOLS.chatgpt.c,[
-  `Apri ${mp('Plugin › Skill › Crea')} → <b>Carica dal computer</b> e scegli il file SKILL.md (o la cartella della skill).`,
+ chatgpt: `<h3 style="margin-top:0">In ChatGPT con un piano aziendale (Business, Enterprise, Edu)</h3>` + stepsL(TOOLS.chatgpt.c,[
+  'Comprimi la cartella della skill in <b>.zip</b> (Mac: tasto destro › Comprimi · Windows: tasto destro › Invia a › Cartella compressa).',
+  `Apri ${mp('barra laterale › Plugin › scheda Skill › Crea')} → <b>Carica dal computer</b> e scegli il file .zip.`,
   'Oppure <b>Crea con la chat</b>: ChatGPT ti intervista e scrive la skill al posto tuo.',
   '<b>Usarla</b>: scrivi <b>@</b> e il nome della skill, oppure chiedi il lavoro normalmente e ChatGPT la sceglie da sola se la <i>description</i> corrisponde.',
-  '<b>Condividerla</b> con i colleghi: va inserita in un <b>plugin</b> (in azienda chiedi all’amministratore).'
- ]) + `<h3>In Codex</h3><p>Nella cartella del progetto le skill stanno in ${cmd('.agents/skills/nome-skill/SKILL.md')}. Più semplice: scrivi a Codex <i>“installa la skill che si trova nella cartella report-mensile”</i>. Per richiamarla in Codex scrivi <b>$</b> e il nome.</p>`,
+  '<b>Condividerla</b> con i colleghi: va inserita in un <b>plugin</b> (chiedi all’amministratore dell’area di lavoro).'
+ ]) + `<h3>Con un piano personale</h3><p>Le Skill nella chat non sono disponibili: crea un <b>Progetto</b>, incolla il testo di SKILL.md nelle <b>Istruzioni</b> e carica i file di <code>assets/</code> e <code>references/</code> tra i file del progetto.</p><h3>In Codex (tutti i piani)</h3><p>Nella cartella del progetto le skill stanno in ${cmd('.agents/skills/nome-skill/SKILL.md')}. Più semplice: scrivi a Codex <i>“installa la skill che si trova nella cartella report-mensile”</i>. Per richiamarla in Codex scrivi <b>$</b> e il nome.</p>`,
  claude: `<h3 style="margin-top:0">Nell’app e sul sito di Claude</h3>` + stepsL(TOOLS.claude.c,[
   'Comprimi la cartella della skill in <b>.zip</b> (Mac: tasto destro › Comprimi · Windows: tasto destro › Invia a › Cartella compressa).',
   `Apri ${mp('Personalizza › Skill')} → pulsante ${mp('+')} → <b>Crea skill</b> → <b>Carica una skill</b> → scegli il file .zip.`,
@@ -740,7 +749,7 @@ md:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
   'In chat chiedi: <i>“Scrivi il file SKILL.md per … e dammelo da scaricare come file .md”</i>. Compare un link per scaricarlo.',
   'In <b>Work</b> o <b>Codex</b>, su una cartella del computer, il file viene creato direttamente lì.',
-  'Dove lo usi: in <b>Plugin › Skill</b> (skill), nelle <b>Istruzioni</b> di un Progetto, oppure nella cartella di Codex come <code>AGENTS.md</code>.'
+  'Dove lo usi: in <b>Plugin › Skill</b> (piani aziendali), nelle <b>Istruzioni</b> di un Progetto, oppure nella cartella di Codex come <code>AGENTS.md</code>.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
   'Chiedi: <i>“Crea il file SKILL.md per …”</i>. Claude crea un file vero che puoi aprire e <b>scaricare</b>.',
@@ -1444,10 +1453,12 @@ la nuova data di consegna. Massimo 100 parole.`,
  <h3>Esempio: una skill costruita “a strati”</h3>
  <div class="tree"><b>report-mensile/</b>
 ├── <b>SKILL.md</b>              <i>← 40 righe: quando usarla e i passi</i>
-├── riferimenti/
+├── references/
 │   ├── definizioni-kpi.md   <i>← letto solo se serve calcolare i KPI</i>
 │   └── esempio-report.md    <i>← letto solo per imitare il formato</i>
-└── script/
+├── assets/
+│   └── modello-report.docx  <i>← usato solo per creare il file finale</i>
+└── scripts/
     └── calcola-kpi.py       <i>← esegue i calcoli: zero ragionamento</i></div>`)}
  ${card('Esempio: il file dell’agente snello', ex(
 `# Regole
@@ -1746,7 +1757,7 @@ L({id:'p2-assistenti', p:'p2', t:'Gli Assistenti personalizzati', sub:'GPT e Gem
  ])}`)}
  ${card(`Come si crea in ${toolName()}`, howBox('assistant'))}
  ${card('Il collegamento con i progetti', `<p>${byTool({
-  chatgpt:'Dentro una chat, anche in un progetto, puoi richiamare una skill scrivendo <b>@</b> e il suo nome. Così combini il <b>contesto del progetto</b> con il <b>metodo della skill</b>: <i>“@traduttore-email traduci la risposta per il fornitore tedesco”</i>.',
+  chatgpt:'Nei piani aziendali, dentro una chat (anche in un progetto) puoi richiamare una skill scrivendo <b>@</b> e il suo nome. Così combini il <b>contesto del progetto</b> con il <b>metodo della skill</b>: <i>“@traduttore-email traduci la risposta per il fornitore tedesco”</i>.',
   claude:'Le <b>skill</b> funzionano anche dentro i progetti: combini il <b>contesto del progetto</b> con il <b>metodo della skill</b>. Scrivi nel progetto <i>“traduci la risposta per il fornitore tedesco”</i> e Claude usa la skill di traduzione.',
   gemini:'Il Gem contiene già istruzioni e file: per combinare un metodo (tradurre) con un tema, aggiungi al Gem del tema una sezione con le regole di traduzione, oppure copia il risultato nel Gem “Traduttore”.',
   any:'Combina il <b>contesto del progetto</b> con il <b>metodo dell’assistente</b>: il progetto sa di cosa si parla, l’assistente sa come fare il lavoro.'})}</p>
@@ -1761,7 +1772,7 @@ L({id:'p2-assistenti', p:'p2', t:'Gli Assistenti personalizzati', sub:'GPT e Gem
  ${aiMake('ai-asst','Le istruzioni del tuo assistente', `Voglio creare un assistente personalizzato che fa solo questo compito: [descrivi il compito].
 Fammi prima le domande necessarie, una alla volta (cosa riceve, cosa deve restituire, regole, esempi di risultato giusto).
 Poi scrivi le istruzioni complete con queste sezioni: CHI SEI, COSA RICEVI, COME LAVORI, REGOLE, FORMATO DEL RISULTATO.
-Infine proponi 3 casi di prova per verificare che funzioni.`, byTool({chatgpt:'In ChatGPT puoi anche usare direttamente <b>Plugin › Skill › Crea › Crea con la chat</b>: fa le domande e scrive la skill da solo.', claude:'In Claude, alla fine chiedi: <i>“trasformalo in una skill e dammi il file .zip”</i>.', gemini:'In Gemini incolla il risultato nel campo Istruzioni del nuovo Gem.'}))}
+Infine proponi 3 casi di prova per verificare che funzioni.`, byTool({chatgpt:'Con un piano aziendale puoi usare direttamente <b>Plugin › Skill › Crea › Crea con la chat</b>; con un piano personale incolla il risultato nelle istruzioni di un Progetto.', claude:'In Claude, alla fine chiedi: <i>“trasformalo in una skill e dammi il file .zip”</i>.', gemini:'In Gemini incolla il risultato nel campo Istruzioni del nuovo Gem.'}))}
  ${keys(['Assistente = un compito semplice, sempre uguale.','Le istruzioni fisse si chiamano <b>system prompt</b>: puoi fartele scrivere dall’AI.','Testalo con 3 casi reali prima di condividerlo con i colleghi.'])}
 `, update(){ setText('p-asst', asstText()); }});
 
@@ -1798,10 +1809,13 @@ L({id:'p2-skill', p:'p2', t:'Le Skill', sub:'Pacchetti di competenza riutilizzab
  ${analogy('🎒','Il manuale operativo nello zaino dell’AI','<p style="margin:4px 0 0">Una skill è come il manuale che un collega esperto scrive per spiegare <b>come fa</b> un lavoro: passi, modelli, controlli. L’AI lo tiene “nello zaino” e lo apre <b>solo quando serve</b>.</p>')}
  ${card('Cos’è una Skill, esattamente', `<p>Una skill è una <b>cartella</b> che contiene un file <code>SKILL.md</code> con le istruzioni e, se servono, <b>altri file</b>: modelli di documento, esempi, piccoli programmi. È pensata per <b>lavori complessi</b> che vuoi fare sempre allo stesso modo.</p>
  <div class="grid2"><div><h3>Com’è fatta</h3><div class="tree"><b>report-mensile/</b>
-├── <b>SKILL.md</b>          <i>← istruzioni (obbligatorio)</i>
-├── modello-report.docx  <i>← modello da compilare</i>
-├── esempio-report.md    <i>← un esempio fatto bene</i>
-└── calcola-kpi.py       <i>← codice (facoltativo)</i></div></div>
+├── <b>SKILL.md</b>               <i>← istruzioni (obbligatorio)</i>
+├── assets/
+│   └── modello-report.docx   <i>← modelli da compilare</i>
+├── references/
+│   └── esempio-report.md     <i>← esempi e dettagli</i>
+└── scripts/
+    └── calcola-kpi.py        <i>← codice (facoltativo)</i></div></div>
  <div><h3>Com’è fatto SKILL.md</h3><div class="tree">---
 <b>name:</b> report-mensile
 <b>description:</b> Usa questa skill quando
@@ -1815,8 +1829,17 @@ vendite per la direzione.
  <ul><li><b>name</b>: il nome della skill, in minuscolo e con i trattini (<code>report-mensile</code>).</li>
  <li><b>description</b>: <b>quando</b> usarla. L’AI legge <b>solo questa riga</b> per decidere se aprire la skill. Se è vaga, la skill non verrà usata quando serve.</li></ul>
  ${ex('description: Skill per i report.', 'description: Usa questa skill quando devi preparare\nil report mensile delle vendite per la direzione,\npartendo dall’export Excel del gestionale.', 'Troppo generica: l’AI non capisce quando attivarla.', 'Dice quando, per chi e da quali dati: l’AI la attiva al momento giusto.')}`)}
+ ${card('Le regole d’oro per una buona skill', `<ol class="steps" style="--pc:#0d9488">
+  <li><b>Una skill, un lavoro.</b> Meglio “verbale-riunione” e “report-mensile” separate che una skill “ufficio” che fa tutto.</li>
+  <li><b>Description con le parole che userai.</b> Scrivi quando usarla, per chi, da quali file, e se serve quando <i>non</i> usarla. È l’unica parte che l’AI legge sempre.</li>
+  <li><b>SKILL.md snello</b>: sotto le 500 righe, con passi e controlli. Si legge per intero ogni volta che la skill si attiva.</li>
+  <li><b>Cartelle standard</b>: <code>assets/</code> per modelli e file da compilare, <code>references/</code> per esempi, definizioni e regole lunghe, <code>scripts/</code> per calcoli e controlli ripetitivi.</li>
+  <li><b>Richiama i file in modo esplicito</b> (“per il formato leggi references/esempio-report.md”): l’AI apre un file di supporto solo se SKILL.md lo indica.</li>
+  <li><b>Controlli verificabili e regole anti-invenzione</b>: numeri che tornano, NON TROVATO dove manca un dato.</li>
+  <li><b>Provala con 3 richieste reali</b>, scritte in modo diverso, e correggi description e passi.</li>
+ </ol>`)}
  ${card('Skill che servono in quasi ogni ufficio', tbl(['Skill','Cosa mettere nella cartella'],[
-  ['<b>Report mensile</b> da Excel','SKILL.md + modello Word o PowerPoint + un report ben fatto'],
+  ['<b>Report mensile</b> da Excel','SKILL.md + assets/modello Word o PowerPoint + references/report ben fatto + scripts/calcoli'],
   ['<b>Verbale di riunione</b>','SKILL.md + modello del verbale'],
   ['<b>Presentazione aziendale</b>','SKILL.md + modello .pptx con colori e logo'],
   ['<b>Confronto offerte</b> dei fornitori','SKILL.md + criteri di valutazione + modello Excel del confronto'],
@@ -1853,16 +1876,21 @@ Se manca qualcosa, chiedilo prima di procedere.
 ${steps.length ? steps.map((x,i)=>(i+1)+'. '+x).join('\n') : '1. [primo passo]\n2. [secondo passo]'}
 
 ## Come deve essere il risultato
-${v(K.template,'formato, sezioni, lunghezza. Se c’è un modello, indica il file: es. modello-report.docx')}
+${v(K.template,'formato, sezioni, lunghezza. Se c’è un modello, indica il file: es. assets/modello-report.docx')}
+
+## File di supporto (leggili solo quando servono)
+- Modelli da compilare: cartella assets/
+- Esempi, definizioni e regole di dettaglio: cartella references/
+- Calcoli e controlli ripetitivi: cartella scripts/ (se presente, usala invece di rifare i calcoli)
 
 ## Controlli prima di consegnare
 ${ctr.length ? ctr.map(x=>'- '+x).join('\n') : '- [controllo verificabile]'}
 - Elenca in fondo le assunzioni fatte e i punti da verificare`;
 }
 const SKILL_PRESETS = {
- report:{label:'Report mensile vendite', nome:'Report mensile vendite', quando:'devi preparare il report mensile delle vendite per la direzione partendo dall’export Excel del gestionale', input:'Export Excel delle vendite del mese\nExport del mese precedente\nObiettivi mensili per prodotto', passi:'Calcola il totale vendite e la variazione rispetto al mese precedente\nConfronta ogni prodotto con il suo obiettivo\nIndividua i 3 prodotti migliori e i 3 peggiori\nScrivi una sintesi di 3 righe per la direzione\nProponi massimo 3 decisioni da prendere', template:'Una pagina: sintesi in 3 righe, tabella KPI (valore, mese precedente, variazione %, obiettivo), 3 decisioni. Usa il modello modello-report.docx', controlli:'Ogni numero coincide con l’export Excel\nLe variazioni sono calcolate sul mese precedente\nNessuna sezione del modello è vuota\nIl report sta in una pagina'},
- verbale:{label:'Verbale riunione', nome:'Verbale riunione', quando:'devi trasformare la trascrizione o gli appunti di una riunione in un verbale con decisioni e attività', input:'Trascrizione o appunti della riunione\nElenco dei partecipanti\nData e argomento', passi:'Individua gli argomenti discussi\nPer ogni argomento riassumi in 2-3 righe\nEstrai le decisioni prese\nEstrai le attività: cosa, chi, entro quando\nElenca i punti rimasti aperti', template:'Documento Word: intestazione (data, partecipanti, argomento), sintesi, tabella decisioni, tabella attività (cosa | chi | entro quando), punti aperti. Massimo 2 pagine. Usa modello-verbale.docx', controlli:'Ogni attività ha un responsabile e una data, oppure è segnata DA DEFINIRE\nNessuna decisione è attribuita a chi non l’ha presa\nNessuna informazione è aggiunta rispetto alla trascrizione'},
- presentazione:{label:'Presentazione aziendale', nome:'Presentazione aziendale', quando:'devi creare una presentazione PowerPoint partendo da un documento o da dati Excel, con il modello aziendale', input:'Documento o file Excel di partenza\nModello aziendale modello.pptx\nPubblico e durata della presentazione', passi:'Leggi i materiali e individua i 3 messaggi principali\nProponi la scaletta e chiedi conferma\nCrea una slide per ogni punto della scaletta\nTrasforma i numeri importanti in grafici\nScrivi le note del relatore', template:'File .pptx basato su modello.pptx: titolo, agenda, una idea per slide, massimo 40 parole per slide, slide finale con prossimi passi', controlli:'Ogni numero coincide con i materiali di partenza\nNessuna slide supera 40 parole\nColori e caratteri sono quelli del modello'}
+ report:{label:'Report mensile vendite', nome:'Report mensile vendite', quando:'devi preparare il report mensile delle vendite per la direzione partendo dall’export Excel del gestionale', input:'Export Excel delle vendite del mese\nExport del mese precedente\nObiettivi mensili per prodotto', passi:'Calcola il totale vendite e la variazione rispetto al mese precedente\nConfronta ogni prodotto con il suo obiettivo\nIndividua i 3 prodotti migliori e i 3 peggiori\nScrivi una sintesi di 3 righe per la direzione\nProponi massimo 3 decisioni da prendere', template:'Una pagina: sintesi in 3 righe, tabella KPI (valore, mese precedente, variazione %, obiettivo), 3 decisioni. Usa il modello assets/modello-report.docx', controlli:'Ogni numero coincide con l’export Excel\nLe variazioni sono calcolate sul mese precedente\nNessuna sezione del modello è vuota\nIl report sta in una pagina'},
+ verbale:{label:'Verbale riunione', nome:'Verbale riunione', quando:'devi trasformare la trascrizione o gli appunti di una riunione in un verbale con decisioni e attività', input:'Trascrizione o appunti della riunione\nElenco dei partecipanti\nData e argomento', passi:'Individua gli argomenti discussi\nPer ogni argomento riassumi in 2-3 righe\nEstrai le decisioni prese\nEstrai le attività: cosa, chi, entro quando\nElenca i punti rimasti aperti', template:'Documento Word: intestazione (data, partecipanti, argomento), sintesi, tabella decisioni, tabella attività (cosa | chi | entro quando), punti aperti. Massimo 2 pagine. Usa assets/modello-verbale.docx', controlli:'Ogni attività ha un responsabile e una data, oppure è segnata DA DEFINIRE\nNessuna decisione è attribuita a chi non l’ha presa\nNessuna informazione è aggiunta rispetto alla trascrizione'},
+ presentazione:{label:'Presentazione aziendale', nome:'Presentazione aziendale', quando:'devi creare una presentazione PowerPoint partendo da un documento o da dati Excel, con il modello aziendale', input:'Documento o file Excel di partenza\nModello aziendale modello.pptx\nPubblico e durata della presentazione', passi:'Leggi i materiali e individua i 3 messaggi principali\nProponi la scaletta e chiedi conferma\nCrea una slide per ogni punto della scaletta\nTrasforma i numeri importanti in grafici\nScrivi le note del relatore', template:'File .pptx basato su assets/modello.pptx: titolo, agenda, una idea per slide, massimo 40 parole per slide, slide finale con prossimi passi', controlli:'Ogni numero coincide con i materiali di partenza\nNessuna slide supera 40 parole\nColori e caratteri sono quelli del modello'}
 };
 L({id:'p2-skill-prova', p:'p2', t:'Crea la tua prima skill', sub:'Dal lavoro che conosci alla skill funzionante', min:12, body:()=>`
  ${aiMake('ai-skill','La tua skill completa (il modo più facile)', `Voglio creare una skill per questo lavoro: [descrivi il lavoro, es. preparare il report mensile delle vendite].
@@ -1884,13 +1912,13 @@ Se puoi, dammi la cartella completa come file .zip da scaricare.`, byTool({
    ${fld('skill.quando','Quando va usata? (completa la frase “Usa questa skill quando…”)',{type:'area',rows:2,ph:'devi preparare il report mensile delle vendite per la direzione partendo dall’export Excel'})}
    ${fld('skill.input','Cosa serve per iniziare (uno per riga)',{type:'area',rows:3,ph:'Export Excel delle vendite del mese\nObiettivi mensili'})}
    ${fld('skill.passi','I passi, come li faresti tu (uno per riga)',{type:'area',rows:4,ph:'Calcola totale e variazione sul mese precedente\nIndividua i 3 prodotti migliori e peggiori\nScrivi la sintesi'})}
-   ${fld('skill.template','Come deve essere il risultato',{type:'area',rows:2,wide:true,ph:'Una pagina: sintesi in 3 righe, tabella KPI, 3 decisioni da prendere. Usa il modello modello-report.docx'})}
+   ${fld('skill.template','Come deve essere il risultato',{type:'area',rows:2,wide:true,ph:'Una pagina: sintesi in 3 righe, tabella KPI, 3 decisioni da prendere. Usa il modello assets/modello-report.docx'})}
    ${fld('skill.controlli','Controlli prima di consegnare (uno per riga)',{type:'area',rows:3,wide:true,ph:'Ogni numero coincide con l’Excel\nNessuna sezione vuota\nMassimo una pagina'})}
   </div>
   <div class="grid2"><div>${outBox('p-skill','SKILL.md','', 'SKILL.md')}</div><div><div class="out" style="background:#fff;border:1px solid #e2e8f0"><div class="out-h"><span>Anteprima</span></div><div class="md-view" id="skill-view" style="border:0;min-height:0"></div></div></div></div>`)}
  ${card('Prepara la cartella della skill', `<ol class="steps" style="--pc:#0d9488">
   <li>Crea sul computer una cartella con lo stesso nome della skill (es. <code>report-mensile-vendite</code>).</li>
-  <li>Metti dentro <b>SKILL.md</b> e gli eventuali modelli ed esempi (es. <code>modello-report.docx</code>).</li>
+  <li>Metti dentro <b>SKILL.md</b> e, se servono, le sottocartelle <code>assets/</code> (modelli, es. <code>modello-report.docx</code>), <code>references/</code> (esempi e regole di dettaglio) e <code>scripts/</code> (calcoli).</li>
   <li>Se lo strumento lo richiede, comprimi la cartella in <b>.zip</b>: <b>Mac</b> tasto destro → Comprimi; <b>Windows</b> tasto destro → Invia a → Cartella compressa.</li>
  </ol>`)}
  ${card(`Mettila in funzione in ${toolName()}`, howBox('skillUse'))}
@@ -1903,7 +1931,7 @@ Se puoi, dammi la cartella completa come file .zip da scaricare.`, byTool({
 `, update(){ const t = skillText(); setText('p-skill', t); setHTML('skill-view', mdToHtml(t)); }});
 
 const SKILL_LIB = [
- {id:'report-mensile-excel', ic:'📊', t:'Report mensile da Excel', quando:'Ogni mese trasformi un export Excel in un report per la direzione.', cartella:'SKILL.md + modello-report.docx (facoltativo) + un report ben fatto come esempio', md:`---
+ {id:'report-mensile-excel', ic:'📊', t:'Report mensile da Excel', quando:'Ogni mese trasformi un export Excel in un report per la direzione.', cartella:'SKILL.md · assets/modello-report.docx (facoltativo) · references/esempio-report.md · scripts/calcola-kpi.py (facoltativo)', md:`---
 name: report-mensile-excel
 description: Usa questa skill quando devi preparare il report mensile per la direzione partendo da uno o più file Excel o CSV (vendite, costi, ordini), con confronto sul mese precedente e decisioni da prendere.
 ---
@@ -1917,14 +1945,15 @@ description: Usa questa skill quando devi preparare il report mensile per la dir
 
 ## Procedura
 1. Controlla la qualità dei dati: righe vuote, doppioni, date fuori periodo, importi negativi. Elencali, non correggerli in silenzio.
-2. Calcola eseguendo codice: totale del mese, variazione % sul mese precedente, totale per categoria.
+2. Calcola eseguendo codice (se esiste scripts/calcola-kpi.py usa quello): totale del mese, variazione % sul mese precedente, totale per categoria.
+   Per il formato del report leggi references/esempio-report.md.
 3. Confronta ogni categoria con l’obiettivo, se presente.
 4. Individua le 3 voci migliori e le 3 peggiori, con il motivo numerico.
 5. Scrivi una sintesi di 3 righe per chi non ha tempo.
 6. Proponi al massimo 3 decisioni, ognuna collegata a un numero.
 
 ## Risultato
-Documento Word di una pagina (usa modello-report.docx se presente):
+Documento Word di una pagina (usa assets/modello-report.docx se presente):
 - Sintesi (3 righe)
 - Tabella KPI: voce | mese | mese precedente | variazione % | obiettivo
 - Un grafico dell’andamento
@@ -1936,7 +1965,7 @@ Documento Word di una pagina (usa modello-report.docx se presente):
 - Le variazioni sono calcolate sul mese precedente.
 - Il report sta in una pagina.
 - Nessun dato inventato: dove manca scrivi NON DISPONIBILE.`},
- {id:'verbale-riunione', ic:'📝', t:'Verbale di riunione', quando:'Trasformi trascrizioni o appunti in verbale con decisioni e attività.', cartella:'SKILL.md + modello-verbale.docx (facoltativo)', md:`---
+ {id:'verbale-riunione', ic:'📝', t:'Verbale di riunione', quando:'Trasformi trascrizioni o appunti in verbale con decisioni e attività.', cartella:'SKILL.md · assets/modello-verbale.docx (facoltativo)', md:`---
 name: verbale-riunione
 description: Usa questa skill quando devi trasformare la trascrizione o gli appunti di una riunione (Teams, Meet, Zoom, appunti a mano) in un verbale con decisioni, attività, responsabili e scadenze.
 ---
@@ -1971,21 +2000,21 @@ Documento Word, massimo 2 pagine:
 - Ogni decisione e attività si ritrova nella trascrizione.
 - Nessuna attività senza responsabile o DA DEFINIRE.
 - Massimo 2 pagine.`},
- {id:'presentazione-aziendale', ic:'📽️', t:'Presentazione con il modello aziendale', quando:'Crei presentazioni PowerPoint da documenti o dati, sempre con lo stesso stile.', cartella:'SKILL.md + modello.pptx con logo e colori + una presentazione ben fatta', md:`---
+ {id:'presentazione-aziendale', ic:'📽️', t:'Presentazione con il modello aziendale', quando:'Crei presentazioni PowerPoint da documenti o dati, sempre con lo stesso stile.', cartella:'SKILL.md · assets/modello.pptx con logo e colori · references/esempio-presentazione.pdf', md:`---
 name: presentazione-aziendale
-description: Usa questa skill quando devi creare una presentazione PowerPoint partendo da documenti, appunti o dati Excel, usando il modello aziendale (modello.pptx) e le regole di stile interne.
+description: Usa questa skill quando devi creare una presentazione PowerPoint partendo da documenti, appunti o dati Excel, usando il modello aziendale (assets/modello.pptx) e le regole di stile interne.
 ---
 
 # Presentazione con il modello aziendale
 
 ## Prima di iniziare
 - Chiedi: pubblico, durata, obiettivo della presentazione (informare, convincere, decidere).
-- Servono i materiali di partenza e il file modello.pptx.
+- Servono i materiali di partenza e il file assets/modello.pptx.
 
 ## Procedura
 1. Leggi i materiali e individua i 3 messaggi principali.
 2. Proponi la scaletta (titolo e messaggio di ogni slide) e ASPETTA la conferma.
-3. Crea le slide con modello.pptx: una idea per slide, titolo che dice il messaggio.
+3. Crea le slide con assets/modello.pptx: una idea per slide, titolo che dice il messaggio.
 4. Trasforma i numeri importanti in grafici semplici.
 5. Scrivi le note del relatore per ogni slide.
 
@@ -2000,7 +2029,7 @@ description: Usa questa skill quando devi creare una presentazione PowerPoint pa
 - Nessuna slide supera 40 parole.
 - Colori, caratteri e logo sono quelli del modello.
 - Il numero di slide è adatto alla durata (circa 1 slide ogni 2 minuti).`},
- {id:'confronto-offerte', ic:'⚖️', t:'Confronto offerte dei fornitori', quando:'Confronti preventivi con formati diversi prima di scegliere.', cartella:'SKILL.md + criteri-valutazione.md + modello-confronto.xlsx (facoltativo)', md:`---
+ {id:'confronto-offerte', ic:'⚖️', t:'Confronto offerte dei fornitori', quando:'Confronti preventivi con formati diversi prima di scegliere.', cartella:'SKILL.md · references/criteri-valutazione.md · assets/modello-confronto.xlsx (facoltativo)', md:`---
 name: confronto-offerte
 description: Usa questa skill quando devi confrontare più preventivi o offerte di fornitori (PDF, Word, email) per lo stesso acquisto e preparare una tabella di confronto con differenze e domande da fare.
 ---
@@ -2009,7 +2038,7 @@ description: Usa questa skill quando devi confrontare più preventivi o offerte 
 
 ## Prima di iniziare
 - Chiedi cosa si sta acquistando e quali criteri contano di più (prezzo, tempi, qualità, garanzia).
-- Se esiste criteri-valutazione.md, usalo.
+- Se esiste references/criteri-valutazione.md, usalo.
 
 ## Procedura
 1. Per ogni offerta estrai: fornitore, prezzo totale IVA esclusa, voci incluse, tempi di consegna, garanzia, pagamento, costi extra, validità.
@@ -2030,7 +2059,7 @@ description: Usa questa skill quando devi confrontare più preventivi o offerte 
 - Una riga per ogni offerta ricevuta.
 - Ogni prezzo ha il riferimento alla pagina.
 - I totali comparabili sono ricalcolati con il codice.`},
- {id:'estrazione-fatture', ic:'🧾', t:'Estrazione dati da fatture e ricevute', quando:'Trascrivi in Excel i dati di fatture, ricevute o documenti di trasporto.', cartella:'SKILL.md + modello-tabella.xlsx (facoltativo)', md:`---
+ {id:'estrazione-fatture', ic:'🧾', t:'Estrazione dati da fatture e ricevute', quando:'Trascrivi in Excel i dati di fatture, ricevute o documenti di trasporto.', cartella:'SKILL.md · assets/modello-tabella.xlsx (facoltativo) · scripts/controlla-totali.py (facoltativo)', md:`---
 name: estrazione-fatture
 description: Usa questa skill quando devi estrarre in una tabella Excel i dati di fatture, ricevute, scontrini o documenti di trasporto in PDF o immagine, con controllo dei totali.
 ---
@@ -2044,7 +2073,7 @@ description: Usa questa skill quando devi estrarre in una tabella Excel i dati d
 ## Procedura
 1. Per ogni documento estrai: nome file, fornitore, partita IVA, numero, data, imponibile, IVA, totale, scadenza di pagamento.
 2. Riporta numeri e nomi esattamente come sono scritti.
-3. Controlla che imponibile + IVA = totale (tolleranza 0,01 €).
+3. Controlla che imponibile + IVA = totale (tolleranza 0,01 €); se esiste scripts/controlla-totali.py usa quello.
 4. Se un controllo non torna, rileggi il documento. Dopo 2 tentativi segna la riga DA VERIFICARE.
 5. Segnala i possibili doppioni (stesso fornitore, numero e importo).
 
@@ -2062,22 +2091,22 @@ File Excel con:
 - Numero di righe = numero di documenti.
 - Nessuna cella vuota nelle colonne obbligatorie.
 - Tutti i totali verificati oppure segnati DA VERIFICARE.`},
- {id:'risposte-richieste-frequenti', ic:'✉️', t:'Risposte alle richieste frequenti', quando:'Rispondi a email ricorrenti con informazioni corrette e nel tuo stile.', cartella:'SKILL.md + informazioni.md (orari, prezzi, procedure) + 3 risposte ben fatte', md:`---
+ {id:'risposte-richieste-frequenti', ic:'✉️', t:'Risposte alle richieste frequenti', quando:'Rispondi a email ricorrenti con informazioni corrette e nel tuo stile.', cartella:'SKILL.md · references/informazioni.md (orari, prezzi, procedure) · references/esempi-risposte.md', md:`---
 name: risposte-richieste-frequenti
-description: Usa questa skill quando devi rispondere a email o messaggi con domande ricorrenti (orari, tempi di consegna, documenti richiesti, procedure, reclami semplici) usando le informazioni ufficiali in informazioni.md.
+description: Usa questa skill quando devi rispondere a email o messaggi con domande ricorrenti (orari, tempi di consegna, documenti richiesti, procedure, reclami semplici) usando le informazioni ufficiali in references/informazioni.md.
 ---
 
 # Risposte alle richieste frequenti
 
 ## Prima di iniziare
-- Leggi informazioni.md: è l’unica fonte valida per dati, prezzi, tempi e procedure.
-- Leggi le risposte di esempio per imitarne tono e struttura.
+- Leggi references/informazioni.md: è l’unica fonte valida per dati, prezzi, tempi e procedure.
+- Leggi references/esempi-risposte.md per imitarne tono e struttura.
 
 ## Procedura
 1. Individua cosa chiede davvero il messaggio (anche più domande).
-2. Cerca le risposte in informazioni.md.
+2. Cerca le risposte in references/informazioni.md.
 3. Scrivi la risposta: saluto, risposta diretta, eventuali passi da fare, chiusura.
-4. Se una domanda non trova risposta in informazioni.md, NON inventare: inserisci [DA VERIFICARE: …].
+4. Se una domanda non trova risposta in references/informazioni.md, NON inventare: inserisci [DA VERIFICARE: …].
 5. Se il messaggio è un reclamo serio o contiene minacce legali, non rispondere: segnala che serve una persona.
 
 ## Stile
@@ -2086,10 +2115,10 @@ description: Usa questa skill quando devi rispondere a email o messaggi con doma
 - Frasi brevi, niente formule burocratiche.
 
 ## Controlli prima di consegnare
-- Ogni dato (prezzo, data, orario) è presente in informazioni.md.
+- Ogni dato (prezzo, data, orario) è presente in references/informazioni.md.
 - Tutte le domande del messaggio hanno una risposta o un [DA VERIFICARE].
 - Nessuna promessa non prevista dalle procedure.`},
- {id:'revisione-documento', ic:'🔍', t:'Revisione e verifica di un documento', quando:'Controlli un testo prima di inviarlo: errori, chiarezza, dati non verificati.', cartella:'SKILL.md + guida-stile.md (facoltativo)', md:`---
+ {id:'revisione-documento', ic:'🔍', t:'Revisione e verifica di un documento', quando:'Controlli un testo prima di inviarlo: errori, chiarezza, dati non verificati.', cartella:'SKILL.md · references/guida-stile.md (facoltativo)', md:`---
 name: revisione-documento
 description: Usa questa skill quando devi rivedere un documento prima di inviarlo o pubblicarlo (lettera, offerta, report, procedura, articolo) controllando errori, chiarezza, coerenza e affermazioni non verificabili.
 ---
@@ -2111,13 +2140,13 @@ description: Usa questa skill quando devi rivedere un documento prima di inviarl
 ## Regole
 - Non aggiungere informazioni nuove.
 - Non cambiare il significato: se un punto è poco chiaro, proponi e chiedi.
-- Se esiste guida-stile.md, seguila.
+- Se esiste references/guida-stile.md, seguila.
 
 ## Controlli prima di consegnare
 - Ogni modifica è elencata nella tabella.
 - Tutti i numeri del documento sono stati ricontrollati.
 - Le affermazioni non verificabili sono segnalate.`},
- {id:'analisi-contratto', ic:'📑', t:'Analisi di un contratto', quando:'Estrai scadenze, obblighi e rischi da contratti e condizioni generali.', cartella:'SKILL.md + checklist-clausole.md (facoltativo)', md:`---
+ {id:'analisi-contratto', ic:'📑', t:'Analisi di un contratto', quando:'Estrai scadenze, obblighi e rischi da contratti e condizioni generali.', cartella:'SKILL.md · references/checklist-clausole.md (facoltativo)', md:`---
 name: analisi-contratto
 description: Usa questa skill quando devi leggere un contratto, un accordo o delle condizioni generali per estrarre durata, scadenze, rinnovi, recesso, penali, obblighi e punti di attenzione, con riferimento agli articoli.
 ---
@@ -2149,7 +2178,7 @@ Questa analisi aiuta a leggere il contratto ma non sostituisce il parere di un l
 ## Regole
 - Usa solo il testo del contratto. Se un punto non c’è, scrivi NON PREVISTO.
 - Mai interpretare in modo creativo: riporta e spiega.`},
- {id:'pulizia-dati-excel', ic:'🧹', t:'Pulizia di elenchi Excel', quando:'Sistemi anagrafiche, listini o elenchi pieni di doppioni ed errori.', cartella:'SKILL.md + regole-dati.md (formati accettati, campi obbligatori)', md:`---
+ {id:'pulizia-dati-excel', ic:'🧹', t:'Pulizia di elenchi Excel', quando:'Sistemi anagrafiche, listini o elenchi pieni di doppioni ed errori.', cartella:'SKILL.md · references/regole-dati.md (formati accettati, campi obbligatori)', md:`---
 name: pulizia-dati-excel
 description: Usa questa skill quando devi pulire un elenco Excel o CSV (anagrafiche, contatti, articoli, listini) da doppioni, celle vuote, formati diversi ed errori, prima di importarlo o usarlo.
 ---
@@ -2159,7 +2188,7 @@ description: Usa questa skill quando devi pulire un elenco Excel o CSV (anagrafi
 ## Prima di iniziare
 - Lavora sempre su una copia del file.
 - Dimmi righe e colonne lette e mostrami le prime 5 righe.
-- Se esiste regole-dati.md, usalo per formati e campi obbligatori.
+- Se esiste references/regole-dati.md, usalo per formati e campi obbligatori.
 
 ## Procedura
 1. Analizza e SEGNALA (senza correggere): doppioni esatti e probabili, celle vuote obbligatorie, email e telefoni non validi, date e numeri in formati diversi, spazi e maiuscole incoerenti.
@@ -2177,7 +2206,7 @@ File Excel con:
 - Righe pulito + da verificare + doppioni rimossi = righe originali.
 - Nessuna cella obbligatoria vuota nel foglio “Pulito”.
 - Ogni modifica compare nel foglio “Modifiche”.`},
- {id:'requisiti-app', ic:'🧩', t:'Requisiti di un’app (PRD)', quando:'Prima di creare un’app, trasformi un’idea in un documento chiaro da dare all’AI.', cartella:'SKILL.md', md:`---
+ {id:'requisiti-app', ic:'🧩', t:'Requisiti di un’app (PRD)', quando:'Prima di creare un’app, trasformi un’idea in un documento chiaro da dare all’AI.', cartella:'SKILL.md · references/esempio-prd.md (facoltativo)', md:`---
 name: requisiti-app
 description: Usa questa skill quando qualcuno vuole creare un’app, un gestionale, un modulo online o un’automazione e bisogna trasformare l’idea in un documento dei requisiti (PRD.md) chiaro, prima di scrivere codice.
 ---
@@ -2215,6 +2244,7 @@ description: Usa questa skill quando qualcuno vuole creare un’app, un gestiona
 L({id:'p2-skill-libreria', p:'p2', t:'Libreria: 10 skill pronte', sub:'File SKILL.md completi da scaricare, adattare e installare', min:10, body:()=>`
  ${card('Come usare la libreria', `<ol class="steps" style="--pc:#0d9488">
   <li>Scegli una skill e premi <b>⬇ Scarica SKILL.md</b>.</li>
+  <li>I file indicati in <code>assets/</code>, <code>references/</code> e <code>scripts/</code> sono facoltativi: se non li hai, fatteli creare dall’AI oppure togli il riferimento da SKILL.md.</li>
   <li>Crea sul computer una cartella con il <b>nome indicato</b> e metti dentro il file (se il browser lo rinomina “SKILL (1).md”, rinominalo <code>SKILL.md</code>).</li>
   <li>Aggiungi i file consigliati (modelli, esempi) e <b>adatta la skill</b> con il prompt qui sotto.</li>
   <li>Installala seguendo le istruzioni per ${toolName()} della lezione <button class="btn" data-act="go" data-to="p2-skill-prova">Crea la tua prima skill</button>.</li>
@@ -2934,7 +2964,7 @@ L({id:'p5-casi', p:'p5', t:'Agenti al lavoro: 8 casi concreti', sub:'Excel, Word
 `});
 
 function cmdText(){
- const C = S.cmd, r = lines(C.regole), k = lines(C.comandi);
+ const C = S.cmd, r = lines(C.regole), k = lines(C.comandi), dt = lines(C.dettagli);
  return `# ${v(C.progetto,'Nome della cartella o del progetto')}
 
 ## Di cosa si tratta
@@ -2947,7 +2977,10 @@ ${r.length ? r.map(x=>'- '+x).join('\n') : '- [regola]'}
 - Prima di azioni irreversibili chiedimi conferma
 
 ## File e cartelle importanti
-${k.length ? k.map(x=>'- '+x).join('\n') : '- [es. originali/ = copie dei file di partenza]'}`;
+${k.length ? k.map(x=>'- '+x).join('\n') : '- [es. originali/ = copie dei file di partenza]'}
+
+## Dove trovare i dettagli (leggili solo se servono)
+${dt.length ? dt.map(x=>'- '+x).join('\n') : '- [es. procedura completa → docs/procedura.md]'}`;
 }
 L({id:'p5-istruzioni', p:'p5', t:'Il file di istruzioni dell’agente', sub:'La “memoria” permanente di una cartella di lavoro', min:7, body:()=>{ const f = AGENT_MD[curTool()]; return `
  ${card('Il problema: l’agente riparte da zero', `<p>Quando apri un agente in una cartella, all’inizio non sa nulla di quel lavoro. Per non rispiegare ogni volta le regole (Pilastro II!), si mette nella cartella un file .md che l’agente <b>legge automaticamente a ogni avvio</b>.</p>
@@ -2964,6 +2997,7 @@ L({id:'p5-istruzioni', p:'p5', t:'Il file di istruzioni dell’agente', sub:'La 
   ${fld('cmd.comandi','File e cartelle importanti (uno per riga)',{type:'area',rows:3,ph:'originali/ = copie delle fatture PDF\nrisultati/ = file Excel creati'})}
   ${fld('cmd.scopo','Di cosa si tratta',{type:'area',rows:2,wide:true,ph:'Cartella per trascrivere ogni mese le fatture dei fornitori in Excel per l’amministrazione.'})}
   ${fld('cmd.regole','Regole da seguire sempre (una per riga)',{type:'area',rows:3,wide:true,ph:'Scrivi in italiano\nDate nel formato GG/MM/AAAA\nNon inviare email'})}
+  ${fld('cmd.dettagli','Dettagli in altri file, da leggere solo se servono (uno per riga)',{type:'area',rows:2,wide:true,ph:'Procedura fatture → docs/fatture.md\nElenco fornitori → dati/fornitori.csv',hint:'Tieni il file principale breve: viene letto a ogni avvio.'})}
  </div>${outBox('p-cmd',f,'',f)}
  <p class="hint" style="margin-top:8px">Salva il file nella cartella di lavoro con il nome esatto <code>${f}</code>.</p>`)}
  ${aiMake('ai-cmd',`Il file ${f} della tua cartella`, `Analizza la cartella di lavoro in cui ti trovi (nomi dei file e sottocartelle, senza modificare nulla).
@@ -2975,27 +3009,8 @@ Mostrami il testo prima di salvarlo.`, `Questo prompt va incollato <b>direttamen
 `; }, update(){ setText('p-cmd', cmdText()); }});
 
 /* ---------- CONCLUSIONE ---------- */
-/* Registro delle revisioni: aggiungere una voce in cima a ogni modifica della guida */
-const REVISIONI = [
- {rev:3, note:[
-  'Nuova voce nella Conclusione: “Quiz finale” con 62 domande su tutti gli argomenti, giri da 10 domande sempre diverse (prima quelle non ancora viste), risposte mescolate, spiegazione e link alla lezione per ogni domanda, voto su 10 con giudizio.',
-  'Risultati salvati nel browser: storico dei giri con grafico, voto migliore, media, domande viste, andamento per argomento con l’argomento da ripassare per primo, pulsante per azzerare.']},
- {rev:2, note:[
-  'Nuova lezione “Usare meno token (e non finire i limiti)”: come si consumano i token, simulatore dell’effetto delle chat lunghe, 12 abitudini per risparmiare, esempi, prompt per ripartire da un riassunto, organizzazione di skill, file .md e istruzioni per consumare meno (skill “a strati”, file dell’agente snello, script, schede dei documenti lunghi), prompt per snellire skill e istruzioni, consigli per gli agenti e istruzioni per controllare i consumi in ChatGPT, Claude e Gemini.',
-  'Glossario e soluzioni ai problemi aggiornati con token e limiti di utilizzo.']},
- {rev:1, note:[
-  'Guida per chi usa l’AI solo in chat: scelta iniziale di ChatGPT, Claude o Gemini, con istruzioni solo per lo strumento scelto.',
-  'Istruzioni verificate sulle versioni attuali: ChatGPT (Chat, Work, Codex, Skill, Sites), Claude (Chat, Cowork, Claude Code, Skill, componenti Office), Gemini (Gem, Notebook, Gemini Notebook, Gemini Spark, AI Studio, Antigravity).',
-  'Lezioni su prompt, allucinazioni, lavoro sui file, dati in locale, personalizzazione, progetti, assistenti, file .md, skill (con libreria di 10 skill pronte), mappa delle attività, mini-app, app complete, agenti, file di istruzioni.',
-  'Ricettario con più di 50 casi di livello base, intermedio e avanzato; 8 casi completi di agenti; glossario; soluzioni ai problemi comuni.',
-  'Salvataggio dell’avanzamento nel browser.']}
-];
-const REV = REVISIONI[0];
-L({id:'fine-revisioni', p:'fine', t:'Registro delle revisioni', sub:'Cosa cambia nella guida, versione per versione', min:2, body:()=>`
- ${card(`Versione attuale: Rev. ${REV.rev}`, `<p>Gli strumenti di AI cambiano spesso. Ogni volta che la guida viene aggiornata, il numero di revisione aumenta e qui trovi cosa è cambiato.</p>`)}
- ${REVISIONI.map(r=>card(`Rev. ${r.rev}`, `<ul>${r.note.map(n=>`<li>${n}</li>`).join('')}</ul>`)).join('')}
-`});
-
+/* Versione della guida: aggiornarla a ogni modifica */
+const REV = '2.0';
 const RIC_CAT = {tutti:'Tutti', excel:'📊 Excel e dati', documenti:'📄 Word e PDF', ppt:'📽️ Presentazioni', testi:'✉️ Email e testi', ricerca:'🔎 Ricerca e decisioni', app:'🛠️ App e strumenti', agenti:'🔁 Agenti e automazioni', organizzazione:'🗓️ Riunioni, progetti, persone'};
 const RIC_LVL = {tutti:{l:'Tutti i livelli'}, base:{l:'Base', c:'#16a34a'}, intermedio:{l:'Intermedio', c:'#d97706'}, avanzato:{l:'Avanzato', c:'#dc2626'}};
 const RICETTE = [
@@ -3779,7 +3794,7 @@ function renderToolSel(){
 }
 const pc = l => l.p && PILLARS[l.p] ? PILLARS[l.p].c : l.p==='fine' ? '#16a34a' : '#38bdf8';
 function renderSide(){
- $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Guida AI</b><small>I 5 pilastri, passo passo</small><button class="rev-tag" data-act="go" data-to="fine-revisioni">Rev. ${REV.rev}</button></div></div>` +
+ $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Guida AI</b><small>I 5 pilastri, passo passo</small><span class="rev-tag">Rev. ${REV}</span></div></div>` +
   GROUPS.map(([k,label,c,n])=>{ const ls = LESSONS.map((l,i)=>[l,i]).filter(([l])=>l.p===k); if(!ls.length) return '';
    return `<div class="grp" style="--gc:${c}">${n?`<i>${n}</i>`:''}${label}</div>` + ls.map(([l,i])=>`<button class="li${i===cur?' on':''}" data-act="goi" data-i="${i}"><span class="ck${S.done[l.id]?' ok':''}">${S.done[l.id]?'✓':''}</span><span>${esc(l.t)}</span></button>`).join(''); }).join('') +
   `<button class="side-reset" data-act="reset">↺ Ricomincia da capo</button>`;
