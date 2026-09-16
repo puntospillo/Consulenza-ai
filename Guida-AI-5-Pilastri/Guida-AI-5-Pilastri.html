@@ -261,6 +261,7 @@ Questa è una **frase in grassetto** e questa è normale.
   agente:{obiettivo:'',strumenti:'',passi:'',controlli:'',seFallisce:'',maxTent:3,umano:'',output:''},
   cmd:{progetto:'',scopo:'',regole:'',comandi:''},
   ric:{f:'tutti',l:'tutti'},
+  tok:{msg:30,parole:200,pagine:20,ogni:6},
   prd:{nome:'',problema:'',ruoli:'',funzioni:'',dati:'',accesso:'ruoli',riservati:'si',dispositivi:'entrambi',fuori:''},
   pers:{ruolo:'',lavoro:'',pubblico:'',tono:'lei',lunghezza:'sintetiche',formato:'',evitare:'',fonti:true,nonloso:true,ipotesi:true,calcoli:true,web:true}
  };
@@ -564,6 +565,30 @@ verify:{
   '<b>Deep Research</b>: per temi importanti produce un report con le fonti.',
   '<b>Fogli Google</b>: per i calcoli su tabelle chiedi a Gemini dentro Fogli di creare le formule: puoi controllarle cella per cella.',
   '<b>Seconda opinione</b>: incolla la risposta in una <b>chat temporanea</b> e chiedi di trovare gli errori.'
+ ])
+},
+/* ---- Consumi e limiti ---- */
+tokens:{
+ chatgpt: stepsL(TOOLS.chatgpt.c,[
+  '<b>Scegli il modello</b> dal selettore: quello veloce per richieste semplici, quello con ragionamento (“Thinking”) solo per analisi complesse. Hanno limiti di utilizzo diversi.',
+  '<b>Work, Codex, Deep research e immagini</b> consumano molto più di una normale chat: usali per lavori che lo valgono.',
+  '<b>Limiti</b>: quando ti avvicini o raggiungi un limite, ChatGPT lo segnala e indica quando si ricarica.',
+  '<b>Codex</b>: nelle sessioni lunghe usa <code>/compact</code> per riassumere la conversazione e <code>/status</code> per vedere l’uso (dove disponibili), oppure apri un nuovo compito.',
+  '<b>Progetti</b>: carica i documenti una volta nel progetto invece di allegarli in ogni chat.'
+ ]),
+ claude: stepsL(TOOLS.claude.c,[
+  `<b>Controlla l’utilizzo</b> in ${mp('Impostazioni › Utilizzo')}: vedi quanto hai consumato nella sessione (si ricarica ogni 5 ore) e nella settimana.`,
+  '<b>Scegli il modello</b> dal selettore: uno più leggero per compiti semplici, il più potente solo per quelli complessi. Il ragionamento esteso consuma di più.',
+  '<b>Strumenti</b>: dal menu della casella disattiva ricerca web e connettori quando non servono.',
+  '<b>Progetti con tanti documenti</b>: Claude cerca solo le parti utili invece di rileggere tutto, quindi conviene caricarli lì.',
+  '<b>Claude Code</b>: <code>/clear</code> per ricominciare pulito, <code>/compact</code> per riassumere, <code>/context</code> per vedere cosa occupa spazio. <b>Cowork</b>: un compito per sessione.'
+ ]),
+ gemini: stepsL(TOOLS.gemini.c,[
+  '<b>Scegli il modello</b>: quello veloce per richieste semplici; quelli più potenti o con ragionamento hanno un numero di richieste al giorno più basso.',
+  '<b>Deep Research, immagini e video</b> hanno limiti giornalieri propri: usali per ciò che conta.',
+  '<b>Gemini Notebook e Notebook</b>: le fonti restano nel notebook, non serve ricaricarle in ogni chat.',
+  '<b>Antigravity</b>: la quota dipende dal piano; chiudi i compiti finiti e apri una conversazione nuova per ogni lavoro diverso.',
+  '<b>Modifica il prompt</b> (icona matita) invece di aggiungere messaggi di correzione.'
  ])
 },
 /* ---- Lavorare con i file in chat ---- */
@@ -1293,6 +1318,132 @@ ${T.ctrl.map(x=>'- '+x).join('\n')}
 - Non inventare dati: dove un’informazione manca scrivi DA VERIFICARE.
 - In fondo elenca cosa devo controllare io.`;
 }
+const RIASSUNTO_PROMPT = `Riassumi questa conversazione per continuarla in una chat nuova.
+Includi solo:
+- obiettivo del lavoro
+- decisioni prese
+- dati, numeri e nomi importanti
+- file usati e cosa contengono
+- cosa resta da fare
+- regole di stile e formato da rispettare
+Massimo 250 parole, in un testo pronto da incollare all’inizio della nuova chat.`;
+function tokCalc(){
+ const T = S.tok, n = Math.max(1, Math.min(200, Number(T.msg)||1)), perMsg = Math.max(10,(Number(T.parole)||0))*1.5*2, att = Math.max(0,Number(T.pagine)||0)*700, k = Math.max(1, Number(T.ogni)||5);
+ let unica = 0; for(let i=1;i<=n;i++) unica += att + i*perMsg;
+ let divise = 0; for(let i=1;i<=n;i++){ const pos = ((i-1)%k)+1; divise += att + pos*perMsg + (i>k ? 400 : 0); }
+ return {n, unica:Math.round(unica), divise:Math.round(divise)};
+}
+L({id:'p1-token', p:'p1', t:'Usare meno token (e non finire i limiti)', sub:'Come lavora “il contatore” dell’AI, le abitudini e l’organizzazione di skill e file .md per risparmiare', min:13, body:()=>`
+ ${analogy('⛽','Il serbatoio dell’AI','<p style="margin:4px 0 0">Ogni piano ha un “serbatoio” di utilizzo che si ricarica dopo un certo tempo. Si misura in <b>token</b>: pezzi di parole (in italiano, più o meno una sillaba o una parola corta). Si consumano token sia per <b>tutto quello che l’AI legge</b> sia per <b>tutto quello che scrive</b>. Guidare bene fa fare più chilometri con lo stesso pieno.</p>')}
+ ${card('Il punto che quasi nessuno sa: a ogni messaggio l’AI rilegge tutto', `<p>Quando scrivi il decimo messaggio di una chat, l’AI non legge solo quello: <b>rilegge tutta la conversazione</b>, gli allegati, le istruzioni personali e quelle del progetto. Per questo una chat lunga consuma sempre di più, anche per domande brevi.</p>
+ ${tbl(['Cosa consuma token','Quanto'],[
+  ['Una domanda breve in una chat nuova','🟢 Poco'],
+  ['Istruzioni personali e del progetto','🟡 Poco, ma a <b>ogni</b> messaggio: tienile brevi'],
+  ['Un PDF di 100 pagine o un Excel con migliaia di righe','🟠 Molto, e viene riletto nei messaggi successivi'],
+  ['Una chat di 40 messaggi sullo stesso tema','🔴 Moltissimo: ogni messaggio rilegge tutto'],
+  ['Modelli “ragionamento”, Deep Research, immagini','🔴 Molto'],
+  ['Un agente che lavora per un’ora su una cartella','🔴 Moltissimo'],
+  ['Una mini-app creata dall’AI che poi lavora da sola','🟢 Zero: il programma non usa l’AI']
+ ])}`)}
+ ${tryBox('Guarda quanto pesa una chat lunga', `<p>Una stima semplice per capire l’effetto: cambia i numeri e confronta una chat unica con chat nuove ripartendo da un riassunto.</p>
+  <div class="form">
+   ${fld('tok.msg','Quanti messaggi scrivi sullo stesso lavoro',{type:'number',min:1})}
+   ${fld('tok.parole','Parole medie per messaggio (tuo + risposta)',{type:'number',min:10})}
+   ${fld('tok.pagine','Pagine di documenti allegati',{type:'number',min:0})}
+   ${fld('tok.ogni','Apro una chat nuova ogni … messaggi',{type:'number',min:1})}
+  </div><div id="tok-out"></div>`)}
+ ${card('Le 12 abitudini che fanno risparmiare', `<ol class="steps" style="--pc:#4f46e5">
+  <li><b>Una chat per argomento.</b> Cambi tema? Chat nuova.</li>
+  <li><b>Chat lunga? Riassumi e riparti.</b> Usa il prompt qui sotto e incolla il riassunto in una chat nuova.</li>
+  <li><b>Correggi modificando il messaggio</b> (icona matita) invece di aggiungere “no, intendevo…”: la parte sbagliata non resta nella conversazione.</li>
+  <li><b>Un messaggio completo, non dieci piccoli.</b> Un prompt CRAFT chiaro evita giri di correzioni.</li>
+  <li><b>Chiedi solo ciò che serve.</b> “Solo la tabella, senza introduzione né conclusioni.”</li>
+  <li><b>Modifiche puntuali.</b> “Riscrivi solo il paragrafo 3” invece di “rifai tutto il documento”.</li>
+  <li><b>Il modello giusto.</b> Veloce per compiti semplici; quello con ragionamento solo per analisi difficili.</li>
+  <li><b>File leggeri.</b> Allega solo le pagine o i fogli che servono; togli immagini e fogli inutili; per grandi tabelle usa CSV.</li>
+  <li><b>Non ricaricare lo stesso file.</b> Nella stessa chat o nel progetto è già lì: fai riferimento a quello.</li>
+  <li><b>Istruzioni personali brevi; il resto in skill.</b> Le istruzioni personali si leggono a ogni messaggio, le skill solo quando servono.</li>
+  <li><b>Strumenti accesi solo quando servono.</b> Ricerca web, connettori, Deep Research e agenti aggiungono molto lavoro.</li>
+  <li><b>Lavori ripetitivi? Un programma, non l’AI.</b> Se ogni mese fai gli stessi calcoli sugli stessi file, fatti creare una mini-app: dopo, costa zero.</li>
+ </ol>`)}
+ ${card('Esempi', ex(
+`[messaggio 38 di una chat iniziata 3 giorni fa,
+con 4 PDF allegati e argomenti diversi]
+Ah, e adesso scrivimi anche la mail per il fornitore.`,
+`[chat nuova]
+Contesto: [riassunto di 8 righe della chat precedente]
+Scrivi la mail al fornitore Alfa per chiedere
+la nuova data di consegna. Massimo 100 parole.`,
+ 'L’AI rilegge 3 giorni di conversazione e 4 PDF per scrivere una mail di 100 parole: consumo altissimo e più rischio di confusione.',
+ 'Solo il contesto necessario: consumo minimo e risposta più precisa.', 'Spreco', 'Risparmio') + '<div style="height:12px"></div>' + ex('Il titolo non mi piace, rifammi tutto il report.', 'Cambia solo il titolo del report:\nproponi 3 alternative, massimo 8 parole ciascuna.\nNon riscrivere il resto.', 'Viene rigenerato un documento intero per cambiare una riga.', 'Si genera solo ciò che cambia.', 'Spreco', 'Risparmio'))}
+ ${card('Il prompt per ripartire in una chat nuova', outBox('p-riassunto','Prompt · Riassunto per continuare', RIASSUNTO_PROMPT))}
+ ${card('Organizza gli strumenti per consumare meno: skill, file .md, progetti', `<p>Il risparmio più grande non viene dal singolo prompt, ma da <b>come organizzi istruzioni e materiali</b>. La regola: l’AI deve leggere <b>sempre</b> solo ciò che serve sempre, e <b>solo quando serve</b> tutto il resto.</p>
+ ${tbl(['Strumento','Quando viene letto','Come ottimizzarlo'],[
+  ['<b>Istruzioni personali</b>','A <b>ogni</b> messaggio','Massimo 10–15 righe: chi sei, come vuoi le risposte, regole di affidabilità. Niente procedure lunghe.'],
+  ['<b>Istruzioni del progetto / notebook</b>','A ogni messaggio del progetto','Solo contesto e regole del tema. Le procedure vanno in skill.'],
+  ['<b>'+AGENT_MD[curTool()]+'</b> (file dell’agente)','A <b>ogni avvio</b> dell’agente','Breve: regole che valgono sempre e un indice dei file (“per le fatture leggi docs/fatture.md”). I dettagli in file separati.'],
+  ['<b>Skill (SKILL.md)</b>','All’inizio solo nome e <i>description</i>; il resto <b>solo quando serve</b>','È lo strumento più “economico”: sposta qui le procedure. Description precisa (così non si attiva a sproposito), SKILL.md breve, dettagli in file a parte.'],
+  ['<b>File di riferimento</b> della skill','Solo se la procedura li richiama','Definizioni, esempi, tabelle, listini: ognuno nel suo file .md, con il nome che dice cosa contiene.'],
+  ['<b>Script</b> nella skill','Vengono eseguiti, non “letti e ragionati”','Calcoli, controlli e conversioni ripetitivi: un programmino costa quasi zero token rispetto a farli fare all’AI.'],
+  ['<b>Documenti del progetto</b>','Solo le parti utili, quando servono','Carica versioni aggiornate e togli quelle superate; niente doppioni.'],
+  ['<b>Memoria</b>','Può entrare in ogni conversazione','Cancella ricordi inutili o superati.']
+ ])}
+ <h3>Esempio: una skill costruita “a strati”</h3>
+ <div class="tree"><b>report-mensile/</b>
+├── <b>SKILL.md</b>              <i>← 40 righe: quando usarla e i passi</i>
+├── riferimenti/
+│   ├── definizioni-kpi.md   <i>← letto solo se serve calcolare i KPI</i>
+│   └── esempio-report.md    <i>← letto solo per imitare il formato</i>
+└── script/
+    └── calcola-kpi.py       <i>← esegue i calcoli: zero ragionamento</i></div>`)}
+ ${card('Esempio: il file dell’agente snello', ex(
+`# Regole
+[300 righe con: storia dell’azienda,
+tutte le procedure (fatture, ordini, report),
+elenco completo dei fornitori,
+esempi di email, listino prezzi…]`,
+`# Cartella acquisti
+Regole sempre valide:
+- lavora su copie, salva in risultati/
+- chiedi conferma prima di inviare o cancellare
+- date GG/MM/AAAA, importi 1.234,56 €
+
+Dove trovare i dettagli (leggili solo se servono):
+- procedura fatture → docs/fatture.md
+- elenco fornitori → dati/fornitori.csv
+- report mensile → skill report-mensile`,
+ 'Tutto viene riletto a ogni avvio, anche quando il lavoro riguarda una sola cosa.',
+ 'Poche righe sempre valide e un indice: l’agente apre i dettagli solo quando servono.', 'Pesante', 'Snello'))}
+ ${card('Altri trucchi di organizzazione', `<ul>
+  <li><b>Scheda .md dei documenti lunghi</b>: fai creare una volta una scheda di 1–2 pagine di un manuale di 200 pagine (con i riferimenti alle pagine) e usala per le domande frequenti. Apri il manuale intero solo per i casi particolari.</li>
+  <li><b>Dati puliti una volta sola</b>: converti PDF ed Excel disordinati in un CSV o .md ordinato, con solo le colonne utili, e riusa quello.</li>
+  <li><b>Un esempio buono, non dieci</b>: un solo esempio breve insegna il formato quanto dieci lunghi.</li>
+  <li><b>Formati compatti</b>: tabelle ed elenchi invece di testo discorsivo; niente ripetizione della domanda nella risposta.</li>
+  <li><b>Una skill per lavoro</b>, non una skill gigante per tutto: così si carica solo quella giusta.</li>
+ </ul>`)}
+ ${aiMake('ai-snellisci','Snellire skill e file di istruzioni', `Ti allego un file di istruzioni ([SKILL.md / ${AGENT_MD[curTool()]} / istruzioni del progetto]).
+Ottimizzalo per consumare meno token senza perdere qualità:
+1. Tieni nel file principale solo le regole che servono sempre e i passi essenziali.
+2. Sposta dettagli, esempi, tabelle e casi particolari in file .md separati, con nomi chiari, e nel file principale scrivi quando leggerli.
+3. Individua calcoli o controlli ripetitivi che conviene trasformare in uno script.
+4. Elimina ripetizioni, frasi di cortesia e istruzioni ovvie.
+5. Se è una skill, rendi la description più precisa perché si attivi solo quando serve.
+Mostrami: la nuova struttura dei file, il nuovo file principale e l’elenco di cosa hai spostato o tolto.`)}
+ ${card('Agenti: dove si consuma di più', `<ul>
+  <li><b>Compito preciso</b>: “compila le colonne D ed E del file X”, non “guarda la cartella e vedi cosa si può fare”.</li>
+  <li><b>Cartella piccola</b>: dai accesso solo ai file necessari, non all’archivio intero.</li>
+  <li><b>Prova su pochi file</b>, poi allarga: un errore scoperto su 5 file costa poco, su 500 costa tanto.</li>
+  <li><b>Controlli sì/no e numero massimo di tentativi</b>: senza stop l’agente può girare a vuoto consumando.</li>
+  <li><b>Istruzioni nel file</b> (${AGENT_MD[curTool()]} o skill) invece di rispiegarle a ogni avvio.</li>
+ </ul>`)}
+ ${card(`Tenere d’occhio i consumi in ${toolName()}`, howBox('tokens'))}
+ ${keys(['A ogni messaggio l’AI rilegge tutta la chat: chat brevi e mirate.','Istruzioni sempre lette = brevi; procedure nelle skill, dettagli in file .md separati, calcoli negli script.','Modello veloce per il semplice, strumenti pesanti solo quando servono, programmi per il ripetitivo.'])}
+`, update(){
+ const r = tokCalc(), max = Math.max(r.unica, r.divise, 1), pct = Math.round((1 - r.divise/r.unica)*100);
+ const bar = (l,v,c) => `<div style="margin:8px 0"><div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700"><span>${l}</span><span>circa ${fmt(v)} token</span></div><div class="meter-bar" style="height:14px"><i style="width:${Math.max(2,v/max*100)}%;background:${c}"></i></div></div>`;
+ setHTML('tok-out', bar('Tutto in una chat', r.unica, '#dc2626') + bar(`Chat nuova ogni ${Math.max(1,Number(S.tok.ogni)||5)} messaggi (con riassunto)`, r.divise, '#16a34a') + `<p class="hint" style="margin:6px 0 0">${pct>0 ? `Risparmio stimato: <b>circa il ${pct}%</b>.` : 'Con così pochi messaggi la differenza è minima.'} Numeri indicativi: servono a capire l’effetto, non a calcolare i consumi reali.</p>`);
+}});
+
 L({id:'p1-file', p:'p1', t:'Lavorare sui file: Excel, Word, PDF, PowerPoint', sub:'Il passo che quasi nessuno fa: dare all’AI i tuoi documenti', min:12, body:()=>`
  ${card('L’AI non legge solo quello che scrivi', `<p>Puoi <b>allegare i tuoi file</b> alla chat. L’AI li legge, con Excel <b>fa calcoli veri</b> (scrive ed esegue da sola un piccolo programma) e può restituirti <b>file nuovi da scaricare</b>: un Excel pulito, un documento Word, una presentazione.</p>
   <p>È il passaggio che trasforma l’AI da “risponditore” a collega che lavora con te.</p>`)}
@@ -2444,7 +2595,7 @@ L({id:'p5-controlli', p:'p5', t:'Controlli, stop e intervento umano', sub:'Le re
  <ul><li>“Se più del 20% delle righe resta incompleto, fermati e chiedimi.”</li><li>“Prima di inviare email, spostare o cancellare file, chiedimi conferma.”</li><li>“Se trovi dati in contraddizione, non scegliere: segnalameli.”</li><li>“Prima di creare tutte le lettere, fammi vedere le prime 3.”</li></ul>`)}
  ${card('4 · Regole di sicurezza', `<ul>
   <li><b>Lavora su copie</b>, mai sui file originali.</li>
-  <li><b>Inizia in piccolo</b>: 5 file, non 500. Poi allarga.</li>
+  <li><b>Inizia in piccolo</b>: 5 file, non 500. Poi allarga. Fa risparmiare anche tempo e token.</li>
   <li><b>Chiedi un report finale</b>: cosa ha fatto, cosa no e perché, quanti tentativi.</li>
   <li><b>Niente azioni irreversibili</b> (invii, pagamenti, cancellazioni) senza la tua conferma.</li>
  </ul>`)}
@@ -2773,6 +2924,9 @@ Mostrami il testo prima di salvarlo.`, `Questo prompt va incollato <b>direttamen
 /* ---------- CONCLUSIONE ---------- */
 /* Registro delle revisioni: aggiungere una voce in cima a ogni modifica della guida */
 const REVISIONI = [
+ {rev:2, note:[
+  'Nuova lezione “Usare meno token (e non finire i limiti)”: come si consumano i token, simulatore dell’effetto delle chat lunghe, 12 abitudini per risparmiare, esempi, prompt per ripartire da un riassunto, organizzazione di skill, file .md e istruzioni per consumare meno (skill “a strati”, file dell’agente snello, script, schede dei documenti lunghi), prompt per snellire skill e istruzioni, consigli per gli agenti e istruzioni per controllare i consumi in ChatGPT, Claude e Gemini.',
+  'Glossario e soluzioni ai problemi aggiornati con token e limiti di utilizzo.']},
  {rev:1, note:[
   'Guida per chi usa l’AI solo in chat: scelta iniziale di ChatGPT, Claude o Gemini, con istruzioni solo per lo strumento scelto.',
   'Istruzioni verificate sulle versioni attuali: ChatGPT (Chat, Work, Codex, Skill, Sites), Claude (Chat, Cowork, Claude Code, Skill, componenti Office), Gemini (Gem, Notebook, Gemini Notebook, Gemini Spark, AI Studio, Antigravity).',
@@ -3335,7 +3489,7 @@ L({id:'fine-problemi', p:'fine', t:'Quando qualcosa non va', sub:'I problemi pi�
   ['Ha inventato informazioni (allucinazione)','Mancavano dati e ha “riempito i buchi”','Scrivi: <i>“usa solo i file allegati; dove manca scrivi NON TROVATO”</i>, chiedi pagine e frasi esatte, usa il prompt di verifica (lezione “Risultati affidabili”).'],
   ['Dimentica le istruzioni date all’inizio','Conversazione troppo lunga','Nuova chat con un riassunto. Le regole fisse mettile in un progetto o in una skill.'],
   ['Non trovo il menu indicato','I nomi cambiano spesso, o il piano non lo include','Cerca il nome della funzione nel centro assistenza. Verifica il tuo piano.'],
-  ['“Hai raggiunto il limite di utilizzo”','I piani hanno un numero massimo di messaggi o di lavoro','Aspetta qualche ora, dividi il lavoro in parti più piccole, valuta un piano superiore.'],
+  ['“Hai raggiunto il limite di utilizzo”','Chat lunghe, file pesanti, modelli potenti e agenti consumano molti token','Aspetta la ricarica, riparti da un riassunto in una chat nuova, usa un modello più leggero (lezione “Usare meno token”), valuta un piano superiore.'],
   ['La skill non si attiva','Description vaga, o skill non attiva','Controlla che sia attiva, scrivi <i>“usa la skill …”</i> e migliora la description.'],
   ['L’agente gira a vuoto','Controlli vaghi o nessuna condizione di stop','Fermalo. Riscrivi controlli sì/no e un numero massimo di tentativi.'],
   ['L’agente chiede tanti permessi','È normale all’inizio: ti tutela','Consenti letture e creazione di file nella cartella; conferma a mano modifiche, invii, cancellazioni.'],
@@ -3362,6 +3516,8 @@ L({id:'fine-glossario', p:'fine', t:'Glossario completo', sub:'Tutte le parole d
   ['*','<b>Prompt</b>','La richiesta scritta all’AI. Meglio se segue una formula (CRAFT).'],
   ['*','<b>CRAFT</b>','Contesto, Ruolo, Azione, Formato, Tono: la formula per scrivere prompt completi.'],
   ['*','<b>Prompt chaining</b>','Dividere un lavoro complesso in più prompt in sequenza, con controlli tra un passo e l’altro.'],
+  ['*','<b>Token</b>','Pezzi di parole con cui l’AI misura ciò che legge e scrive: determinano consumi e limiti di utilizzo.'],
+  ['*','<b>Limiti di utilizzo</b>','Quantità di lavoro consentita dal piano in un periodo (ore, giorno, settimana), poi si ricarica.'],
   ['*','<b>Contesto / Finestra di contesto</b>','Tutto ciò che l’AI “vede” in una conversazione. Ha un limite: meglio pochi materiali ma pertinenti.'],
   ['*','<b>Allegato</b>','Un file caricato nella chat perché l’AI lo legga.'],
   ['*','<b>Allucinazione</b>','Informazione inventata dall’AI ma scritta in modo convincente. Si riduce dando fonti, chiedendo riferimenti e permettendo il “non lo so”.'],
