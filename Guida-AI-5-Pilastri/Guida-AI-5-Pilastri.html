@@ -3796,7 +3796,7 @@ function renderToolSel(){
 }
 const pc = l => l.p && PILLARS[l.p] ? PILLARS[l.p].c : l.p==='fine' ? '#16a34a' : '#38bdf8';
 function renderSide(){
- $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Guida AI</b><small>I 5 pilastri</small><div class="rev-line"><span class="rev-tag">Rev. ${REV}</span><span class="by-tag">App by Pippo</span></div></div></div>` +
+ $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Guida AI - I 5 pilastri</b><div class="rev-line"><span class="by-tag">App by Pippo</span><span class="rev-tag">Rev. ${REV}</span></div></div></div>` +
   GROUPS.map(([k,label,c,n])=>{ const ls = LESSONS.map((l,i)=>[l,i]).filter(([l])=>l.p===k); if(!ls.length) return '';
    return `<div class="grp" style="--gc:${c}">${n?`<i>${n}</i>`:''}${label}</div>` + ls.map(([l,i])=>`<button class="li${i===cur?' on':''}" data-act="goi" data-i="${i}"><span class="ck${S.done[l.id]?' ok':''}">${S.done[l.id]?'✓':''}</span><span>${esc(l.t)}</span></button>`).join(''); }).join('') +
   `<button class="side-reset" data-act="reset">↺ Ricomincia da capo</button>`;
