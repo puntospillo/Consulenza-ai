@@ -248,7 +248,9 @@ code,.path{overflow-wrap:anywhere}
 .qz-end h2{margin:6px 0 4px;font-size:24px}.qz-end p{margin:0 0 6px}
 .qz-confetti{text-align:center;font-size:30px;letter-spacing:6px;margin-top:12px;animation:qzIn .6s ease}
 .qz-review{border-top:1px solid var(--line);padding:12px 0}.qz-review:first-child{border-top:0;padding-top:0}
-.rev-tag{display:inline-block;margin-top:4px;background:#1e3a5f;color:#93c5fd;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:700}
+.rev-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:4px}
+.by-tag{font-size:11.5px;font-weight:700;color:#cbd5e1}
+.rev-tag{display:inline-block;background:#1e3a5f;color:#93c5fd;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:700}
 @media (max-width:1000px){.letters,.pillar-cards,.levels{grid-template-columns:repeat(2,1fr)}.plan{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:860px){
  .app{grid-template-columns:1fr}
@@ -3794,7 +3796,7 @@ function renderToolSel(){
 }
 const pc = l => l.p && PILLARS[l.p] ? PILLARS[l.p].c : l.p==='fine' ? '#16a34a' : '#38bdf8';
 function renderSide(){
- $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Guida AI</b><small>I 5 pilastri, passo passo</small><span class="rev-tag">Rev. ${REV}</span></div></div>` +
+ $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Guida AI</b><small>I 5 pilastri</small><div class="rev-line"><span class="rev-tag">Rev. ${REV}</span><span class="by-tag">App by Pippo</span></div></div></div>` +
   GROUPS.map(([k,label,c,n])=>{ const ls = LESSONS.map((l,i)=>[l,i]).filter(([l])=>l.p===k); if(!ls.length) return '';
    return `<div class="grp" style="--gc:${c}">${n?`<i>${n}</i>`:''}${label}</div>` + ls.map(([l,i])=>`<button class="li${i===cur?' on':''}" data-act="goi" data-i="${i}"><span class="ck${S.done[l.id]?' ok':''}">${S.done[l.id]?'✓':''}</span><span>${esc(l.t)}</span></button>`).join(''); }).join('') +
   `<button class="side-reset" data-act="reset">↺ Ricomincia da capo</button>`;
