@@ -191,6 +191,57 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
 .chip-btn.on{background:#4f46e5;border-color:#4f46e5;color:#fff}
 .side-reset{display:block;width:calc(100% - 16px);margin:18px 8px 0;background:transparent;border:1px solid #334155;color:#94a3b8;border-radius:9px;padding:7px 10px;font-size:13px;cursor:pointer}
 .side-reset:hover{color:#fff;border-color:#64748b}
+/* Quiz finale */
+.qz-hero{display:flex;gap:20px;align-items:center;background:linear-gradient(120deg,#4f46e5,#0d9488 55%,#e11d48);color:#fff;border-radius:22px;padding:28px 30px;box-shadow:0 14px 34px rgba(79,70,229,.25);position:relative;overflow:hidden}
+.qz-hero:after{content:"";position:absolute;right:-70px;top:-70px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.12)}
+.qz-hero>*{position:relative;z-index:1}
+.qz-hero-ic{font-size:68px;line-height:1}
+.qz-kick{font-size:12px;font-weight:800;letter-spacing:1.4px;opacity:.9}
+.qz-hero h2{margin:4px 0 6px;font-size:30px}.qz-hero p{margin:0 0 16px;opacity:.95;max-width:640px}
+.qz-start{border:0;background:#fff;color:#4338ca;font-weight:800;font-size:16px;border-radius:13px;padding:13px 22px;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.18);transition:transform .15s}
+.qz-start:hover{transform:translateY(-2px)}
+.qz-end .qz-start{background:linear-gradient(90deg,#4f46e5,#0d9488);color:#fff}
+.qz-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.qz-stats div{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center;box-shadow:var(--sh)}
+.qz-stats b{display:block;font-size:28px;line-height:1.2}.qz-stats span{font-size:13px;color:var(--muted)}
+.qz-bars{display:flex;align-items:flex-end;gap:10px;height:180px;padding-top:24px}
+.qz-bar{flex:1;max-width:58px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.qz-bar i{display:block;width:100%;border-radius:9px 9px 3px 3px;position:relative;animation:qzGrow .6s ease-out}
+.qz-bar em{position:absolute;top:-21px;left:0;right:0;text-align:center;font-style:normal;font-weight:800;font-size:13px;color:#334155}
+.qz-bar span{font-size:11.5px;color:var(--muted);margin-top:5px}
+@keyframes qzGrow{from{transform:scaleY(0);transform-origin:bottom}to{transform:scaleY(1);transform-origin:bottom}}
+.qz-args{display:grid;grid-template-columns:1fr 1fr;gap:12px 24px}
+.qz-arg-h{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.qz-card{background:#fff;border-radius:22px;padding:24px 28px;box-shadow:0 12px 32px rgba(79,70,229,.13);border:2px solid #e0e7ff;min-width:0}
+.qz-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.qz-num{font-weight:800;color:#4338ca}
+.qz-score{margin-left:auto;font-weight:800;color:#15803d}
+.qz-dots{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.qz-dots span{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;background:#f1f5f9;color:#94a3b8}
+.qz-dots .ok{background:#16a34a;color:#fff}.qz-dots .ko{background:#dc2626;color:#fff}.qz-dots .cur{background:#4f46e5;color:#fff;box-shadow:0 0 0 3px #c7d2fe}
+.qz-arg-tag{display:inline-block;margin-top:14px;background:#eef2ff;color:#4338ca;border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700}
+.qz-q{font-size:23px;margin:10px 0 18px;line-height:1.35}
+.qz-opts{display:grid;gap:10px}
+.qz-opt{display:flex;align-items:center;gap:12px;text-align:left;border:2px solid #e2e8f0;background:#fff;border-radius:14px;padding:12px 14px;font-size:16px;cursor:pointer;transition:all .15s}
+.qz-opt:hover:not([disabled]){border-color:#6366f1;background:#f5f3ff;transform:translateX(4px)}
+.qz-opt[disabled]{cursor:default}
+.qz-letter{flex:none;width:34px;height:34px;border-radius:10px;background:#eef2ff;color:#4338ca;display:grid;place-items:center;font-weight:800}
+.qz-mark{margin-left:auto;font-weight:800;font-size:19px}
+.qz-opt.ok{border-color:#16a34a;background:#f0fdf4}.qz-opt.ok .qz-letter{background:#16a34a;color:#fff}.qz-opt.ok .qz-mark{color:#16a34a}
+.qz-opt.ko{border-color:#dc2626;background:#fef2f2}.qz-opt.ko .qz-letter{background:#dc2626;color:#fff}.qz-opt.ko .qz-mark{color:#dc2626}
+.qz-opt.dim{opacity:.55}
+.qz-fb{margin-top:16px;border-radius:14px;padding:14px 16px;animation:qzIn .25s ease}
+.qz-fb.ok{background:#f0fdf4;border:1px solid #bbf7d0}.qz-fb.ko{background:#fffbeb;border:1px solid #fde68a}
+.qz-next{border:0;background:linear-gradient(90deg,#4f46e5,#0d9488);color:#fff;font-weight:800;font-size:15px;border-radius:11px;padding:11px 18px;cursor:pointer}
+@keyframes qzIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.qz-end-top{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.qz-ring{width:160px;height:160px;flex:none}
+.qz-ring-arc{animation:qzRing 1.1s ease-out}
+@keyframes qzRing{from{stroke-dasharray:0 400}}
+.qz-big-ic{font-size:46px;line-height:1}
+.qz-end h2{margin:6px 0 4px;font-size:24px}.qz-end p{margin:0 0 6px}
+.qz-confetti{text-align:center;font-size:30px;letter-spacing:6px;margin-top:12px;animation:qzIn .6s ease}
+.qz-review{border-top:1px solid var(--line);padding:12px 0}.qz-review:first-child{border-top:0;padding-top:0}
 .rev-tag{display:inline-block;margin-top:4px;background:#1e3a5f;color:#93c5fd;border:0;border-radius:999px;padding:1px 9px;font-size:11.5px;font-weight:700;cursor:pointer}
 .rev-tag:hover{background:#2563eb;color:#fff}
 @media (max-width:1000px){.letters,.pillar-cards,.levels{grid-template-columns:repeat(2,1fr)}.plan{grid-template-columns:repeat(2,1fr)}}
@@ -202,6 +253,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--blue);bo
  #page{padding:18px 16px 40px}.topbar{padding:10px 16px}
  .grid2,.grid3,.ex,.md-live,.scale,.letters,.pillar-cards,.plan,.toolpick,.levels{grid-template-columns:1fr}
  .topbar{flex-wrap:wrap}.toolsel>span{display:none}
+ .qz-stats{grid-template-columns:1fr 1fr}.qz-args{grid-template-columns:1fr}.qz-hero{flex-direction:column;align-items:flex-start;padding:22px}.qz-q{font-size:19px}.qz-card{padding:18px}.qz-bars{gap:5px}
  .lhead h1{font-size:24px}
 }
 </style>
@@ -261,6 +313,7 @@ Questa è una **frase in grassetto** e questa è normale.
   agente:{obiettivo:'',strumenti:'',passi:'',controlli:'',seFallisce:'',maxTent:3,umano:'',output:''},
   cmd:{progetto:'',scopo:'',regole:'',comandi:''},
   ric:{f:'tutti',l:'tutti'},
+  qz:{fase:'home',set:[],i:0,risposte:[],ordine:[]},
   tok:{msg:30,parole:200,pagine:20,ogni:6},
   prd:{nome:'',problema:'',ruoli:'',funzioni:'',dati:'',accesso:'ruoli',riservati:'si',dispositivi:'entrambi',fuori:''},
   pers:{ruolo:'',lavoro:'',pubblico:'',tono:'lei',lunghezza:'sintetiche',formato:'',evitare:'',fonti:true,nonloso:true,ipotesi:true,calcoli:true,web:true}
@@ -2924,6 +2977,9 @@ Mostrami il testo prima di salvarlo.`, `Questo prompt va incollato <b>direttamen
 /* ---------- CONCLUSIONE ---------- */
 /* Registro delle revisioni: aggiungere una voce in cima a ogni modifica della guida */
 const REVISIONI = [
+ {rev:3, note:[
+  'Nuova voce nella Conclusione: “Quiz finale” con 62 domande su tutti gli argomenti, giri da 10 domande sempre diverse (prima quelle non ancora viste), risposte mescolate, spiegazione e link alla lezione per ogni domanda, voto su 10 con giudizio.',
+  'Risultati salvati nel browser: storico dei giri con grafico, voto migliore, media, domande viste, andamento per argomento con l’argomento da ripassare per primo, pulsante per azzerare.']},
  {rev:2, note:[
   'Nuova lezione “Usare meno token (e non finire i limiti)”: come si consumano i token, simulatore dell’effetto delle chat lunghe, 12 abitudini per risparmiare, esempi, prompt per ripartire da un riassunto, organizzazione di skill, file .md e istruzioni per consumare meno (skill “a strati”, file dell’agente snello, script, schede dei documenti lunghi), prompt per snellire skill e istruzioni, consigli per gli agenti e istruzioni per controllare i consumi in ChatGPT, Claude e Gemini.',
   'Glossario e soluzioni ai problemi aggiornati con token e limiti di utilizzo.']},
@@ -3504,12 +3560,159 @@ L({id:'fine-piano', p:'fine', t:'Il tuo piano in 4 settimane', sub:'Dalla teoria
   <div class="week" style="--pc:#4f46e5"><b>Settimana 1 · Pilastro I</b><ul><li>Scrivi le tue istruzioni personali con le regole di affidabilità</li><li>Usa CRAFT su 5 richieste reali</li><li>Carica un tuo Excel o PDF e fatti fare un riepilogo</li><li>Salva i 3 prompt migliori</li></ul></div>
   <div class="week" style="--pc:#d97706"><b>Settimana 2 · Pilastri III e II</b><ul><li>Mappa 5–10 attività</li><li>Crea un Progetto per il tuo tema principale</li><li>Crea un Assistente per un compito semplice</li></ul></div>
   <div class="week" style="--pc:#0d9488"><b>Settimana 3 · Pilastro II</b><ul><li>Fatti creare dall’AI la skill per l’attività n°1 della mappa</li><li>Provala con dati reali e correggila</li><li>Condividila con un collega</li></ul></div>
-  <div class="week" style="--pc:#e11d48"><b>Settimana 4 · Pilastri IV e V</b><ul><li>Installa ${where('local')}</li><li>Fai il primo agente sulle 5 fatture di prova</li><li>Crea una mini-app o prova un caso concreto</li><li>Misura: quanto tempo hai recuperato?</li></ul></div>
+  <div class="week" style="--pc:#e11d48"><b>Settimana 4 · Pilastri IV e V</b><ul><li>Installa ${where('local')}</li><li>Fai il primo agente sulle 5 fatture di prova</li><li>Crea una mini-app o prova un caso concreto</li><li>Misura: quanto tempo hai recuperato?</li><li>Fai il quiz finale e ripassa gli argomenti più deboli</li></ul></div>
  </div>`)}
  ${card('Poi ricomincia il ciclo', `<p style="font-size:18px;text-align:center;margin:6px 0"><b>Mappa le attività</b> → <b>Crea le skill</b> → <b>Delega agli agenti</b> → <b>Misura</b> → di nuovo</p>
  <p class="lead" style="text-align:center">Ogni giro libera tempo dalle attività da 2/10 per dedicarlo a quelle da 10/10.</p>`)}
  ${analogy('🛒','E le novità sull’AI?','<p style="margin:4px 0 0">Quando esce qualcosa di nuovo, chiediti: <b>risolve un’attività della mia mappa?</b> Se sì, provalo. Se no, lascialo sullo scaffale.</p>')}
 `});
+
+/* ============ QUIZ FINALE ============ */
+const QZ_ARG = {
+ prompt:{l:'Prompt e CRAFT', ic:'✍️', go:'p1-craft'},
+ affidabilita:{l:'Allucinazioni e verifica', ic:'🎯', go:'p1-allucinazioni'},
+ token:{l:'Token e consumi', ic:'⛽', go:'p1-token'},
+ file:{l:'Contesto e file', ic:'📎', go:'p1-file'},
+ dati:{l:'Dati e privacy', ic:'🔒', go:'dati'},
+ personalizza:{l:'Personalizzazione', ic:'🤝', go:'p2-personalizza'},
+ frizione:{l:'Progetti, assistenti e skill', ic:'🧩', go:'p2-skill'},
+ workflow:{l:'Mappa delle attività', ic:'🗺️', go:'p3-perche'},
+ app:{l:'Mini-app e app', ic:'🛠️', go:'p4-app'},
+ agenti:{l:'Agenti', ic:'🔁', go:'p5-chatbot'}
+};
+/* La risposta corretta è sempre la prima: le opzioni vengono mescolate a ogni giro */
+const QZ = [
+ {a:'prompt', go:'p1-brief', q:'Qual è il motivo più comune per cui l’AI dà risposte generiche?', o:['Riceve poche informazioni e deve indovinare contesto e obiettivo','Il prompt è scritto in italiano','Il prompt è troppo cortese','Non si usano parole inglesi'], e:'Come un collega al primo giorno: se mancano contesto, obiettivo e caratteristiche del risultato, l’AI riempie i buchi con ipotesi generiche.'},
+ {a:'prompt', go:'p1-craft', q:'Nella formula CRAFT, cosa indica la lettera A?', o:['Azione: cosa deve fare e a che scopo','Allegati da caricare','Assunzioni da verificare','Argomento della chat'], e:'CRAFT = Contesto, Ruolo, Azione, Formato, Tono.'},
+ {a:'prompt', go:'p1-craft', q:'Quale di questi vincoli è verificabile?', o:['“Massimo 120 parole, frasi di massimo 20 parole”','“Rendilo più professionale”','“Fallo bene”','“Scrivilo in modo migliore”'], e:'Un vincolo verificabile si controlla con un sì o un no. “Professionale” e “migliore” significano cose diverse per ognuno.'},
+ {a:'prompt', go:'p1-craft', q:'A cosa servono delimitatori come <appunti> … </appunti>?', o:['A far distinguere all’AI le istruzioni dai materiali su cui lavorare','A ridurre il costo dell’abbonamento','Senza delimitatori l’AI non legge il testo','Sono obbligatori in tutti gli strumenti'], e:'Separare istruzioni e materiali evita che l’AI scambi parti del testo per ordini da eseguire.'},
+ {a:'prompt', go:'p1-migliorare', q:'Il primo risultato non ti convince. Cosa conviene fare?', o:['Correggere un aspetto alla volta con istruzioni precise','Ripetere la stessa richiesta finché cambia','Cambiare subito strumento','Scrivere soltanto “riprova”'], e:'Il primo risultato è una bozza: correzioni mirate (“riduci a 5 righe”, “usa solo questi dati”) funzionano meglio dei tentativi a caso.'},
+ {a:'prompt', go:'p1-migliorare', q:'Perché aggiungere “Se ti mancano informazioni, fammi prima le domande”?', o:['Per evitare che l’AI riempia i buchi con ipotesi','Per avere risposte più veloci','Per attivare la ricerca web','Per usare un modello più potente'], e:'Le domande preliminari portano alla luce ciò che manca prima che l’AI lo inventi.'},
+ {a:'prompt', go:'p1-chaining', q:'Quando conviene usare il prompt chaining (catena di prompt)?', o:['Per lavori complessi, controllando il risultato tra un passo e l’altro','Per ogni domanda, anche semplice','Solo per le traduzioni','Solo con gli agenti'], e:'Analisi → struttura → bozza → revisione: il valore sono i punti di controllo tra le fasi.'},
+ {a:'affidabilita', go:'p1-allucinazioni', q:'Cos’è un’allucinazione dell’AI?', o:['Un’informazione inventata ma scritta in modo convincente','Un errore di battitura','Un blocco dell’app','Una risposta troppo lunga'], e:'Il pericolo è che sembra vera: l’AI produce testo plausibile anche quando non ha le informazioni.'},
+ {a:'affidabilita', go:'p1-allucinazioni', q:'Quale istruzione riduce di più le informazioni inventate?', o:['“Se l’informazione non c’è, scrivi NON TROVATO”','“Sii creativa”','“Rispondi con sicurezza”','“Non farmi domande”'], e:'Autorizzare il “non lo so” toglie all’AI la spinta a riempire i buchi.'},
+ {a:'affidabilita', go:'p1-allucinazioni', q:'Per controllare velocemente una risposta basata su un documento, cosa chiedi?', o:['La pagina e la frase esatta tra virgolette','Una risposta più lunga','Il riassunto del riassunto','Un tono più formale'], e:'Una citazione testuale con la pagina si verifica in pochi secondi.'},
+ {a:'affidabilita', go:'p1-allucinazioni', q:'Ti servono leggi, prezzi o scadenze aggiornate. Cosa fai?', o:['Chiedi la ricerca web con fonti e data, poi apri le fonti','Ti fidi della memoria dell’AI','Chiedi all’AI se è sicura','Usi il modello più veloce'], e:'Le conoscenze interne del modello possono essere vecchie: servono fonti recenti da controllare.'},
+ {a:'affidabilita', go:'p1-allucinazioni', q:'Chi è responsabile del risultato che usi o invii?', o:['Tu: l’AI prepara, tu controlli','L’AI','L’azienda che produce lo strumento','Nessuno'], e:'Numeri, nomi, riferimenti e tutto ciò che va all’esterno vanno sempre controllati da una persona.'},
+ {a:'affidabilita', go:'p1-allucinazioni', q:'Dove conviene chiedere una “seconda opinione” su una risposta importante?', o:['In una chat nuova, che non è legata alla risposta','Nella stessa chat chiedendo “sei sicura?”','Non serve mai','In una chat ancora più lunga'], e:'Una chat nuova valuta la risposta senza essere influenzata dalla conversazione che l’ha prodotta.'},
+ {a:'affidabilita', go:'p1-file', q:'Calcoli su un Excel di 2.000 righe: cosa chiedi all’AI?', o:['Di eseguire i calcoli con il codice e dirti quante righe ha letto','Di stimare i totali a occhio','Di arrotondare tutto','Di non aprire il file'], e:'Il codice calcola in modo esatto; il numero di righe lette ti dice se ha considerato tutto il file.'},
+ {a:'token', go:'p1-token', q:'Perché una chat molto lunga consuma sempre più token?', o:['A ogni messaggio l’AI rilegge tutta la conversazione','Perché l’AI si stanca','Perché aumentano le risposte cortesi','Non è vero, consuma sempre uguale'], e:'Anche una domanda breve, al quarantesimo messaggio, fa rileggere tutto: chat, allegati e istruzioni.'},
+ {a:'token', go:'p1-token', q:'Hai scritto male una richiesta. Qual è il modo più economico per correggere?', o:['Modificare il messaggio originale','Aggiungere “no, intendevo…”','Aprire tre chat diverse','Ricaricare tutti i file'], e:'Modificando il messaggio la parte sbagliata non resta nella conversazione da rileggere.'},
+ {a:'token', go:'p1-token', q:'Cosa viene letto a ogni messaggio e quindi va tenuto breve?', o:['Le istruzioni personali','Una skill che non stai usando','Uno script della skill','I file di riferimento della skill'], e:'Le istruzioni personali entrano in ogni messaggio: 10–15 righe bastano. Le procedure vanno nelle skill.'},
+ {a:'token', go:'p1-token', q:'Perché le skill aiutano a consumare meno?', o:['All’inizio l’AI legge solo nome e description; il resto solo quando serve','Perché sono gratuite','Perché disattivano la memoria','Perché usano un modello più piccolo'], e:'Le skill si caricano “a richiesta”: meglio ancora se i dettagli stanno in file separati.'},
+ {a:'token', go:'p1-token', q:'Un calcolo che fai uguale ogni mese: qual è la soluzione più economica?', o:['Una mini-app o uno script che lo fa senza AI','Chiederlo ogni mese in una chat lunga','Usare Deep Research','Un agente che riparte da zero ogni volta'], e:'Una volta creato, il programma lavora senza consumare token.'},
+ {a:'token', go:'p1-token', q:'La chat ha 40 messaggi e vuoi continuare. Cosa fai?', o:['Chiedi un riassunto e riparti in una chat nuova','Continui nella stessa chat','Ricarichi tutti i file','Cambi solo il modello'], e:'Il riassunto porta con sé solo ciò che serve: meno consumo e meno confusione.'},
+ {a:'file', go:'p1-contesto', q:'Qual è il “contesto giusto” da dare all’AI?', o:['Le informazioni che possono cambiare la risposta','Tutto quello che hai, per sicurezza','Nessuna informazione','Solo il nome del file'], e:'Chiediti: se un collega nuovo non lo sapesse, sbaglierebbe? Se sì, va nel contesto.'},
+ {a:'file', go:'p1-file', q:'Hai allegato un Excel. Cosa chiedi per prima cosa?', o:['Quante righe e colonne ha letto, e le prime righe','Un grafico colorato','Di cancellare i doppioni','Niente, parte subito'], e:'Così verifichi che abbia letto il file giusto e per intero, prima di qualsiasi analisi.'},
+ {a:'file', go:'p1-contesto', q:'Hai un documento di 200 pagine. Come aiuti l’AI?', o:['Indichi dove guardare: capitolo o pagine','Lo incolli più volte','Non dici nulla','Le chiedi di impararlo a memoria'], e:'Indicare la parte utile migliora la precisione e riduce i consumi.'},
+ {a:'file', go:'p1-contesto', q:'Perché aprire una chat nuova quando cambi argomento?', o:['La “scrivania” dell’AI riparte pulita e non mescola i temi','Per salvare i file','Perché è obbligatorio','Per cambiare lingua'], e:'Argomenti diversi nella stessa chat confondono l’AI e consumano di più.'},
+ {a:'file', go:'p1-file', q:'Vuoi un file Excel come risultato. Come lo chiedi?', o:['Scrivendo esplicitamente “restituiscimi un file .xlsx da scaricare”','Non si può ottenere','Copiando la risposta in Word','Chiedendo un’immagine della tabella'], e:'Se lo chiedi, l’AI crea un file vero da scaricare.'},
+ {a:'file', go:'p1-file', q:'A cosa fare attenzione con i PDF scansionati?', o:['Cifre e nomi possono essere letti male: vanno verificati','Non si possono allegare','Sono letti sempre perfettamente','Vanno prima stampati'], e:'La lettura di documenti scansionati può sbagliare numeri e lettere: controlla a campione.'},
+ {a:'dati', go:'dati', q:'Nel metodo “programma fatto dall’AI”, cosa vede l’AI?', o:['Solo la struttura dei dati (colonne, righe inventate)','Tutti i dati veri','Nulla, nemmeno la richiesta','Anche le password del computer'], e:'L’AI scrive il programma sulla base della struttura; i dati veri li elabora il programma sul computer.'},
+ {a:'dati', go:'strumenti', q:'Documenti di lavoro riservati: quale account usi?', o:['Quello aziendale approvato, con uso per addestramento escluso','Quello personale gratuito','Uno qualsiasi','Quello di un collega'], e:'Gli account aziendali offrono garanzie sui dati; nel dubbio chiedi all’IT.'},
+ {a:'dati', go:'dati', q:'Un documento contiene dati di persone. Cosa fai prima di darlo all’AI?', o:['Anonimizzi (es. “Persona A”) o usi un metodo locale','Lo incolli così com’è','Aggiungi anche il codice fiscale','Lo metti nelle istruzioni personali'], e:'Meno dati personali escono dal computer, meglio è.'},
+ {a:'dati', go:'p4-computer', q:'Un agente sul computer deve lavorare su…', o:['Copie dei file in una cartella dedicata','Tutto il disco','I file originali','La cartella con le password'], e:'Cartella dedicata e copie: se qualcosa va storto, gli originali sono al sicuro.'},
+ {a:'dati', go:'dati', q:'Quale di queste cose non va mai scritta in chat?', o:['Password e codici di accesso','Il nome del tuo ufficio','Un elenco di prodotti','La bozza di un’email'], e:'Credenziali e dati bancari non devono mai finire nelle conversazioni con l’AI.'},
+ {a:'personalizza', go:'p2-personalizza', q:'Cosa metti nelle istruzioni personali?', o:['Chi sei, come vuoi le risposte e le regole di affidabilità','Tutte le procedure aziendali','I dati dei dipendenti','Le password dei programmi'], e:'Poche righe che valgono sempre; le procedure vanno in progetti e skill.'},
+ {a:'personalizza', go:'p2-personalizza', q:'Qual è il modo migliore per far scrivere l’AI con il tuo stile?', o:['Darle 2–3 tuoi testi e farle ricavare le regole','Scrivere solo “scrivi come me”','Usare tante emoji','Cambiare strumento'], e:'Mostrare è più efficace che descrivere: le regole ricavate si possono salvare.'},
+ {a:'personalizza', go:'p2-personalizza', q:'La memoria dell’AI va…', o:['Controllata ogni tanto, cancellando ciò che è sbagliato o riservato','Ignorata del tutto','Riempita di dati sensibili','Disattivata sempre'], e:'La memoria aiuta, ma può conservare informazioni superate o delicate.'},
+ {a:'personalizza', go:'p2-personalizza', q:'A cosa serve la chat temporanea o in incognito?', o:['Ad argomenti delicati che non devono restare in cronologia né in memoria','A consumare meno token','A usare gli agenti','A creare skill'], e:'Non lascia traccia nella cronologia e non crea nuove memorie.'},
+ {a:'personalizza', go:'p2-progetti', q:'Una regola che vale solo per un tema (es. ufficio acquisti) va messa…', o:['Nelle istruzioni del progetto di quel tema','Nelle istruzioni personali','Nella memoria generale','In ogni singolo messaggio'], e:'Ogni livello ha il suo posto: personale per tutto, progetto per un tema, skill per un lavoro.'},
+ {a:'frizione', go:'p2-progetti', q:'A cosa serve un Progetto?', o:['A tenere documenti e istruzioni di un tema, così ogni chat li conosce','A creare app','A tradurre testi','A programmare agenti'], e:'Lo prepari una volta e non rispieghi più il contesto.'},
+ {a:'frizione', go:'p2-assistenti', q:'Traduci ogni settimana email con le stesse regole. Cosa ti serve?', o:['Un assistente o una skill','Un progetto per ogni email','Un agente','Deep Research'], e:'Compito semplice e sempre uguale: istruzioni fisse, riusabili.'},
+ {a:'frizione', go:'p2-skill', q:'Cos’è una skill?', o:['Una cartella con SKILL.md (ed eventuali modelli) che insegna un lavoro','Un tipo di abbonamento','Un tipo di chat','Un modello di AI'], e:'Contiene la procedura e, se servono, modelli, esempi e script.'},
+ {a:'frizione', go:'p2-skill', q:'Perché la description di una skill è così importante?', o:['L’AI la legge per decidere quando usare la skill','È solo il titolo del file','Serve per la grafica','Non è importante'], e:'Una description vaga fa sì che la skill non si attivi quando serve (o si attivi a sproposito).'},
+ {a:'frizione', go:'p2-markdown', q:'Cos’è un file .md?', o:['Un file di testo con pochi simboli per titoli ed elenchi','Un file Excel','Un’immagine','Un programma da installare'], e:'Markdown: leggibile dalle persone e dall’AI, si crea con qualsiasi editor di testo.'},
+ {a:'frizione', go:'p5-istruzioni', q:'Quale file legge un agente a ogni avvio nella cartella di lavoro?', o:['Il file di istruzioni (CLAUDE.md, AGENTS.md o GEMINI.md)','Tutte le skill installate per intero','Un file preso da internet','Nessun file'], e:'Contiene le regole permanenti di quella cartella: va tenuto breve.'},
+ {a:'frizione', go:'p2-skill-prova', q:'Devi creare una skill ma non sai da dove partire. Cosa fai?', o:['Ti fai intervistare dall’AI e ti fai scrivere SKILL.md','Rinunci','Copi dentro il manuale intero','Scrivi solo il nome della skill'], e:'L’AI fa le domande giuste: tu rispondi e controlli.'},
+ {a:'frizione', go:'p2-differenze', q:'Report trimestrale con modello Word, calcoli e controlli: cosa usi?', o:['Una skill','Un prompt occasionale','Una chat temporanea','Nessuno strumento'], e:'Lavoro complesso e ripetuto, con modello: è il caso tipico della skill.'},
+ {a:'workflow', go:'p3-perche', q:'Da quali attività conviene partire con l’AI?', o:['Tanto tempo a settimana e poca necessità della persona','Quelle che fai una volta all’anno','Quelle in cui sei insostituibile','Le più divertenti'], e:'Frequenza × tempo, con bassa necessità umana: lì si recupera più tempo.'},
+ {a:'workflow', go:'p3-perche', q:'Un’attività valutata 8/10 su “quanto serve che la faccia proprio tu” significa…', o:['Resta tua: libera tempo da altre attività per dedicarti a questa','Affidala subito all’AI','Automatizzala con un agente','Eliminala'], e:'Il lavoro in cui sei insostituibile non si automatizza: si protegge.'},
+ {a:'workflow', go:'p3-perche', q:'Un’attività da un’ora all’anno…', o:['Di solito non vale la pena automatizzarla','Va automatizzata per prima','Richiede un agente','Richiede un’app online'], e:'Il risparmio sarebbe minimo rispetto allo sforzo.'},
+ {a:'workflow', go:'p3-mappa', q:'Come elenchi velocemente le tue attività ricorrenti?', o:['Chiedi all’AI di analizzare calendario o lista delle cose da fare','Le inventi','Le chiedi a un fornitore','Non serve elencarle'], e:'Il prompt della lezione estrae attività, frequenza e tempi dal calendario.'},
+ {a:'app', go:'p4-app', q:'Differenza tra app di livello 1 e di livello 2?', o:['L1: file HTML creato in chat; L2: app sul computer che lavora sui file','Nessuna differenza','L1 costa di più','L2 non richiede installazioni'], e:'Il livello 1 non richiede installazioni; il livello 2 legge e scrive i file del computer.'},
+ {a:'app', go:'p4-regole', q:'Prima di costruire un’app, cosa chiedi all’AI?', o:['“Esiste già un programma gratuito che lo fa?”','“Quanto costa un programmatore?”','“Scrivimi subito tutto il codice”','“Usa per forza un database”'], e:'Non reinventare la ruota: spesso una parte esiste già.'},
+ {a:'app', go:'p4-regole', q:'Perché salvare le versioni con Git e GitHub?', o:['Per tornare alla versione funzionante se una modifica rompe l’app','Per rendere l’app più veloce','Per consumare meno token','È obbligatorio per legge'], e:'Come i salvataggi di un videogioco.'},
+ {a:'app', go:'p4-app-complete', q:'Cos’è un PRD?', o:['Il documento dei requisiti: cosa fa l’app, per chi, con quali dati','Un linguaggio di programmazione','Un servizio di hosting','Un tipo di skill'], e:'Un buon PRD è metà del lavoro: te lo fai scrivere dall’AI con un’intervista.'},
+ {a:'app', go:'p4-app-complete', q:'App online con dati personali dei dipendenti. Prima di pubblicarla…', o:['Coinvolgi IT e privacy, con accesso a password e backup','La pubblichi con un link aperto a tutti','Scrivi le password nel codice','Non servono controlli'], e:'Dati personali online richiedono sicurezza, responsabili e verifiche.'},
+ {a:'app', go:'p4-crea', q:'Con quali dati provi una nuova app?', o:['Dati di esempio; poi quelli veri, con copia di sicurezza','Subito i dati veri','Nessun dato','I dati di un altro ufficio'], e:'Prima i dati finti: gli errori non fanno danni.'},
+ {a:'agenti', go:'p5-chatbot', q:'Qual è la differenza tra chatbot e agente?', o:['L’agente lavora in più passaggi e si verifica da solo con i controlli che gli dai','Nessuna differenza','L’agente risponde solo sì o no','Il chatbot lavora sulle cartelle del computer'], e:'Chatbot: controlli tu a ogni risposta. Agente: scrivi tu i controlli, lui li applica.'},
+ {a:'agenti', go:'p5-controlli', q:'Quale controllo è adatto a un agente?', o:['“Il numero di righe è uguale al numero di file”','“Fai un buon lavoro”','“Controlla che sia corretto”','“Rendilo bello”'], e:'I controlli devono avere una risposta oggettiva sì/no.'},
+ {a:'agenti', go:'p5-controlli', q:'Perché serve una condizione di stop?', o:['Senza, l’agente può girare a vuoto consumando tempo e token','Per spegnere il computer','Per salvare i file','Non serve'], e:'“Dopo 3 tentativi segna DA VERIFICARE e vai avanti.”'},
+ {a:'agenti', go:'p5-loop', q:'Il ciclo (loop) di un agente è…', o:['Osserva → decide → agisce → verifica, finché i controlli sono superati','Chiedi → risposta → fine','Scarica → installa → apri','Leggi → copia → incolla'], e:'Il loop si ripete finché i controlli passano o scatta lo stop.'},
+ {a:'agenti', go:'p5-primo', q:'Prima di usare un agente su 500 file…', o:['Lo provi su 5 file e controlli il report','Lo lanci subito su tutti','Gli dai accesso a tutto il disco','Disattivi le richieste di permesso'], e:'Un errore su 5 file costa poco, su 500 costa tanto.'},
+ {a:'agenti', go:'p5-primo', q:'Quale permesso non va concesso “per sempre” a un agente?', o:['Cancellare file, inviare email o fare acquisti','Leggere i file della cartella di lavoro','Creare file nella cartella risultati','Mostrare il piano di lavoro'], e:'Le azioni irreversibili vanno sempre confermate a mano.'},
+ {a:'agenti', go:'p5-controlli', q:'Quando l’agente deve fermarsi e chiederti (human in the loop)?', o:['Nei casi che definisci tu, es. dati contraddittori o azioni irreversibili','Mai','A ogni singola riga','Solo a fine anno'], e:'Decidi tu in anticipo i momenti in cui serve una persona.'},
+ {a:'agenti', go:'p5-prova', q:'Un lavoro con l’agente ormai funziona sempre bene. Passo successivo?', o:['Trasformarlo in una skill da riusare','Buttare il prompt','Rifarlo a mano','Cambiare strumento'], e:'Così il metodo resta e anche i colleghi possono usarlo.'}
+];
+const QZ_STORE = 'guida-ai-5-pilastri-quiz';
+const qzLoad = () => { try{ const d = JSON.parse(localStorage.getItem(QZ_STORE) || 'null'); return d && Array.isArray(d.storico) ? d : {storico:[], viste:{}}; }catch(e){ return {storico:[], viste:{}}; } };
+const qzSave = d => { try{ localStorage.setItem(QZ_STORE, JSON.stringify(d)); }catch(e){} };
+const shuffle = arr => { const a = [...arr]; for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; };
+function qzPick(){
+ const viste = qzLoad().viste, byArg = {};
+ shuffle(QZ.map((q,i)=>i)).forEach(i=>{ (byArg[QZ[i].a] = byArg[QZ[i].a] || []).push(i); });
+ Object.values(byArg).forEach(l=>l.sort((x,y)=>(viste[x]||0)-(viste[y]||0)));
+ const out = [], args = shuffle(Object.keys(byArg));
+ while(out.length < 10){ let added = false; for(const a of args){ if(out.length >= 10) break; const l = byArg[a]; if(l.length){ out.push(l.shift()); added = true; } } if(!added) break; }
+ return shuffle(out);
+}
+const qzGiudizio = v => v===10 ? ['🏆','Eccellente! Punteggio pieno.'] : v>=8 ? ['🎉','Ottimo lavoro!'] : v>=6 ? ['👍','Buono: ripassa gli argomenti segnati.'] : v>=4 ? ['📚','Da ripassare: guarda le lezioni consigliate.'] : ['💪','Riparti dalle lezioni e riprova: le domande cambiano.'];
+const qzColor = v => v>=8 ? '#16a34a' : v>=6 ? '#2563eb' : v>=4 ? '#d97706' : '#dc2626';
+function qzRing(v){
+ const C = 2*Math.PI*54, c = qzColor(v);
+ return `<svg viewBox="0 0 140 140" class="qz-ring" role="img" aria-label="Voto ${v} su 10"><circle cx="70" cy="70" r="54" fill="none" stroke="#e2e8f0" stroke-width="14"/><circle cx="70" cy="70" r="54" fill="none" stroke="${c}" stroke-width="14" stroke-linecap="round" stroke-dasharray="${C*v/10} ${C}" transform="rotate(-90 70 70)" class="qz-ring-arc"/><text x="70" y="78" text-anchor="middle" font-size="38" font-weight="800" fill="#0f1b2d">${v}</text><text x="70" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">su 10</text></svg>`;
+}
+function qzDots(){
+ const Q = S.qz;
+ return `<div class="qz-dots">${Q.set.map((qi,i)=>{ const r = Q.risposte[i]; return `<span class="${r ? (r.ok?'ok':'ko') : i===Q.i?'cur':''}">${i+1}</span>`; }).join('')}</div>`;
+}
+function qzHome(){
+ const D = qzLoad(), st = D.storico, n = st.length;
+ const best = n ? Math.max(...st.map(x=>x.voto)) : 0, media = n ? st.reduce((s,x)=>s+x.voto,0)/n : 0, viste = Object.keys(D.viste).length;
+ const arg = {}; st.forEach(x=>Object.entries(x.arg||{}).forEach(([k,[ok,tot]])=>{ arg[k] = arg[k] || [0,0]; arg[k][0]+=ok; arg[k][1]+=tot; }));
+ const last = st.slice(-12);
+ const weak = Object.entries(arg).filter(([,[ok,tot]])=>tot>=2).sort((a,b)=>a[1][0]/a[1][1]-b[1][0]/b[1][1])[0];
+ return `<section class="qz-hero"><div class="qz-hero-ic">🎓</div><div><div class="qz-kick">QUIZ FINALE · 10 DOMANDE PER GIRO</div><h2>Quanto hai imparato?</h2><p>${QZ.length} domande su tutti gli argomenti della guida. A ogni giro ne escono 10 diverse, dando la precedenza a quelle che non hai ancora visto. Alla fine ricevi un voto e i consigli su cosa ripassare.</p>
+  <div class="actions"><button class="qz-start" data-act="qz-start">${n ? '🔄 Nuovo giro di domande' : '🚀 Inizia il quiz'}</button></div></div></section>
+ ${n ? `<div class="qz-stats">
+  <div><b>${n}</b><span>giri completati</span></div>
+  <div><b style="color:${qzColor(best)}">${best}/10</b><span>voto migliore</span></div>
+  <div><b style="color:${qzColor(Math.round(media))}">${fmt1(media)}</b><span>media dei voti</span></div>
+  <div><b>${viste}/${QZ.length}</b><span>domande viste</span></div></div>
+ ${card('I tuoi ultimi giri', `<div class="qz-bars">${last.map((x,i)=>`<div class="qz-bar" title="${new Date(x.t).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}"><i style="height:${Math.max(6,x.voto*10)}%;background:${qzColor(x.voto)}"><em>${x.voto}</em></i><span>${n-last.length+i+1}°</span></div>`).join('')}</div>`)}
+ ${card('Come vai per argomento', `<div class="qz-args">${Object.entries(QZ_ARG).map(([k,x])=>{ const [ok,tot] = arg[k] || [0,0], p = tot ? Math.round(ok/tot*100) : null;
+   return `<div class="qz-arg"><div class="qz-arg-h"><span>${x.ic} ${x.l}</span><b>${p===null ? '—' : p+'%'}</b></div><div class="meter-bar"><i style="width:${p||0}%;background:${p===null?'#e2e8f0':qzColor(Math.round(p/10))}"></i></div></div>`; }).join('')}</div>
+  ${weak ? `<p style="margin:12px 0 0">📌 Da ripassare per primo: <b>${QZ_ARG[weak[0]].ic} ${QZ_ARG[weak[0]].l}</b> <button class="btn" data-act="go" data-to="${QZ_ARG[weak[0]].go}">Vai alla lezione →</button></p>` : ''}`)}
+ <div class="actions" style="justify-content:flex-end"><button class="btn" data-act="qz-reset">Azzera i risultati del quiz</button></div>` : note('I risultati restano salvati','<p style="margin:4px 0 0">Voti e progressi del quiz vengono salvati <b>solo in questo browser</b>, su questo dispositivo. Puoi ripetere il quiz tutte le volte che vuoi.</p>')}`;
+}
+function qzQuestion(){
+ const Q = S.qz, q = QZ[Q.set[Q.i]], ord = Q.ordine[Q.i], r = Q.risposte[Q.i], x = QZ_ARG[q.a];
+ return `<section class="qz-card" id="qz">
+  <div class="qz-top"><span class="qz-num">Domanda ${Q.i+1} di 10</span>${qzDots()}<span class="qz-score">✅ ${Q.risposte.filter(y=>y&&y.ok).length}</span></div>
+  <div class="meter-bar" style="height:8px"><i style="width:${(Q.i+(r?1:0))*10}%;background:linear-gradient(90deg,#4f46e5,#0d9488)"></i></div>
+  <div class="qz-arg-tag">${x.ic} ${x.l}</div>
+  <h2 class="qz-q">${esc(q.q)}</h2>
+  <div class="qz-opts">${ord.map((oi,k)=>{ const cls = !r ? '' : oi===0 ? ' ok' : r.scelta===oi ? ' ko' : ' dim';
+   return `<button class="qz-opt${cls}" data-act="qz-ans" data-o="${oi}"${r?' disabled':''}><span class="qz-letter">${'ABCD'[k]}</span><span>${esc(q.o[oi])}</span>${r && oi===0 ? '<span class="qz-mark">✓</span>' : r && r.scelta===oi ? '<span class="qz-mark">✗</span>' : ''}</button>`; }).join('')}</div>
+  ${r ? `<div class="qz-fb ${r.ok?'ok':'ko'}"><b>${r.ok ? '🎉 Risposta giusta!' : '💡 Non proprio.'}</b> ${esc(q.e)}
+   <div class="actions" style="margin-top:10px"><button class="qz-next" data-act="qz-next">${Q.i<9 ? 'Domanda successiva →' : '🏁 Vedi il voto'}</button><button class="btn" data-act="go" data-to="${q.go}">📖 Rivedi la lezione</button></div></div>` : ''}
+ </section>`;
+}
+function qzEnd(){
+ const Q = S.qz, v = Q.risposte.filter(y=>y&&y.ok).length, [ic,msg] = qzGiudizio(v);
+ const sbagliate = Q.set.map((qi,i)=>[QZ[qi], Q.risposte[i]]).filter(([,r])=>r && !r.ok);
+ return `<section class="qz-card qz-end" id="qz">
+  <div class="qz-end-top">${qzRing(v)}<div><div class="qz-big-ic">${ic}</div><h2>${msg}</h2><p>Hai risposto correttamente a <b>${v} domande su 10</b>.</p>${qzDots()}</div></div>
+  ${v===10 ? '<div class="qz-confetti" aria-hidden="true">🎊 🎉 ✨ 🏆 ✨ 🎉 🎊</div>' : ''}
+  <div class="actions" style="margin-top:14px"><button class="qz-start" data-act="qz-start">🔄 Nuovo giro con domande diverse</button><button class="btn" data-act="qz-home">📊 I miei risultati</button></div>
+ </section>
+ ${sbagliate.length ? card('Da ripassare', sbagliate.map(([q])=>`<div class="qz-review"><div class="qz-arg-tag">${QZ_ARG[q.a].ic} ${QZ_ARG[q.a].l}</div><p style="margin:4px 0"><b>${esc(q.q)}</b></p><p style="margin:0 0 4px">✅ ${esc(q.o[0])}</p><p class="hint" style="margin:0 0 6px">${esc(q.e)}</p><button class="btn" data-act="go" data-to="${q.go}">📖 Rivedi la lezione</button></div>`).join('')) : ''}`;
+}
+L({id:'fine-quiz', p:'fine', t:'Quiz finale', sub:'10 domande per giro su tutti gli argomenti, con voto e risultati salvati', min:5, body:()=>{
+ const Q = S.qz;
+ return Q.fase==='domanda' ? qzQuestion() : Q.fase==='fine' ? qzEnd() : qzHome();
+}});
 
 L({id:'fine-glossario', p:'fine', t:'Glossario completo', sub:'Tutte le parole della guida, in un posto solo', min:5, body:()=>`
  ${card('', tbl(['Parola','Significato'],[
@@ -3600,6 +3803,7 @@ function render(){
  try{ history.replaceState(null,'','#'+l.id); }catch(e){}
 }
 function update(){ const l = LESSONS[cur]; if(l.update) l.update(); }
+function toQz(){ const e = document.getElementById('qz') || $('#page'); window.scrollTo({top: Math.max(0, e.getBoundingClientRect().top + window.scrollY - 80), behavior:'smooth'}); }
 function goTo(i){ if(i>=0 && i<LESSONS.length){ cur = i; render(); window.scrollTo({top:0,behavior:'smooth'}); } }
 async function copyText(t){
  try{ await navigator.clipboard.writeText(t); }
@@ -3638,6 +3842,15 @@ document.addEventListener('click', e=>{
    toast('Istruzioni per ' + TOOLS[d.tool].l); break; }
   case 'reset': if(confirm('Vuoi azzerare le lezioni completate e lo strumento scelto?')){ try{ localStorage.removeItem(STORE); }catch(e){} initState(); cur = 0; render(); window.scrollTo({top:0}); toast('Guida azzerata'); } break;
   case 'ric': S.ric.f = d.f; render(); break;
+  case 'qz-start': { const set = qzPick(); S.qz = {fase:'domanda', set, i:0, risposte:[], ordine:set.map(()=>shuffle([0,1,2,3]))}; render(); toQz(); break; }
+  case 'qz-ans': { const Q = S.qz; if(Q.risposte[Q.i]) break; const o = Number(d.o); Q.risposte[Q.i] = {scelta:o, ok:o===0};
+   const D = qzLoad(); D.viste[Q.set[Q.i]] = (D.viste[Q.set[Q.i]]||0) + 1; qzSave(D); render(); break; }
+  case 'qz-next': { const Q = S.qz; if(Q.i < 9){ Q.i++; render(); toQz(); break; }
+   const arg = {}; Q.set.forEach((qi,i)=>{ const a = QZ[qi].a; arg[a] = arg[a] || [0,0]; arg[a][1]++; if(Q.risposte[i] && Q.risposte[i].ok) arg[a][0]++; });
+   const D = qzLoad(); D.storico.push({t:Date.now(), voto:Q.risposte.filter(y=>y&&y.ok).length, arg}); qzSave(D);
+   Q.fase = 'fine'; render(); toQz(); break; }
+  case 'qz-home': S.qz.fase = 'home'; render(); toQz(); break;
+  case 'qz-reset': if(confirm('Vuoi azzerare tutti i risultati del quiz?')){ qzSave({storico:[], viste:{}}); S.qz.fase = 'home'; render(); toast('Risultati del quiz azzerati'); } break;
   case 'ric-l': S.ric.l = d.l; render(); break;
   case 'preset': applyPreset(S.prompt, PRESETS[d.p]); render(); toast('Esempio caricato: modificalo come vuoi'); break;
   case 'preset-skill': applyPreset(S.skill, SKILL_PRESETS[d.p]); render(); toast('Esempio caricato: modificalo come vuoi'); break;
