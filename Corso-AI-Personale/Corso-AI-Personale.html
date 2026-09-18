@@ -313,7 +313,7 @@ code,.path{overflow-wrap:anywhere}
 <div id="toast"></div>
 <script>
 'use strict';
-const REV = '1.1';
+const REV = '1.2';
 
 /* ============ I 5 PILASTRI (versione vita quotidiana) ============ */
 const PILLARS = {
@@ -399,6 +399,11 @@ const lvInfo = () => LV[lvNow()];
 const byLv = o => o[lvNow()] ?? o.any ?? '';
 const upTo = (n, html) => lvNow() >= n ? html : '';
 const lvTag = n => `<span class="lv-tag" style="--lc:${LV[n].c}">${LV[n].ic} ${LV[n].l}</span>`;
+/* Toglie dai blocchi di istruzioni le righe marcate per livelli che l’utente non ha ancora:
+   data-lv="3" = si vede dal livello 3 in su; data-lvmax="2" = si vede fino al livello 2. */
+const lvFilter = h => String(h)
+ .replace(/<(tr|li|div|p)\b[^>]*\bdata-lv="(\d)"[^>]*>[\s\S]*?<\/\1>/g, (m,t,n) => Number(n) <= lvNow() ? m : '')
+ .replace(/<(tr|li|div|p)\b[^>]*\bdata-lvmax="(\d)"[^>]*>[\s\S]*?<\/\1>/g, (m,t,n) => lvNow() <= Number(n) ? m : '');
 
 /* Mini renderer Markdown: titoli, elenchi, grassetto, corsivo, codice, frontmatter */
 function mdToHtml(src){
@@ -548,21 +553,37 @@ const TOOLS = {
  claude: {l:'Claude',  by:'Anthropic', c:'#c96442'},
  gemini: {l:'Gemini',  by:'Google',    c:'#1a73e8'}
 };
-const TOOL_INTRO = {
- chatgpt:'Si usa dal sito, dall’app del telefono o dall’app per computer. Nell’app per computer trovi <b>Chat</b> (domande e file), <b>Work</b> (lavori lunghi su documenti e cartelle) e <b>Codex</b> (creare programmi). In più Progetti, Canvas e ricerca approfondita.',
- claude:'Chat, Progetti e <b>Artifact</b> (piccole pagine e strumenti creati al volo). Nell’app per computer: <b>Cowork</b> per lavorare sulle cartelle e <b>Claude Code</b> per creare programmi. C’è anche dentro Excel, Word e PowerPoint.',
- gemini:'App Gemini (sito, telefono, computer) con <b>Gem</b>, <b>Notebook</b> e <b>Canvas</b>. È dentro Gmail, Drive, Documenti, Fogli e Presentazioni. <b>Gemini Notebook</b> per studiare tanti documenti, <b>Antigravity</b> per le cartelle del computer.'
+const TOOL_INTRO_LV = {
+ chatgpt:{
+  1:'Il più conosciuto. Si usa dal sito o dall’app del telefono, gratis o a pagamento. Scrive testi, legge i tuoi file, risponde alle domande, crea immagini e sa parlare a voce.',
+  2:'Si usa dal sito o dall’app del telefono. Scrive testi, legge i tuoi file, crea immagini, parla a voce. Ha i <b>Progetti</b> per tenere insieme documenti e regole di un tema, <b>Canvas</b> per i testi lunghi e la ricerca sul web con le fonti.',
+  3:'Sito, telefono e app per computer. Nell’app per computer trovi <b>Chat</b> (domande e file), <b>Work</b> (lavori lunghi su documenti e cartelle) e <b>Codex</b> (creare programmi). In più Progetti, Canvas, immagini e ricerca approfondita.'},
+ claude:{
+  1:'Il più bravo a scrivere e a leggere documenti lunghi. Si usa dal sito o dall’app del telefono. Non crea fotografie, ma prepara testi, tabelle e file da scaricare.',
+  2:'Bravo con i testi lunghi e i documenti. Ha i <b>Progetti</b> per tenere insieme documenti e regole di un tema, gli <b>Artifact</b> (pagine e strumenti creati al volo) e crea file Excel, Word e PDF da scaricare. Non crea fotografie.',
+  3:'Chat, Progetti e <b>Artifact</b>. Nell’app per computer: <b>Cowork</b> per lavorare sulle cartelle e <b>Claude Code</b> per creare programmi. C’è anche dentro Excel, Word e PowerPoint. Non crea fotografie.'},
+ gemini:{
+  1:'Quello di Google: se hai Gmail ce l’hai già. È dentro la posta e i documenti di Google, funziona benissimo dal telefono e con la fotocamera, ed è molto forte sulle immagini.',
+  2:'Quello di Google, già dentro Gmail, Drive, Documenti e Fogli. Ha i <b>Gem</b> (assistenti per compiti fissi), i <b>Notebook</b> per i temi che durano e <b>Gemini Notebook</b> per studiare tanti documenti con le citazioni. Molto forte sulle immagini.',
+  3:'App Gemini con <b>Gem</b>, <b>Notebook</b> e <b>Canvas</b>, dentro Gmail, Drive, Documenti e Fogli. <b>Gemini Notebook</b> per studiare tanti documenti, <b>Antigravity</b> per le cartelle del computer e i programmi.'}
 };
+const toolIntro = k => TOOL_INTRO_LV[k][lvNow()];
 const hasTool = () => !!TOOLS[S.tool];
 const curTool = () => hasTool() ? S.tool : 'any';
 const byTool = o => o[curTool()] ?? o.any ?? '';
 const toolName = () => hasTool() ? TOOLS[S.tool].l : 'il tuo strumento';
 const mp = t => `<span class="path">${t}</span>`;
-const stepsL = (c, arr) => `<ol class="steps" style="--pc:${c}">${arr.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+/* Un passo può essere una stringa (vale sempre) oppure [livelloMinimo, testo] */
+const stepsL = (c, arr) => `<ol class="steps" style="--pc:${c}">${arr.map(x=>Array.isArray(x)?`<li data-lv="${x[0]}">${x[1]}</li>`:`<li>${x}</li>`).join('')}</ol>`;
 const cmd = t => `<code>${esc(t)}</code>`;
 const DL = ' <span class="dl-badge">⬇ da installare</span>';
-const modeTbl = rows => `<p class="hint" style="margin:0 0 8px"><span class="dl-badge">⬇ da installare</span> = serve scaricare un’app sul computer. Tutto il resto funziona nel browser o nell’app del telefono, senza installare nulla.</p>` + tbl(['Cosa vuoi fare','Dove farlo','Esempio di casa'], rows);
-const rule = h => `<div class="rule"><b>🎯 Regola semplice</b>${h}</div>`;
+/* Una riga può essere [cosa, dove, esempio] oppure [livelloMinimo, cosa, dove, esempio] */
+const modeTbl = rows => `<p class="hint" data-lv="3" style="margin:0 0 8px"><span class="dl-badge">⬇ da installare</span> = serve scaricare un’app sul computer. Tutto il resto funziona nel browser o nell’app del telefono, senza installare nulla.</p>` +
+ `<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Cosa vuoi fare</th><th>Dove farlo</th><th>Esempio di casa</th></tr></thead><tbody>` +
+ rows.map(r=>{ const lv = typeof r[0]==='number' ? r[0] : 1, c = typeof r[0]==='number' ? r.slice(1) : r;
+  return `<tr data-lv="${lv}">${c.map(x=>`<td>${x}</td>`).join('')}</tr>`; }).join('') + `</tbody></table></div>`;
+/* rule(testo) vale sempre; rule(testo, min, max) solo nell’intervallo di livelli indicato */
+const rule = (h, min, max) => `<div class="rule"${min?` data-lv="${min}"`:''}${max?` data-lvmax="${max}"`:''}><b>🎯 Regola semplice</b>${h}</div>`;
 
 /* Pulsanti di scelta dello strumento */
 const toolButtons = () => Object.entries(TOOLS).map(([k,x])=>`<button class="btn" style="border-color:${x.c};color:${x.c}" data-act="set-tool" data-tool="${k}">${x.l}</button>`).join('');
@@ -570,7 +591,7 @@ const toolButtons = () => Object.entries(TOOLS).map(([k,x])=>`<button class="btn
 function howBox(op){
  if(!hasTool()) return `<div class="how"><div class="how-body"><p style="margin:0 0 10px"><b>Scegli lo strumento che usi</b> per vedere qui le istruzioni passo passo, solo per quello:</p><div class="actions">${toolButtons()}</div></div></div>`;
  const x = TOOLS[S.tool];
- return `<div class="how" style="--tc:${x.c}"><div class="how-bar"><span class="how-dot"></span>Istruzioni per <b>${x.l}</b></div><div class="how-body">${HOW[op][S.tool]}</div></div>`;
+ return `<div class="how" style="--tc:${x.c}"><div class="how-bar"><span class="how-dot"></span>Istruzioni per <b>${x.l}</b></div><div class="how-body">${lvFilter(HOW[op][S.tool])}</div></div>`;
 }
 /* Riquadro “Fattelo creare dall’AI” */
 const aiMake = (id, t, text, tip) => `<section class="aimake"><div class="aimake-h"><span>✨ FATTELO CREARE DALL’AI</span><h2>${t}</h2></div><p style="margin:0 0 6px">Non devi scrivere tutto tu: copia questo prompt in ${toolName()}, rispondi alle domande e controlla il risultato.</p>${tip?`<p class="hint" style="margin:0 0 4px">${tip}</p>`:''}${outBox(id,'Prompt da copiare',text)}</section>`;
@@ -579,55 +600,63 @@ const HOW = {
 /* ---- Quando usare cosa ---- */
 modes:{
  chatgpt: modeTbl([
-  ['Domande, email, lettere, traduzioni, idee','💬 <b>Chat</b> (sito, telefono o app per computer)','“Riscrivi questo reclamo in tono fermo ma educato”'],
+  ['Domande, email, lettere, traduzioni, idee','💬 <b>Chat</b> (dal sito o dal telefono)','“Riscrivi questo reclamo in tono fermo ma educato”'],
   ['Far leggere una bolletta, un contratto, un referto, una foto di un documento','💬 <b>Chat</b> con il file allegato','“Questa bolletta è più alta del solito: dimmi perché”'],
   ['Parlare invece di scrivere, o fotografare qualcosa','📱 <b>App ChatGPT sul telefono</b> (microfono e fotocamera)','“Che cos’è questo tasto della lavatrice?”'],
-  ['Restare per settimane sullo stesso tema (casa, viaggio, pratica)','📁 <b>Progetti</b>','Progetto “Ristrutturazione bagno”'],
-  ['Scrivere un testo lungo o creare un piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
+  [2,'Restare per settimane sullo stesso tema (casa, viaggio, pratica)','📁 <b>Progetti</b>','Progetto “Ristrutturazione bagno”'],
+  [2,'Scrivere un testo lungo o creare un piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
   ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Ricerca</b> / <b>Deep research</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
   ['Immagini: crearle o modificarle','🎨 <b>Chat</b>, allegando o chiedendo un’immagine','“Fammi un invito per la festa di Anna, 8 anni”'],
-  ['Lavoro lungo che produce documenti, fogli e presentazioni, anche su una <b>cartella del computer</b>','🗂️ <b>Work</b> (per le cartelle: app per computer)'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
-  ['Creare mini-app e programmi su misura','💻 <b>Codex</b> (app ChatGPT per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
- ]) + rule('Una domanda o pochi file → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>. Una cartella piena di file → <b>Work</b>.'),
+  [3,'Lavoro lungo che produce documenti, fogli e presentazioni, anche su una <b>cartella del computer</b>','🗂️ <b>Work</b> (per le cartelle: app per computer)'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
+  [3,'Creare mini-app e programmi su misura','💻 <b>Codex</b> (app ChatGPT per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
+ ]) + rule('Una domanda al volo o un documento da capire → <b>Chat</b>, dal computer o dal telefono. Ti serve una cosa aggiornata (prezzi, leggi, orari) → chiedi la <b>ricerca sul web</b>.', 0, 1)
+   + rule('Una domanda o pochi file → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>.', 2, 2)
+   + rule('Una domanda o pochi file → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>. Una cartella piena di file → <b>Work</b>.', 3),
  claude: modeTbl([
-  ['Domande, email, lettere, traduzioni, idee','💬 <b>Chat</b> (sito, telefono o app per computer)','“Riscrivi questo reclamo in tono fermo ma educato”'],
+  ['Domande, email, lettere, traduzioni, idee','💬 <b>Chat</b> (dal sito o dal telefono)','“Riscrivi questo reclamo in tono fermo ma educato”'],
   ['Far leggere una bolletta, un contratto, un referto, una foto di un documento','💬 <b>Chat</b> con il file allegato','“Questa bolletta è più alta del solito: dimmi perché”'],
   ['Parlare invece di scrivere, o fotografare qualcosa','📱 <b>App Claude sul telefono</b>','“Che cos’è questo tasto della lavatrice?”'],
-  ['Restare per settimane sullo stesso tema (casa, viaggio, pratica)','📁 <b>Progetti</b>','Progetto “Ristrutturazione bagno”'],
-  ['Un piccolo strumento o una pagina da usare subito','✨ <b>Artifact</b> (appare accanto alla chat)','“Fammi un calcolatore delle spese di viaggio”'],
+  [2,'Restare per settimane sullo stesso tema (casa, viaggio, pratica)','📁 <b>Progetti</b>','Progetto “Ristrutturazione bagno”'],
+  [2,'Un piccolo strumento o una pagina da usare subito','✨ <b>Artifact</b> (appare accanto alla chat)','“Fammi un calcolatore delle spese di viaggio”'],
   ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Ricerca</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
   ['Ottenere un Excel, un Word o un PDF vero da scaricare','💬 <b>Chat</b> con “Esecuzione codice e creazione file” attiva','“Fammi il budget di casa in un file .xlsx”'],
-  ['Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','🤝 <b>Cowork</b> (app Claude per computer)'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
-  ['Creare mini-app e programmi su misura','💻 <b>Claude Code</b> (app Claude per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
- ]) + rule('File che puoi allegare → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>. Una cartella piena di file → <b>Cowork</b>.'),
+  [3,'Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','🤝 <b>Cowork</b> (app Claude per computer)'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
+  [3,'Creare mini-app e programmi su misura','💻 <b>Claude Code</b> (app Claude per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
+ ]) + rule('Una domanda al volo o un documento da capire → <b>Chat</b>, dal computer o dal telefono. Ti serve una cosa aggiornata (prezzi, leggi, orari) → chiedi la <b>ricerca sul web</b>.', 0, 1)
+   + rule('File che puoi allegare → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>.', 2, 2)
+   + rule('File che puoi allegare → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>. Una cartella piena di file → <b>Cowork</b>.', 3),
  gemini: modeTbl([
   ['Domande, email, lettere, traduzioni, idee','💬 <b>App Gemini</b> (sito, telefono, computer)','“Riscrivi questo reclamo in tono fermo ma educato”'],
   ['Far leggere una bolletta, un contratto, un referto, una foto di un documento','💬 <b>App Gemini</b> con il file allegato','“Questa bolletta è più alta del solito: dimmi perché”'],
   ['Parlare invece di scrivere, o inquadrare qualcosa con la fotocamera','📱 <b>App Gemini sul telefono</b>','“Che cos’è questo tasto della lavatrice?”'],
   ['Lavorare dentro Gmail, Documenti, Fogli, Presentazioni, Drive','📂 <b>Gemini dentro Google</b> (icona in alto a destra)','“In questo foglio calcola quanto spendo al mese”'],
-  ['Un compito sempre uguale (tradurre, correggere, riassumere)','💎 <b>Gem</b>','Gem “Correttore delle mie mail”'],
-  ['Restare per settimane sullo stesso tema, con chat e file insieme','📓 <b>Notebook</b> (nell’app Gemini)','Notebook “Ristrutturazione bagno”'],
-  ['Studiare tanti documenti con risposte citate riga per riga','📚 <b>Gemini Notebook</b> (prima NotebookLM)','“Nel manuale della caldaia, cosa dice l’errore E4?”'],
-  ['Testo lungo o piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
+  [2,'Un compito sempre uguale (tradurre, correggere, riassumere)','💎 <b>Gem</b>','Gem “Correttore delle mie mail”'],
+  [2,'Restare per settimane sullo stesso tema, con chat e file insieme','📓 <b>Notebook</b> (nell’app Gemini)','Notebook “Ristrutturazione bagno”'],
+  [2,'Studiare tanti documenti con risposte citate riga per riga','📚 <b>Gemini Notebook</b> (prima NotebookLM)','“Nel manuale della caldaia, cosa dice l’errore E4?”'],
+  [2,'Testo lungo o piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
   ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Deep Research</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
-  ['Lavorare sulle cartelle del computer o creare programmi','🚀 <b>Antigravity</b>'+DL+' · <i>Gemini Spark non è disponibile in Italia</i>','“Da queste 30 bollette PDF fammi un Excel dei consumi”']
- ]) + rule('File su Google Drive → <b>Gemini dentro Documenti e Fogli</b>. Tanti documenti da consultare → <b>Gemini Notebook</b>. Cartelle del computer → <b>Antigravity</b>.')
+  [3,'Lavorare sulle cartelle del computer o creare programmi','🚀 <b>Antigravity</b>'+DL+' · <i>Gemini Spark non è disponibile in Italia</i>','“Da queste 30 bollette PDF fammi un Excel dei consumi”']
+ ]) + rule('Una domanda al volo o un documento da capire → <b>app Gemini</b>, dal computer o dal telefono. File che stanno su Google Drive → aprili e usa <b>Gemini dentro Documenti e Fogli</b>.', 0, 1)
+   + rule('File su Google Drive → <b>Gemini dentro Documenti e Fogli</b>. Tanti documenti da consultare → <b>Gemini Notebook</b>.', 2, 2)
+   + rule('File su Google Drive → <b>Gemini dentro Documenti e Fogli</b>. Tanti documenti da consultare → <b>Gemini Notebook</b>. Cartelle del computer → <b>Antigravity</b>.', 3)
 },
 /* ---- Prima configurazione ---- */
 setup:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
-  '<b>Crea l’account</b> su <b>chatgpt.com</b> (va bene anche l’account Google). Scarica l’<b>app sul telefono</b>: è quella che userai di più. L’app per computer (chatgpt.com/download) serve solo se vorrai lavorare sulle cartelle.',
+  '<b>Crea l’account</b> su <b>chatgpt.com</b> (va bene anche l’account Google). Poi scarica l’<b>app sul telefono</b>: è quella che userai di più.',
+  [3,'<b>App per computer</b> (chatgpt.com/download): serve solo quando vorrai far lavorare l’AI sulle cartelle del tuo computer. Per tutto il resto basta il sito.'+DL],
   `<b>Privacy</b>: ${mp('Impostazioni › Controlli dati')} → disattiva <b>“Migliora il modello per tutti”</b> se non vuoi che le tue conversazioni vengano usate per addestrare i modelli. Fallo subito, prima di caricare documenti tuoi.`,
   `<b>Presentati una volta sola</b>: ${mp('Impostazioni › Personalizzazione')} → scrivi chi sei e come vuoi le risposte. Il testo pronto lo prepari nella lezione “Personalizza la tua AI”.`,
   `<b>Memoria</b>: sempre in ${mp('Impostazioni › Personalizzazione')} puoi attivarla, vedere cosa ricorda e cancellare quello che non vuoi.`,
   '<b>Gratis o a pagamento</b>: con il piano gratuito fai già moltissimo, ma dopo un po’ di messaggi passi a un modello più leggero. Se lo usi tutti i giorni, il piano a pagamento toglie quasi tutti i limiti.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
-  '<b>Crea l’account</b> su <b>claude.ai</b>. Scarica l’<b>app sul telefono</b>: è quella che userai di più. L’app per computer (claude.com/download) serve per Cowork e Claude Code.',
+  '<b>Crea l’account</b> su <b>claude.ai</b>. Poi scarica l’<b>app sul telefono</b>: è quella che userai di più.',
+  [3,'<b>App per computer</b> (claude.com/download): serve solo quando vorrai far lavorare l’AI sulle cartelle del tuo computer. Per tutto il resto basta il sito.'+DL],
   `<b>Attiva la creazione di file</b>: ${mp('Impostazioni › Funzionalità')} → <b>“Esecuzione codice e creazione file”</b>. Senza questa spunta Claude non ti consegna Excel, Word e PowerPoint veri.`,
   `<b>Privacy</b>: ${mp('Impostazioni › Privacy')} → scegli se le tue chat possono essere usate per migliorare i modelli.`,
   `<b>Presentati una volta sola</b>: ${mp('Impostazioni › Profilo')} → preferenze personali. Il testo pronto lo prepari nella lezione “Personalizza la tua AI”.`,
-  '<b>Gratis o a pagamento</b>: il piano gratuito ha un tetto di utilizzo che si ricarica ogni poche ore. Se lo usi tutti i giorni o vuoi Cowork, serve un piano a pagamento.'
+  '<b>Gratis o a pagamento</b>: il piano gratuito ha un tetto di utilizzo che si ricarica ogni poche ore. Se lo usi tutti i giorni, serve un piano a pagamento.'
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
   '<b>Entra</b> su <b>gemini.google.com</b> con il tuo account Google: se hai Gmail, ce l’hai già. Sul telefono Android è spesso già installata; su iPhone scarichi l’app Gemini.',
@@ -692,21 +721,24 @@ file:{
   '<b>Verifica sempre per prima cosa</b>: <i>“quante pagine (o righe) hai letto? riportami le prime tre voci”</i>. Se il file è stato letto male, te ne accorgi subito.',
   '<b>Chiedi un file in uscita</b>: <i>“ridammi un file .xlsx da scaricare”</i>. Funziona anche per Word, PowerPoint e PDF.',
   '<b>Tabelle e conti</b>: aggiungi <i>“fai i calcoli eseguendo il codice”</i>, così i totali sono esatti.',
-  '<b>Tanti file insieme</b> (per esempio tutte le bollette dell’anno): mettili in un <b>Progetto</b>, oppure usa <b>Work</b> su una cartella del computer.'+DL
+  [2,'<b>Tanti file insieme</b> (per esempio tutte le bollette dell’anno): invece di allegarli a ogni chat, mettili in un <b>Progetto</b>.'],
+  [3,'<b>Una cartella intera di file</b>: usa <b>Work</b> sulla cartella del computer.'+DL]
  ]),
  claude: stepsL(TOOLS.claude.c,[
   `<b>Allega</b>: trascina il file nella chat o usa la ${mp('graffetta')} (PDF, Word, Excel, foto, scansioni). Dal telefono puoi <b>fotografare</b> direttamente una bolletta o un modulo.`,
   '<b>Verifica sempre per prima cosa</b>: <i>“quante pagine (o righe) hai letto? riportami le prime tre voci”</i>.',
   '<b>Chiedi un file in uscita</b>: con “Esecuzione codice e creazione file” attiva, chiedi <i>“ridammi un .xlsx da scaricare”</i>.',
   '<b>Tabelle e conti</b>: aggiungi <i>“fai i calcoli eseguendo il codice”</i>, così i totali sono esatti.',
-  '<b>Tanti file insieme</b> (per esempio tutte le bollette dell’anno): mettili in un <b>Progetto</b>, oppure usa <b>Cowork</b> su una cartella del computer.'+DL
+  [2,'<b>Tanti file insieme</b> (per esempio tutte le bollette dell’anno): invece di allegarli a ogni chat, mettili in un <b>Progetto</b>.'],
+  [3,'<b>Una cartella intera di file</b>: usa <b>Cowork</b> sulla cartella del computer.'+DL]
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
   `<b>Allega</b>: usa il ${mp('+')} nell’app Gemini (PDF, Word, Excel, foto, scansioni) oppure prendi il file direttamente dal tuo <b>Drive</b>. Dal telefono puoi <b>fotografare</b> una bolletta o un modulo.`,
   '<b>Verifica sempre per prima cosa</b>: <i>“quante pagine (o righe) hai letto? riportami le prime tre voci”</i>.',
   '<b>File Google</b>: se il documento è su Drive, conviene aprirlo e usare l’icona <b>Gemini</b> dentro Documenti o Fogli: lavora direttamente sul file.',
   '<b>Tabelle e conti</b>: in <b>Fogli</b> fatti scrivere le formule; in chat chiedi <i>“usa il codice per i calcoli”</i>.',
-  '<b>Tanti documenti insieme</b> (manuali, contratti, dispense): caricali in <b>Gemini Notebook</b>: risponde solo con quelli e cita il punto esatto.'
+  [2,'<b>Tanti documenti insieme</b> (manuali, contratti, dispense): caricali in <b>Gemini Notebook</b>: risponde solo con quelli e cita il punto esatto.'],
+  [3,'<b>Una cartella intera di file</b>: usa <b>Antigravity</b> sulla cartella del computer.'+DL]
  ])
 },
 /* ---- Immagini e foto ---- */
@@ -784,14 +816,16 @@ progetti:{
 /* ---- Assistenti ---- */
 assistenti:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
-  '<b>Come si fa oggi</b>: i GPT personalizzati sono in via di dismissione. Per un compito sempre uguale conviene un <b>Progetto dedicato</b> con le istruzioni scritte bene, oppure una <b>Skill</b> se hai un piano aziendale.',
+  '<b>Come si fa oggi</b>: i GPT personalizzati sono in via di dismissione. Per un compito sempre uguale conviene un <b>Progetto dedicato</b> con le istruzioni scritte bene.',
+  [3,'Se hai un piano aziendale puoi usare anche una <b>Skill</b>: la trovi nel Pilastro II, più avanti.'],
   '<b>Crea il progetto “assistente”</b>: nome del compito (“Correttore delle mie mail”), istruzioni fisse, ed eventuali esempi caricati come file.',
   '<b>Aggiungi 2–3 esempi</b> di risultato giusto: è quello che fa la differenza.',
   '<b>Usalo</b>: apri una chat nel progetto e incolla solo il testo da lavorare, senza rispiegare le regole.',
   '<b>Migliora</b>: quando una risposta non va, aggiungi una riga alle istruzioni invece di correggere a mano ogni volta.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
-  '<b>Come si fa con Claude</b>: per un compito sempre uguale crea un <b>Progetto dedicato</b> con le istruzioni fisse, oppure una <b>Skill</b> (la vedrai nel livello avanzato).',
+  '<b>Come si fa con Claude</b>: per un compito sempre uguale crea un <b>Progetto dedicato</b> con le istruzioni fisse.',
+  [3,'In alternativa puoi usare una <b>Skill</b>: la trovi più avanti, nello stesso pilastro.'],
   '<b>Crea il progetto “assistente”</b>: nome del compito (“Correttore delle mie mail”), istruzioni fisse nel riquadro delle istruzioni.',
   '<b>Aggiungi 2–3 esempi</b> di risultato giusto nella Conoscenza del progetto.',
   '<b>Usalo</b>: apri una chat nel progetto e incolla solo il testo da lavorare.',
@@ -953,7 +987,7 @@ agentmd:{
 tokens:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
   '<b>Scegli il modello</b>: quello veloce per le cose semplici, quello “con ragionamento” solo quando serve pensare davvero. Hanno limiti diversi.',
-  '<b>Cosa consuma tanto</b>: immagini, ricerca approfondita, Work e Codex. Una domanda normale costa pochissimo.',
+  '<b>Cosa consuma tanto</b>: le immagini e la ricerca approfondita. Una domanda normale costa pochissimo.',
   '<b>Quando arrivi al limite</b> ChatGPT te lo dice e indica quando si ricarica (con il piano gratuito capita prima).',
   '<b>Correggi il messaggio</b> invece di scriverne un altro: usa la matita per modificare quello sbagliato.',
   '<b>Chat lunghe</b>: quando supera i 30–40 messaggi, chiedi un riassunto e riparti in una chat nuova.'
@@ -961,7 +995,7 @@ tokens:{
  claude: stepsL(TOOLS.claude.c,[
   `<b>Controlla quanto hai usato</b>: ${mp('Impostazioni › Utilizzo')}. C’è un tetto che si ricarica ogni 5 ore e uno settimanale.`,
   '<b>Scegli il modello</b>: quello leggero per le cose semplici, il più potente solo quando serve. Il “ragionamento esteso” consuma di più.',
-  '<b>Cosa consuma tanto</b>: ricerca web, tanti allegati, Cowork e Claude Code.',
+  '<b>Cosa consuma tanto</b>: la ricerca sul web e le chat con tanti allegati.',
   '<b>Correggi il messaggio</b> invece di scriverne un altro.',
   '<b>Chat lunghe</b>: quando supera i 30–40 messaggi, chiedi un riassunto e riparti in una chat nuova.'
  ]),
@@ -980,9 +1014,9 @@ const AGENT_MD = {chatgpt:'AGENTS.md', claude:'CLAUDE.md', gemini:'GEMINI.md', a
 const WHERE = {
  chat:{chatgpt:'Chat', claude:'Chat', gemini:'App Gemini', any:'la chat'},
  file:{chatgpt:'Chat con il file allegato', claude:'Chat con il file allegato', gemini:'App Gemini con il file allegato (o Gemini dentro Documenti e Fogli)', any:'la chat con il file allegato'},
- tanti:{chatgpt:'Progetto, oppure Work su una cartella', claude:'Progetto, oppure Cowork su una cartella', gemini:'Gemini Notebook, oppure Antigravity su una cartella', any:'un progetto o una cartella dedicata'},
+ tanti:{chatgpt:()=>lvNow()>=3?'Progetto, oppure Work su una cartella':'Progetto', claude:()=>lvNow()>=3?'Progetto, oppure Cowork su una cartella':'Progetto', gemini:()=>lvNow()>=3?'Gemini Notebook, oppure Antigravity su una cartella':'Gemini Notebook', any:'un progetto'},
  proj:{chatgpt:'Progetti', claude:'Progetti', gemini:'Notebook nell’app Gemini', any:'i progetti'},
- asst:{chatgpt:'Progetto dedicato (o Skill nei piani aziendali)', claude:'Progetto dedicato (o Skill)', gemini:'Gem', any:'un assistente personalizzato'},
+ asst:{chatgpt:()=>lvNow()>=3?'Progetto dedicato (o Skill nei piani aziendali)':'Progetto dedicato', claude:()=>lvNow()>=3?'Progetto dedicato (o Skill)':'Progetto dedicato', gemini:'Gem', any:'un assistente personalizzato'},
  skill:{chatgpt:'Skill (piani aziendali) o Progetto dedicato', claude:'Personalizza › Skill', gemini:'Gem con istruzioni dettagliate', any:'le skill'},
  web:{chatgpt:'Ricerca / Deep research', claude:'Ricerca', gemini:'Deep Research', any:'la ricerca sul web'},
  img:{chatgpt:'Chat (immagini)', claude:'Chat (Artifact per grafiche e schemi)', gemini:'App Gemini (immagini)', any:'la chat'},
@@ -990,7 +1024,7 @@ const WHERE = {
  app:{chatgpt:'Canvas, poi Codex per le app vere', claude:'Artifact, poi Claude Code per le app vere', gemini:'Canvas, poi AI Studio o Antigravity', any:'la chat con anteprima'},
  agent:{chatgpt:'Work (documenti e cartelle) o Codex (programmi)', claude:'Cowork (documenti e cartelle) o Claude Code (programmi)', gemini:'Antigravity', any:'un agente sul computer'}
 };
-const where = k => WHERE[k][curTool()];
+const where = k => { const w = WHERE[k][curTool()]; return typeof w === 'function' ? w() : w; };
 const NEED = {
  chat:{chatgpt:'', claude:'', gemini:'', any:''},
  file:{chatgpt:'', claude:'', gemini:'', any:''},
@@ -1014,10 +1048,10 @@ const L = o => LESSONS.push(o);
 
 /* ---------- Benvenuto ---------- */
 L({id:'benvenuto', p:null, lv:1, t:'Benvenuto', sub:'Un corso di AI per la tua vita di tutti i giorni, costruito sulla tua preparazione', min:4, body:()=>`
- ${card('Questo corso è per te, non per il tuo ufficio', `
-  <p>Qui non si parla di aziende, di clienti o di produttività. Si parla della <b>tua giornata</b>: la bolletta che è arrivata più alta del solito, la mail da scrivere all’amministratore, il compito da spiegare a tuo figlio, il viaggio da organizzare, il contratto del telefono da capire prima di firmarlo.</p>
+ ${card('Cosa c’è dentro questo corso', `
+  <p>Gli esempi sono quelli di una settimana normale: la bolletta arrivata più alta del solito, la mail da scrivere all’amministratore, il compito da spiegare a tuo figlio, il viaggio da organizzare, il contratto del telefono da capire prima di firmarlo.</p>
   <p>Useremo il computer che hai già e i programmi che usi già — posta, Word, Excel, il browser, le foto — più <b>una sola AI a scelta</b> tra ChatGPT, Claude e Gemini.</p>
-  ${analogy('🧑‍🍳','Non è una bacchetta magica, è un aiutante','Un aiutante molto veloce, che sa tantissime cose, non si offende mai se gli chiedi di rifare il lavoro — ma che ogni tanto si inventa le cose con grande sicurezza. Imparerai anche a riconoscere quando lo fa.')}
+  ${analogy('🧑‍🍳','Cosa aspettarsi, e cosa no','È un aiutante molto veloce, che sa tantissime cose e non si offende se gli chiedi di rifare il lavoro. Ogni tanto però si inventa le cose, e lo fa con grande sicurezza: riconoscerlo è una delle prime cose che imparerai.')}
  `)}
  ${card('Come funziona', `
   ${stepsL('#38bdf8',[
@@ -1172,7 +1206,7 @@ L({id:'strumenti', p:null, lv:1, t:'Scegli il tuo strumento', sub:'ChatGPT, Clau
  ${card('Perché uno solo', `
   <p>Sono tre servizi che fanno quasi le stesse cose, con nomi diversi per le stesse funzioni. Usarne tre insieme significa non imparare bene nessuno dei tre.</p>
   <p><b>Scegline uno adesso.</b> Da questo momento in poi, in tutto il corso, vedrai le istruzioni <b>solo per quello</b>: dove cliccare, come si chiama quella funzione, cosa serve installare. Potrai cambiarlo quando vuoi dalla barra in alto, e tutte le lezioni si riscriveranno da sole.</p>
-  <div class="toolpick">${Object.entries(TOOLS).map(([k,x])=>`<button class="tp${S.tool===k?' on':''}" style="--tc:${x.c}" data-act="set-tool" data-tool="${k}"><b>${x.l}</b><small>di ${x.by}</small><span>${TOOL_INTRO[k]}</span><i>${S.tool===k?'✓ È il tuo strumento':'Scegli questo →'}</i></button>`).join('')}</div>
+  <div class="toolpick">${Object.entries(TOOLS).map(([k,x])=>`<button class="tp${S.tool===k?' on':''}" style="--tc:${x.c}" data-act="set-tool" data-tool="${k}"><b>${x.l}</b><small>di ${x.by}</small><span>${toolIntro(k)}</span><i>${S.tool===k?'✓ È il tuo strumento':'Scegli questo →'}</i></button>`).join('')}</div>
   ${hasTool() ? note('Scelto: ' + TOOLS[S.tool].l, '<p style="margin:4px 0 0">Da qui in avanti tutte le istruzioni saranno per ' + TOOLS[S.tool].l + '. Se cambi idea, usa i tre pulsanti in alto a destra.</p>') : warn('Non hai ancora scelto','<p style="margin:4px 0 0">Puoi continuare a leggere, ma al posto delle istruzioni pratiche troverai tre pulsanti per scegliere. Fallo adesso: ci metti un secondo.</p>')}
  `)}
  ${tryBox('Quale fa per te? Cinque domande', `
@@ -1184,12 +1218,12 @@ L({id:'strumenti', p:null, lv:1, t:'Scegli il tuo strumento', sub:'ChatGPT, Clau
  ${card('Cosa si fa e dove', howBox('modes'))}
  ${card('La prima mezz’ora: come prepararlo', howBox('setup'))}
  ${card('Sul telefono, anche parlando', howBox('mobile'), 'Per l’uso di tutti i giorni il telefono conta quanto il computer: al supermercato, in negozio, allo sportello, davanti a un elettrodomestico che non parte.')}
- ${keys(['Uno solo, scelto bene.','Le istruzioni del corso cambiano da sole in base allo strumento scelto.','L’etichetta arancione <span class="dl-badge">⬇ da installare</span> vuol dire che serve scaricare un’app; tutto il resto funziona nel browser.','Metti l’app anche sul telefono: è lì che la userai di più.'])}
+ ${keys(['Uno solo, scelto bene: tre usati a metà non servono.','Le istruzioni del corso cambiano da sole in base allo strumento che scegli.','Metti l’app anche sul telefono: è lì che la userai di più.'].concat(upTo(3,['L’etichetta arancione <span class="dl-badge">⬇ da installare</span> vuol dire che serve scaricare un’app sul computer; tutto il resto funziona nel browser.']) || []))}
 `}});
 
 /* ---------- Privacy ---------- */
 L({id:'privacy', p:null, lv:1, t:'Cosa puoi dare all’AI e cosa no', sub:'La regola semplice per non pentirsi: prima di incollare, chiediti se lo scriveresti su una cartolina', min:8, body:()=>`
- ${card('La regola della cartolina', `
+ ${card('Cosa si può incollare e cosa no', `
   <p>Quando scrivi qualcosa in una chat, quel testo esce dal tuo computer e arriva ai server di una grande azienda. Nella stragrande maggioranza dei casi non succede niente di male — ma vale la pena avere una regola semplice in testa:</p>
   ${analogy('📮','Prima di incollare, chiediti','<b>“Lo scriverei su una cartolina?”</b> Non perché qualcuno la leggerà di sicuro, ma perché è il modo più veloce per accorgerti quando stai per incollare qualcosa che è meglio tenere per sé.')}
   ${tbl(['Cosa','Si può?','Come fare'],[
@@ -1219,12 +1253,12 @@ L({id:'privacy', p:null, lv:1, t:'Cosa puoi dare all’AI e cosa no', sub:'La re
 /* ============ PILASTRO I · SAPER CHIEDERE ============ */
 const P1 = PILLARS.p1.c;
 
-L({id:'p1-brief', p:'p1', lv:1, t:'Chiedere all’AI è come spiegare a un vicino', sub:'Il motivo numero uno delle risposte deludenti: abbiamo dato troppo poche informazioni', min:6, body:()=>`
- ${card('Perché a volte risponde da manuale e non ti serve a niente', `
+L({id:'p1-brief', p:'p1', lv:1, t:'Come si scrive una richiesta che funziona', sub:'Quasi sempre la risposta delude perché la richiesta era troppo corta', min:6, body:()=>`
+ ${card('Perché certe risposte non servono a niente', `
   <p>Immagina di fermare un vicino sulle scale e dirgli: <i>“Senti, mi scrivi una lettera?”</i>. Ti guarderebbe male. A chi? Per dire cosa? Formale o amichevole? Lunga o corta?</p>
   <p>L’AI non ti guarda male: <b>riempie i buchi da sola</b>, tirando a indovinare. Ed è lì che nasce la risposta generica, lunga, piena di consigli che non c’entrano.</p>
   ${ex('Scrivimi una mail per la lavatrice','Devo scrivere al negozio dove ho comprato una lavatrice 4 mesi fa: si è rotta la seconda volta e voglio la sostituzione, non un’altra riparazione. Scrivi una mail di 10 righe, tono fermo ma educato, con la richiesta chiara alla fine.','Non sa cosa è successo, cosa vuoi ottenere, né con che tono.','Sa la situazione, il risultato che vuoi, la lunghezza e il tono. Esce una mail che puoi spedire quasi così.')}
-  ${analogy('🧾','Il trucco','Prima di scrivere, fai una foto mentale della situazione e raccontala in due righe come la racconteresti a un amico al bar. Quello è il contesto. È la parte che quasi tutti saltano.')}
+  ${analogy('🧾','Da dove partire','Prima di scrivere la richiesta, racconta la situazione in due righe come la racconteresti a un amico. Quello è il contesto, ed è la parte che quasi tutti saltano.')}
  `)}
  ${card('Le quattro domande a cui rispondere sempre', `
   ${tbl(['Domanda','Perché conta','Esempio'],[
@@ -1342,7 +1376,7 @@ Non scrivere il prompt prima di avermi fatto tutte le domande.`, 'Comodo quando 
  }});
 
 L({id:'p1-migliorare', p:'p1', lv:1, t:'Se la risposta non va bene', sub:'Il primo risultato è una bozza. Il bello viene dopo, e costa tre secondi', min:6, body:()=>`
- ${card('L’errore più comune: ricominciare da capo', `
+ ${card('Correggi, non ricominciare da capo', `
   <p>Quando la risposta non convince, la reazione istintiva è chiudere la chat e riscrivere tutto. È il modo peggiore: butti via il contesto che avevi già dato.</p>
   <p>La strada giusta è <b>correggere una cosa alla volta</b>, restando nella stessa conversazione.</p>
   ${ex('Non mi piace, riprova','È troppo lunga: tagliala a 8 righe. Togli la parte sui tempi di consegna, non mi interessa. E chiudi chiedendo una risposta entro 10 giorni.','“Riprova” fa ripartire l’AI a caso: spesso ti dà una variante peggiore.','Tre correzioni precise. La seconda versione è quasi sempre quella buona.')}
@@ -1367,7 +1401,7 @@ L({id:'p1-migliorare', p:'p1', lv:1, t:'Se la risposta non va bene', sub:'Il pri
  ${keys(['Il primo risultato è sempre una bozza.','Una correzione alla volta, precisa.','Meglio modificare il messaggio sbagliato che aggiungerne un altro.','Per le cose importanti, chiedi due versioni e un consiglio.'])}
 `});
 
-L({id:'p1-allucinazioni', p:'p1', lv:1, t:'Quando l’AI si inventa le cose', sub:'La lezione più importante del corso. Succede a tutti gli strumenti, e succede spesso', min:9, body:()=>`
+L({id:'p1-allucinazioni', p:'p1', lv:1, t:'Quando l’AI si inventa le cose', sub:'Succede con tutti gli strumenti e succede spesso: imparare a riconoscerlo è la cosa più utile del corso', min:9, body:()=>`
  ${card('Perché succede', `
   <p>L’AI non “sa” le cose come le sai tu: costruisce la risposta una parola dopo l’altra, scegliendo ogni volta quella che sta bene con le precedenti. Funziona benissimo — finché non ha l’informazione che serve. A quel punto <b>non si ferma: continua</b>, e produce qualcosa di plausibile.</p>
   ${analogy('🎭','Lo studente che non ha studiato','Non dice “non lo so”: risponde con grande scioltezza, con date, nomi e dettagli. Sembra preparatissimo. È esattamente il comportamento che devi aspettarti quando chiedi cose che l’AI non può sapere.')}
@@ -1416,7 +1450,7 @@ L({id:'p1-file', p:'p1', lv:1, t:'Far leggere all’AI i tuoi documenti', sub:'B
    ['Un estratto conto o un Excel di spese','“Raggruppa le spese per categoria e dimmi le tre voci dove spendo di più”','Un quadro reale, non a sensazione'],
    ['La foto di un modulo da compilare','“Dimmi cosa va scritto in ogni campo, in ordine”','Niente più moduli rifatti allo sportello']
   ])}
-  ${whereLine('file','tanti')}
+  ${whereLine('file', lvNow()>=2 ? 'tanti' : null)}
  `)}
  ${card('Le tre cose da fare sempre, in ordine', `
   ${stepsL(P1,[
@@ -1485,7 +1519,7 @@ L({id:'p1-contesto', p:'p1', lv:2, t:'Quanto contesto dare (e quanto è troppo)'
 
 L({id:'p1-token', p:'p1', lv:2, t:'Perché a un certo punto rallenta o si blocca', sub:'Token, consumi e limiti spiegati con la benzina, e un simulatore per vederlo', min:10,
  body:()=>`
- ${card('Cos’è un token, senza tecnicismi', `
+ ${card('Cos’è un token', `
   <p>L’AI non conta le parole: conta i <b>token</b>, cioè pezzetti di parola. In italiano una parola vale circa 1,5 token. È l’unità con cui si misura tutto quello che legge e tutto quello che scrive.</p>
   ${analogy('⛽','La benzina','Ogni messaggio consuma. Il punto che quasi nessuno sa: <b>a ogni tuo messaggio l’AI rilegge da capo tutta la conversazione</b>, allegati compresi. Al quarantesimo messaggio, un semplice “grazie” costa quanto rileggere un libretto.')}
   <p>Ecco perché una chat lunga diventa lenta, perde il filo e ti fa arrivare prima al limite del piano.</p>
@@ -1560,7 +1594,7 @@ L({id:'p1-passi', p:'p1', lv:2, t:'Lavori lunghi: un passo alla volta', sub:'Chi
 const P2 = PILLARS.p2.c;
 
 L({id:'p2-attrito', p:'p2', lv:1, t:'Smetti di rispiegare chi sei', sub:'Ogni volta le stesse tre righe di premessa: è lì che si perde tempo e voglia', min:5, body:()=>`
- ${card('Il conto che nessuno fa', `
+ ${card('Quanto tempo se ne va a ripetere le stesse cose', `
   <p>Guarda le tue ultime dieci chat. Quante volte hai scritto “sono un genitore di due bambini”, “rispondimi in italiano semplice”, “scrivi corto”, “non farmi la lezione”?</p>
   <p>Due minuti a volta, dieci volte a settimana, per un anno: sono <b>diciassette ore</b> passate a ripetere cose che l’AI potrebbe sapere già. E soprattutto è la fatica che a un certo punto ti fa dire “lascia stare, faccio prima da solo”.</p>
   ${analogy('🏠','Il nuovo inquilino','Ogni chat nuova è un aiutante che entra in casa per la prima volta: non sa chi sei, quanti siete, cosa mangi, come ti piacciono le cose. Puoi spiegarglielo ogni volta — oppure lasciare un biglietto sul frigo che vale per sempre.')}
@@ -2290,7 +2324,7 @@ L({id:'p2-differenze', p:'p2', lv:2, t:'Quale strumento per quale caso', sub:'Ot
  const casi = QUIZ_CASI.filter(c=>c.lv <= lvNow());
  return `
  ${card('La regola in una riga', `
-  ${rule('Una volta sola → <b>prompt</b>. Un tema che dura → <b>progetto</b>. Un compito sempre uguale → <b>assistente</b>.' + (lvNow()>=3 ? ' Una procedura con modelli e controlli → <b>skill</b>. Tanti file da lavorare da solo → <b>agente</b>.' : ''))}
+  ${rule('Una volta sola → <b>prompt</b>. Un tema che dura → <b>progetto</b>. Un compito sempre uguale → <b>assistente</b>.' + upTo(3, ' Una procedura con modelli e controlli → <b>skill</b>. Tanti file da lavorare in autonomia → <b>agente</b>.'))}
  `)}
  ${tryBox('Indovina lo strumento', casi.map(c=>{
   const sel = S.quiz[c.id];
@@ -2298,7 +2332,7 @@ L({id:'p2-differenze', p:'p2', lv:2, t:'Quale strumento per quale caso', sub:'Ot
    <div class="quiz">${opts.map(([k,l])=>`<button class="qopt${sel===k?(k===c.a?' ':' '):''}" style="${sel?(k===c.a?'border-color:#16a34a;background:#f0fdf4':(sel===k?'border-color:#dc2626;background:#fef2f2':'opacity:.6')):''}" data-act="quiz" data-q="${c.id}" data-a="${k}">${l}${sel&&k===c.a?' ✓':''}${sel===k&&k!==c.a?' ✗':''}</button>`).join('')}</div>
    ${sel ? `<div class="qres" style="margin-top:8px">${sel===c.a?'✅ Esatto.':'💡 In realtà no.'} ${c.e}</div>` : ''}</div>`;
  }).join(''))}
- ${keys(['Non tutto merita di essere costruito: molte cose restano un prompt e basta.','Se lo rifarai più di tre volte, vale la pena prepararlo.','Meglio un assistente usato ogni settimana che cinque skill mai aperte.'])}
+ ${keys(['Non tutto merita di essere costruito: molte cose restano un prompt e basta.','Se lo rifarai più di tre volte, vale la pena prepararlo.','Meglio una cosa sola che usi ogni settimana, che cinque preparate benissimo e mai più aperte.'])}
 `}});
 
 /* ============ PILASTRO III · SCEGLI COSA AFFIDARE ALL’AI ============ */
@@ -2306,8 +2340,8 @@ const P3 = PILLARS.p3.c;
 const CLASSI = {auto:{l:'Affidala all’AI',c:'#16a34a'}, copilota:{l:'Fatti aiutare',c:'#2563eb'}, core:{l:'Resta tua',c:'#64748b'}};
 
 L({id:'p3-perche', p:'p3', lv:2, t:'Prima decidi, poi automatizza', sub:'La domanda non è “cosa può fare l’AI”, ma “cosa mi conviene darle”', min:6, body:()=>`
- ${card('L’errore di partenza', `
-  <p>La trappola è cominciare dallo strumento: “ho visto che si possono fare gli agenti, proviamo a fare un agente”. Si finisce con l’automatizzare una cosa che si fa due volte l’anno, mentre quella che ruba tre ore alla settimana resta lì.</p>
+ ${card('Da dove si comincia', `
+  <p>La trappola è partire dallo strumento: si prova la funzione nuova su una cosa che si fa due volte l’anno, mentre quella che ruba tre ore alla settimana resta lì dov’è.</p>
   ${analogy('🛒','Il supermercato','Non entri al supermercato per comprare quello che è in offerta: entri con la lista di quello che ti serve. Con l’AI è identico — la lista è la tua settimana.')}
  `)}
  ${card('Due domande per ogni attività', `
@@ -2318,9 +2352,9 @@ L({id:'p3-perche', p:'p3', lv:2, t:'Prima decidi, poi automatizza', sub:'La doma
   ${tbl(['Necessità che sia tu','Cosa farne','Esempi di casa'],[
    ['<b>1–3</b> · bassa','✅ <b>Affidala all’AI</b>: il risultato non cambia se lo fa lei','Rinominare foto, riordinare file, riassumere circolari, estrarre dati dalle bollette'],
    ['<b>4–7</b> · media','🤝 <b>Fatti aiutare</b>: l’AI prepara, tu decidi e firmi','Lettere, reclami, confronti di preventivi, programmi di viaggio, menù'],
-   ['<b>8–10</b> · alta','🧑 <b>Resta tua</b>: qui il tempo liberato va speso','Parlare con tuo figlio, scegliere un regalo, decidere se cambiare lavoro, stare con chi ami']
+   ['<b>8–10</b> · alta','🧑 <b>Resta tua</b>: qui va speso il tempo che recuperi altrove','Parlare con tuo figlio, scegliere un regalo, decidere se cambiare lavoro, stare con chi ami']
   ])}
-  ${warn('Il punto vero','<p style="margin:4px 0 0">Non si automatizza per fare di più. Si automatizza per <b>togliere tempo alle cose che non contano</b> e restituirlo a quelle che contano. Se guadagni due ore a settimana e le riempi di altre incombenze, hai solo cambiato il nome alla fatica.</p>')}
+  ${warn('A cosa serve recuperare tempo','<p style="margin:4px 0 0">Non si alleggerisce il lavoro per farne di più. Si alleggerisce per <b>togliere tempo alle cose che non contano</b> e restituirlo a quelle che contano. Se recuperi due ore a settimana e le riempi di altre incombenze, hai solo cambiato nome alla fatica.</p>')}
  `)}
  ${keys(['Parti dalla tua settimana, non dalle funzioni dell’AI.','Frequenza × minuti = quanto pesa davvero.','Necessità alta = non si automatizza, si protegge.','Il tempo recuperato va speso, non riempito.'])}
 `});
@@ -2356,7 +2390,7 @@ function mapSugg(r){
  if(r.tipo==='doc') return 'Un <b>Progetto</b> con dentro i documenti di quel tema.';
  if(r.tipo==='conti') return lv>=3 ? 'Una <b>skill</b> con il tuo foglio come modello, o una <b>mini-app</b>.' : 'Un <b>Progetto</b> con il tuo foglio, e la regola “fai i calcoli con il codice”.';
  if(r.tipo==='ripet') return lv>=3 ? 'Una <b>skill</b>: procedura fissa, modello e controlli.' : 'Un <b>assistente</b> con le istruzioni fisse.';
- if(r.tipo==='tanti') return lv>=3 ? 'Un <b>agente</b> sulla cartella (con copie dei file!).' : 'Per ora falla a mano: gli agenti sono nel livello Avanzato.';
+ if(r.tipo==='tanti') return lv>=3 ? 'Un <b>agente</b> sulla cartella (con copie dei file!).' : 'Al tuo livello conviene dividerla in blocchi e usare un <b>Progetto</b>: c’è di meglio, ma richiede di installare qualcosa.';
  return 'Fatti aiutare a preparare, ma decidi tu.';
 }
 function mapBars(rows){
@@ -2874,7 +2908,7 @@ L({id:'fine-piano', p:'fine', lv:1, t:'Il tuo piano per le prossime quattro sett
  };
  const piano = PIANI[lvNow()];
  return `
- ${card('La regola delle quattro settimane', `<p>Non serve fare tutto. Serve fare <b>una cosa alla settimana</b> e non mollare. Questo piano è quello del livello <b>${lvInfo().ic} ${lvInfo().l}</b>: se cambi livello, cambia anche il piano.</p>
+ ${card('Come usare questo piano', `<p>Non serve fare tutto. Serve fare <b>una cosa alla settimana</b> e non mollare. Questo piano è quello del livello <b>${lvInfo().ic} ${lvInfo().l}</b>: se cambi livello, cambia anche il piano.</p>
   <div class="plan">${piano.map(([s,t,items],i)=>`<div class="week" style="--pc:${['#4f46e5','#0d9488','#d97706','#16a34a'][i]}"><b>${s}</b><span>${t}</span><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('')}</div>`)}
  ${card('Le tre abitudini che contano più di tutto il resto', `
   ${stepsL('#16a34a',[
@@ -2925,8 +2959,8 @@ const QZ = [
  {lv:1, a:'file', go:'p1-file', q:'A cosa fare attenzione con le foto dei documenti?', o:['Le cifre possono essere lette male: vanno controllate a campione','Non si possono allegare','Vengono lette sempre perfettamente','Vanno prima stampate'], e:'Uno 0 letto come 8 cambia una bolletta. Controlla sempre due numeri a caso.'},
  {lv:1, a:'file', go:'p1-file', q:'Vuoi un file Excel come risultato. Come si fa?', o:['Lo chiedi esplicitamente: “ridammi un .xlsx da scaricare”','Non si può ottenere','Copi la risposta in Word','Chiedi la foto della tabella'], e:'Se lo chiedi, l’AI crea un file vero da scaricare. Se non lo chiedi, resta testo nella chat.'},
  {lv:1, a:'personalizza', go:'p2-personalizza', q:'Cosa si mette nelle istruzioni personali?', o:['Chi sei, come vuoi le risposte e le regole contro le invenzioni','Tutte le procedure che usi','I dati sanitari dettagliati','Le password'], e:'Poche righe che valgono sempre. Vengono rilette a ogni messaggio: tienile corte.'},
- {lv:1, a:'personalizza', go:'p2-attrito', q:'Perché conviene scrivere le istruzioni personali?', o:['Per non rispiegare chi sei a ogni chat nuova','Per consumare più token','Per attivare gli agenti','Per cambiare modello'], e:'È l’esercizio con il miglior rapporto tra dieci minuti di fatica e mesi di beneficio.'},
- {lv:1, a:'personalizza', go:'p2-memoria', q:'A cosa serve la chat temporanea o in incognito?', o:['Ad argomenti delicati che non devono restare in cronologia','A consumare meno','A usare gli agenti','A creare progetti'], e:'Non resta nella cronologia e non crea nuove memorie.'},
+ {lv:1, a:'personalizza', go:'p2-attrito', q:'Perché conviene scrivere le istruzioni personali?', o:['Per non rispiegare chi sei a ogni chat nuova','Per far sparire la pubblicità','Per rendere le risposte più lunghe','Per cambiare la lingua delle risposte'], e:'È l’esercizio con il miglior rapporto tra dieci minuti di fatica e mesi di beneficio.'},
+ {lv:1, a:'personalizza', go:'p2-memoria', q:'A cosa serve la chat temporanea o in incognito?', o:['Ad argomenti delicati che non devono restare in cronologia','A ottenere risposte più veloci','A parlare con una persona vera','A scrivere in un’altra lingua'], e:'Non resta nella cronologia e non crea nuove memorie.'},
  {lv:1, a:'prompt', go:'p1-craft', q:'A cosa servono i delimitatori come &lt;testo&gt; … &lt;/testo&gt;?', o:['A far distinguere le istruzioni dal materiale su cui lavorare','A ridurre il costo dell’abbonamento','Senza, l’AI non legge il testo','Sono obbligatori'], e:'Evitano che l’AI scambi una frase del tuo materiale per un ordine da eseguire.'},
  /* --- livello 2 --- */
  {lv:2, a:'token', go:'p1-token', q:'Perché una chat lunga consuma sempre di più?', o:['A ogni messaggio l’AI rilegge tutta la conversazione','Perché si stanca','Perché le risposte diventano più cortesi','Non è vero, consuma sempre uguale'], e:'Al quarantesimo messaggio, anche un “grazie” fa rileggere tutto: chat e allegati.'},
@@ -2935,14 +2969,14 @@ const QZ = [
  {lv:2, a:'file', go:'p1-contesto', q:'Hai un documento di 200 pagine e ti serve un capitolo. Cosa fai?', o:['Indichi le pagine o il capitolo da guardare','Lo incolli tre volte','Non dici niente','Chiedi di impararlo a memoria'], e:'Indicare la parte utile migliora la precisione e riduce i consumi.'},
  {lv:2, a:'file', go:'p1-contesto', q:'Perché aprire una chat nuova quando cambi argomento?', o:['Perché argomenti diversi nella stessa chat la confondono','Per salvare i file','Perché è obbligatorio','Per cambiare lingua'], e:'Una chat, un argomento. È il consiglio pratico più sottovalutato.'},
  {lv:2, a:'file', go:'p1-file', q:'Ti servono dei totali esatti da un elenco di spese. Cosa chiedi?', o:['Di fare i calcoli eseguendo il codice','Di stimarli a occhio','Di arrotondare','Di non guardare i numeri'], e:'Il codice calcola in modo esatto, e ti dice su quante righe ha lavorato.'},
- {lv:2, a:'frizione', go:'p2-progetti', q:'A cosa serve un Progetto?', o:['A tenere documenti e regole di un tema, così ogni chat li conosce già','A creare app','A tradurre','A programmare agenti'], e:'Lo prepari una volta e non rispieghi più il contesto: casa, viaggio, pratica.'},
- {lv:2, a:'frizione', go:'p2-assistenti', q:'Ogni settimana fai correggere le mail con le stesse tre regole. Cosa ti serve?', o:['Un assistente con quelle istruzioni fisse','Un progetto per ogni mail','Un agente','Niente, si rifà ogni volta'], e:'Compito identico ogni volta: si prepara una volta e si usa per anni.'},
- {lv:2, a:'frizione', go:'p2-differenze', q:'Devi scrivere una volta sola una lettera all’assicurazione. Cosa usi?', o:['Un buon prompt e basta','Un progetto','Un assistente','Un agente'], e:'Non tutto va costruito: molte cose restano una richiesta singola.'},
+ {lv:2, a:'frizione', go:'p2-progetti', q:'A cosa serve un Progetto?', o:['A tenere documenti e regole di un tema, così ogni chat li conosce già','A ottenere risposte più veloci','A tradurre i documenti','A non pagare l’abbonamento'], e:'Lo prepari una volta e non rispieghi più il contesto: casa, viaggio, pratica.'},
+ {lv:2, a:'frizione', go:'p2-assistenti', q:'Ogni settimana fai correggere le mail con le stesse tre regole. Cosa ti serve?', o:['Un assistente con quelle istruzioni fisse','Un progetto nuovo per ogni mail','Una chat temporanea ogni volta','Niente: si riscrivono le regole ogni volta'], e:'Compito identico ogni volta: si prepara una volta e si usa per anni.'},
+ {lv:2, a:'frizione', go:'p2-differenze', q:'Devi scrivere una volta sola una lettera all’assicurazione. Cosa usi?', o:['Un buon prompt e basta','Un progetto con dentro i documenti','Un assistente con istruzioni fisse','Le istruzioni personali'], e:'Non tutto va costruito: molte cose restano una richiesta singola.'},
  {lv:2, a:'frizione', go:'p2-progetti', q:'Una regola che vale solo per un tema (per esempio la casa) dove si mette?', o:['Nelle istruzioni di quel progetto','Nelle istruzioni personali','Nella memoria generale','In ogni singolo messaggio'], e:'Ampio → istruzioni personali. Un tema → progetto. Un compito → assistente.'},
  {lv:2, a:'personalizza', go:'p2-personalizza', q:'Come fai scrivere l’AI con il tuo stile?', o:['Le dai due o tre tuoi testi e le fai ricavare le regole','Scrivi solo “scrivi come me”','Usi tante emoji','Cambi strumento'], e:'Mostrare funziona molto meglio che descrivere. E le regole ricavate si salvano.'},
  {lv:2, a:'workflow', go:'p3-perche', q:'Da quali attività conviene partire?', o:['Quelle che pesano tanto ogni settimana e non richiedono proprio te','Quelle che fai una volta all’anno','Quelle in cui sei insostituibile','Le più divertenti'], e:'Frequenza × minuti, con bassa necessità che sia tu: lì si recupera più tempo.'},
- {lv:2, a:'workflow', go:'p3-perche', q:'Un’attività che hai valutato 9 su 10 su “quanto serve che la faccia io”…', o:['Resta tua: il tempo recuperato altrove serve proprio a questo','Va automatizzata subito','Richiede un agente','Va eliminata'], e:'Non si automatizza quello in cui sei insostituibile: si protegge.'},
- {lv:2, a:'workflow', go:'p1-passi', q:'Quando conviene dividere un lavoro in più passaggi?', o:['Quando il risultato deve essere giusto e non solo presentabile','Sempre, anche per tradurre','Solo per le lettere','Solo con gli agenti'], e:'Il valore sta nei controlli tra un passaggio e l’altro: gli errori si vedono subito.'},
+ {lv:2, a:'workflow', go:'p3-perche', q:'Un’attività che hai valutato 9 su 10 su “quanto serve che la faccia io”…', o:['Resta tua: il tempo recuperato altrove serve proprio a questo','Va passata all’AI per prima','Va divisa fra più persone','Va eliminata dalla settimana'], e:'Non si automatizza quello in cui sei insostituibile: si protegge.'},
+ {lv:2, a:'workflow', go:'p1-passi', q:'Quando conviene dividere un lavoro in più passaggi?', o:['Quando il risultato deve essere giusto e non solo presentabile','Sempre, anche per tradurre una frase','Solo per le lettere formali','Solo quando la chat è lunga'], e:'Il valore sta nei controlli tra un passaggio e l’altro: gli errori si vedono subito.'},
  {lv:2, a:'affidabilita', go:'p1-allucinazioni', q:'Dove conviene chiedere una seconda opinione su una risposta importante?', o:['In una chat nuova, che non è legata a quella risposta','Nella stessa chat, chiedendo “sei sicura?”','Non serve mai','In una chat ancora più lunga'], e:'Nella stessa conversazione l’AI tende a difendere quello che ha appena scritto.'},
  {lv:2, a:'personalizza', go:'p2-memoria', q:'Dove vanno salvati i risultati che ti servono davvero?', o:['Fuori dalla chat: in un file, una nota, una cartella','Nella chat, tanto si ritrova','Nella memoria','Da nessuna parte'], e:'Le chat non sono un archivio: cercare tra cento conversazioni è peggio che rifare il lavoro.'},
  /* --- livello 3 --- */
