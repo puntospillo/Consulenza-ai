@@ -37,11 +37,12 @@ button,input,select,textarea{font:inherit;color:inherit}
 .li.on .ck{border-color:#94a3b8}.li.on .ck.ok{border-color:#22c55e}
 /* ricerca per argomento */
 .search{position:relative;margin:2px 8px 4px}
-.search input{width:100%;border:1px solid #2b3d59;background:#0d1a2e;color:#e5edf8;border-radius:11px;padding:9px 30px 9px 32px;font-size:14px}
-.search input::placeholder{color:#6c7f99}
-.search input:focus{outline:none;border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.22)}
-.search .mag{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#6c7f99;font-size:13px;pointer-events:none}
-.search .clr{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:#8296b0;cursor:pointer;font-size:15px;line-height:1;padding:5px 7px;border-radius:7px}
+/* selettore con id: deve battere la regola generica input[type=text] definita più sotto */
+#q,.search input[type=text]{width:100%;box-sizing:border-box;border:1px solid #33486a;background:#0c1829;color:#eaf1fb;border-radius:11px;padding:10px 36px 10px 36px;font-size:14px;line-height:1.3;box-shadow:none}
+#q::placeholder,.search input[type=text]::placeholder{color:#7387a3;opacity:1}
+#q:focus,.search input[type=text]:focus{outline:none;border-color:#60a5fa;background:#0c1829;color:#eaf1fb;box-shadow:0 0 0 3px rgba(96,165,250,.28)}
+.search .mag{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#7387a3;font-size:13px;pointer-events:none;line-height:1}
+.search .clr{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:transparent;border:0;color:#8ea2bd;cursor:pointer;font-size:15px;line-height:1;padding:5px 7px;border-radius:7px}
 .search .clr:hover{background:#1e2d46;color:#fff}
 .res-n{margin:12px 10px 5px;font-size:10.5px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:#5d6e88}
 .li .dot{width:9px;height:9px;border-radius:50%;background:var(--gc,#64748b);display:block;margin:0 auto}
@@ -126,7 +127,7 @@ table.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
 .tbl td{padding:10px 13px;border-bottom:1px solid #f0f4f9;vertical-align:top}
 .tbl tr:last-child td{border-bottom:0}
 .tbl tbody tr:hover{background:#fbfcff}
-.tbl input,.tbl select{padding:6px 8px;font-size:14px}
+.tbl input[type=text],.tbl input[type=number],.tbl select{padding:6px 8px;font-size:14px}
 code{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:1px 6px;font-size:.89em}
 .path{background:#eef2f7;border:1px solid #dbe3ee;border-radius:7px;padding:1px 8px;font-weight:700;font-size:.9em;white-space:nowrap}
 /* problema → soluzione */
@@ -290,7 +291,7 @@ code,.path{overflow-wrap:anywhere}
    KIT CONSULENZA AI — banco di lavoro tecnico per il consulente
    File unico, offline, nessuna libreria esterna.
    ========================================================= */
-const REV = '2.2';
+const REV = '2.3';
 
 /* I 5 pilastri, più partenza, chiusura e librerie */
 const GRP = {
