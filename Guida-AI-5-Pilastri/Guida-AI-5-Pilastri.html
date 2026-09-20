@@ -163,6 +163,8 @@ code,.path{overflow-wrap:anywhere}
 .tp{display:grid;gap:4px;align-content:start;text-align:left;border:2px solid var(--line);border-top:6px solid var(--tc);border-radius:14px;padding:14px 16px;background:#fff;cursor:pointer}
 .tp:hover{border-color:var(--tc)}
 .tp>b{font-size:21px;color:var(--tc)}.tp>small{color:var(--muted);font-size:12.5px;margin-top:-4px}.tp>span{font-size:14px;color:#334155;line-height:1.5}
+.tp-mod{font-size:13px;color:#475569;line-height:1.45;border-top:1px dashed var(--line);padding-top:6px;margin-top:2px}
+.tp-mod b{color:var(--tc)}
 .tp>i{font-style:normal;font-weight:800;font-size:13px;color:var(--tc);margin-top:6px}
 .tp.on{background:color-mix(in srgb,var(--tc) 8%,#fff);border-color:var(--tc)}
 .how{border:1px solid color-mix(in srgb,var(--tc,#94a3b8) 40%,#fff);border-radius:14px;overflow:hidden;margin:6px 0;min-width:0}
@@ -484,9 +486,16 @@ const TOOLS = {
  gemini: {l:'Gemini',  by:'Google',    c:'#1a73e8'}
 };
 const TOOL_INTRO = {
- chatgpt:'Nell’app per computer: <b>Chat</b> per domande e file, <b>Work</b> per lavori lunghi su documenti, fogli, presentazioni e cartelle, <b>Codex</b> per creare app. In più Progetti, Skill, Canvas, Deep research.',
- claude:'Chat, Progetti, Skill, Artifact. <b>Cowork</b> per lavorare su documenti e cartelle, <b>Claude Code</b> per creare app. Anche dentro Excel, Word e PowerPoint.',
+ chatgpt:'Nell’app per computer: <b>Chat</b> per domande e file, <b>Work</b> per lavori lunghi su documenti, fogli, presentazioni e cartelle, <b>Codex</b> per creare app. In più Progetti, Skill, Canvas, Deep research e <b>Sites</b> per pubblicare app.',
+ claude:'Chat, Progetti, Skill, Artifact e i nuovi <b>Docs</b> e <b>Slides</b>. Da metà settembre 2026 <b>Cowork entra dentro la chat</b> (prima sui piani Pro e Max): un’unica finestra per domande, file e lavori lunghi sulle cartelle. Resta separato <b>Claude Code</b> per le app. C’è anche dentro Excel, Word e PowerPoint.',
  gemini:'App Gemini con Gem, Notebook, Canvas, e dentro Gmail, Drive, Documenti, Fogli. <b>Gemini Notebook</b> per i documenti, <b>Antigravity</b> per le cartelle del computer e le app, <b>AI Studio</b> per le app online.'
+};
+/* Modelli e data dell’ultima verifica: da aggiornare quando escono nuove versioni */
+const AGG_DATA = '20 settembre 2026';
+const TOOL_MODELS = {
+ chatgpt:'<b>GPT-6 Astra</b> il più potente (piani a pagamento, anche in Work e Codex) · <b>GPT-5.6</b> nelle versioni Sol, Terra e Luna per l’uso di tutti i giorni.',
+ claude:'<b>Sonnet 5</b> predefinito (anche gratis) · <b>Opus 5</b> sui piani a pagamento per i lavori difficili · <b>Haiku 4.5</b> per le risposte rapide · <b>Fable 5.1</b>, il più potente, in Claude Code.',
+ gemini:'Nel selettore dell’app: <b>Flash-Lite</b> per le cose semplici · <b>Flash</b> (Gemini 3.8 con Google AI Pro e Ultra) per l’uso quotidiano · <b>Pro</b> (Gemini 3.1 Pro) per i lavori difficili · <b>Deep Think</b> solo con Ultra.'
 };
 const hasTool = () => !!TOOLS[S.tool];
 const curTool = () => hasTool() ? S.tool : 'any';
@@ -533,9 +542,10 @@ modes:{
   ['Ricerca sul web con fonti e report finale','🔎 <b>Ricerca</b>','“Incentivi 2026 per le piccole imprese: requisiti e scadenze”'],
   ['Lavorare dentro un file Excel, Word o PowerPoint aperto','📊 <b>Claude in Excel, Word, PowerPoint</b> (componenti aggiuntivi)'+DL,'“Spiegami le formule di questo foglio”'],
   ['Attività nel browser (compilare moduli, raccogliere dati dai siti)','🌐 <b>Claude in Chrome</b> (estensione)'+DL,'“Raccogli prezzi e tempi di consegna da questi 5 siti”'],
-  ['Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','🤝 <b>Cowork</b> (per le cartelle: app Claude per computer)'+DL,'“Crea un Excel con i dati delle 40 fatture PDF di questa cartella”'],
+  ['Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','💬 <b>Chat</b> dell’app per computer, scegliendo la cartella (le funzioni di <b>Cowork</b>)'+DL,'“Crea un Excel con i dati delle 40 fatture PDF di questa cartella”'],
+  ['Scrivere un documento o una presentazione insieme a Claude','📄 <b>Docs</b> e <b>Slides</b> (dalla chat)','“Prepariamo insieme la relazione annuale”'],
   ['Creare mini-app e app vere, programmi e automazioni','💻 <b>Claude Code</b> (app Claude per computer, scheda Code)'+DL,'“Crea un gestionale delle richieste di ferie”']
- ]) + rule('File che puoi allegare → <b>Chat</b>. Cartella del computer con tanti file → <b>Cowork</b>. Un programma o un’app da riusare o pubblicare → <b>Claude Code</b>.'),
+ ]) + rule('Tutto quello che non è un programma → <b>Chat</b> (allegando i file o scegliendo una cartella). Un programma o un’app da riusare o pubblicare → <b>Claude Code</b>.') + note('Da settembre 2026 le modalità sono due','<p style="margin:4px 0 0">Prima c’erano <b>Chat</b>, <b>Cowork</b> e <b>Code</b>. Ora quello che faceva Cowork si fa <b>dentro la chat</b>: scegli la cartella e chiedi il lavoro. Il cambiamento sta arrivando per gradi, prima su Pro e Max: se nell’app vedi ancora la scheda <b>Cowork</b>, usala allo stesso modo.</p>'),
  gemini: modeTbl([
   ['Domande, testi, email, traduzioni','💬 <b>App Gemini</b> (chat)','“Riscrivi questa mail in tono più cortese”'],
   ['Analizzare file allegati','💬 <b>App Gemini</b> con file allegati','“Riassumi questo PDF di 40 pagine in una pagina”'],
@@ -560,11 +570,11 @@ setup:{
   '<b>Cartelle del computer</b>: quando Work o Codex chiedono l’accesso a una cartella, concedilo solo alle cartelle di lavoro, mai a tutto il disco.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
-  '<b>Accedi</b> su <b>claude.ai</b> e installa l’app per computer da <b>claude.com/download</b> (Mac e Windows): serve per usare Cowork sulle cartelle e Claude Code. Cowork e Claude Code richiedono un piano a pagamento (Pro, Max) o aziendale (Team, Enterprise).',
+  '<b>Accedi</b> su <b>claude.ai</b> e installa l’app per computer da <b>claude.com/download</b> (Mac e Windows): serve per far lavorare Claude sulle cartelle e per Claude Code. Queste funzioni richiedono un piano a pagamento (Pro, Max) o aziendale (Team, Enterprise).',
   `<b>Attiva la creazione di file</b>: ${mp('Impostazioni › Funzionalità')} → attiva <b>“Esecuzione codice e creazione file”</b>. Senza, Claude non crea Excel, Word e PowerPoint.`,
   `<b>Skill</b>: in ${mp('Personalizza › Skill')} trovi quelle già pronte (Excel, Word, PowerPoint, PDF) e aggiungi le tue.`,
   `<b>Privacy</b>: ${mp('Impostazioni › Privacy')} → scegli se consentire l’uso delle chat per migliorare i modelli. Negli account aziendali è escluso.`,
-  `<b>Presentati una volta sola</b>: ${mp('Impostazioni › Profilo')} → preferenze personali. Per Cowork c’è anche ${mp('Impostazioni › Cowork › Istruzioni globali')}. Il testo pronto lo crei nella lezione “Personalizza la tua AI”.`,
+  `<b>Presentati una volta sola</b>: ${mp('Impostazioni › Profilo')} → preferenze personali. Per i lavori sulle cartelle c’è anche ${mp('Impostazioni › Cowork › Istruzioni globali')}, dove presente. Il testo pronto lo crei nella lezione “Personalizza la tua AI”.`,
   `<b>Collega i tuoi archivi</b> (facoltativo): ${mp('Impostazioni › Connettori')} → Google Drive, Gmail, Microsoft 365…`
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
@@ -588,7 +598,7 @@ personal:{
  ]),
  claude: stepsL(TOOLS.claude.c,[
   `<b>Preferenze personali</b>: ${mp('Impostazioni › Profilo')} → incolla tutto il testo creato qui sotto. Valgono per tutte le chat.`,
-  `<b>Cowork</b>: le stesse regole incollale anche in ${mp('Impostazioni › Cowork › Istruzioni globali')}.`,
+  `<b>Lavori sulle cartelle</b>: le stesse regole incollale anche in ${mp('Impostazioni › Cowork › Istruzioni globali')}, se nella tua versione c’è.`,
   '<b>Stili</b>: nella casella di scrittura apri il menu degli stili e scegli <b>Normale, Conciso, Esplicativo o Formale</b>. Con <b>Crea e modifica stili</b> carichi un tuo testo (PDF, Word, TXT) oppure descrivi lo stile: Claude impara il tuo modo di scrivere.',
   `<b>Memoria</b>: in ${mp('Impostazioni › Funzionalità')} attiva la memoria generata dalla cronologia delle chat; con <b>Visualizza e modifica memoria</b> controlli e correggi ciò che ricorda. Ogni Progetto ha una memoria separata.`,
   '<b>Insegnare</b>: in chat scrivi <i>“Ricorda che i nostri prezzi sono sempre IVA esclusa”</i>.',
@@ -630,7 +640,7 @@ verify:{
 /* ---- Consumi e limiti ---- */
 tokens:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
-  '<b>Scegli il modello</b> dal selettore: quello veloce per richieste semplici, quello con ragionamento (“Thinking”) solo per analisi complesse. Hanno limiti di utilizzo diversi.',
+  '<b>Scegli il modello</b> dal selettore: <b>GPT-5.6</b> (Luna o Terra) per le richieste semplici, <b>GPT-5.6 Sol</b> con più ragionamento per le analisi, <b>GPT-6 Astra</b> solo per i lavori davvero difficili. Più è potente, più consuma il tuo limite.',
   '<b>Work, Codex, Deep research e immagini</b> consumano molto più di una normale chat: usali per lavori che lo valgono.',
   '<b>Limiti</b>: quando ti avvicini o raggiungi un limite, ChatGPT lo segnala e indica quando si ricarica.',
   '<b>Codex</b>: scrivi <code>/status</code> per vedere i limiti e l’uso; quando una conversazione diventa lunga apri un nuovo thread ripartendo da un riassunto (nella versione a riga di comando c’è anche <code>/compact</code>).',
@@ -638,13 +648,13 @@ tokens:{
  ]),
  claude: stepsL(TOOLS.claude.c,[
   `<b>Controlla l’utilizzo</b> in ${mp('Impostazioni › Utilizzo')}: vedi quanto hai consumato nella sessione (si ricarica ogni 5 ore) e nella settimana.`,
-  '<b>Scegli il modello</b> dal selettore: uno più leggero per compiti semplici, il più potente solo per quelli complessi. Il ragionamento esteso consuma di più.',
+  '<b>Scegli il modello</b> dal selettore: <b>Haiku 4.5</b> per le cose semplici e veloci, <b>Sonnet 5</b> per l’uso normale, <b>Opus 5</b> solo per i lavori difficili. Il ragionamento esteso consuma di più.',
   '<b>Strumenti</b>: dal menu della casella disattiva ricerca web e connettori quando non servono.',
   '<b>Progetti con tanti documenti</b>: Claude cerca solo le parti utili invece di rileggere tutto, quindi conviene caricarli lì.',
-  '<b>Claude Code</b>: <code>/clear</code> per ricominciare pulito, <code>/compact</code> per riassumere, <code>/context</code> per vedere cosa occupa spazio. <b>Cowork</b>: un compito per sessione.'
+  '<b>Claude Code</b>: <code>/clear</code> per ricominciare pulito, <code>/compact</code> per riassumere, <code>/context</code> per vedere cosa occupa spazio. Per i lavori sulle cartelle: <b>un compito per conversazione</b>.'
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
-  '<b>Scegli il modello</b>: quello veloce per richieste semplici; quelli più potenti o con ragionamento hanno un numero di richieste al giorno più basso.',
+  '<b>Scegli il modello</b> nel selettore: <b>Flash-Lite</b> per le cose semplici, <b>Flash</b> per l’uso normale, <b>Pro</b> solo per i lavori difficili (ha un numero di richieste al giorno più basso).',
   '<b>Deep Research, immagini e video</b> hanno limiti giornalieri propri: usali per ciò che conta.',
   '<b>Gemini Notebook e Notebook</b>: le fonti restano nel notebook, non serve ricaricarle in ogni chat.',
   '<b>Antigravity</b>: il livello gratuito ha limiti che si ricaricano ogni poche ore, con un tetto settimanale; AI Pro ne dà di più. Gli agenti in parallelo consumano la quota più in fretta: chiudi i compiti finiti e apri una conversazione nuova per ogni lavoro diverso.',
@@ -738,7 +748,7 @@ skillUse:{
   '<b>Usarla</b>: quando la richiesta corrisponde alla <i>description</i>, Claude la apre da solo. Per sicurezza scrivi <i>“usa la skill report-mensile”</i>.',
   '<b>Condividerla</b> (piani Team ed Enterprise): menu ⋯ accanto alla skill → <b>Condividi</b>.',
   '<b>Aggiornarla</b>: correggi SKILL.md, ricomprimi la cartella e caricala di nuovo.'
- ]) + `<h3>In Cowork e Claude Code</h3><p>Le skill del tuo account sono disponibili anche lì. In Claude Code puoi mettere la cartella in ${cmd('.claude/skills/')} dentro la cartella di lavoro. Più facile: chiedi <i>“installa la skill che trovi in questa cartella”</i>.</p>`,
+ ]) + `<h3>Nei lavori sulle cartelle e in Claude Code</h3><p>Le skill del tuo account sono disponibili anche lì. In Claude Code puoi mettere la cartella in ${cmd('.claude/skills/')} dentro la cartella di lavoro. Più facile: chiedi <i>“installa la skill che trovi in questa cartella”</i>.</p>`,
  gemini: `<h3 style="margin-top:0">Nell’app Gemini</h3><p>L’app non installa cartelle skill. Ottieni lo stesso risultato con un Gem:</p>` + stepsL(TOOLS.gemini.c,[
   'Crea un <b>Gem</b> con il nome della skill.',
   'Incolla il testo di <b>SKILL.md</b> nelle <b>Istruzioni</b>.',
@@ -755,7 +765,7 @@ md:{
  ]),
  claude: stepsL(TOOLS.claude.c,[
   'Chiedi: <i>“Crea il file SKILL.md per …”</i>. Claude crea un file vero che puoi aprire e <b>scaricare</b>.',
-  'In <b>Cowork</b> e <b>Claude Code</b> il file viene creato direttamente nella cartella di lavoro.',
+  'Quando Claude lavora su una cartella (anche in <b>Claude Code</b>) il file viene creato direttamente lì.',
   'Dove lo usi: nella cartella di una <b>skill</b> (poi .zip), come <code>CLAUDE.md</code> nella cartella di lavoro, oppure incollato nelle <b>Istruzioni</b> di un Progetto.'
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
@@ -773,13 +783,13 @@ install:{
   'Sotto la casella di scrittura c’è il controllo dei <b>permessi</b>: lascia <b>Chiedi approvazione</b>, così si ferma prima di uscire dalla cartella o fare azioni importanti.',
   `Le modalità più libere (“Approva per me”, “Accesso completo”) vanno attivate apposta in ${mp('Impostazioni › Generale › Permessi')}: <b>all’inizio non attivarle</b>.`
  ]) + rule('<b>Chat</b> per domande e pochi file. <b>Work</b> per documenti, fogli, presentazioni e cartelle. <b>Codex</b> per creare app e programmi.'),
- claude: `<p><b>Strumento: l’app Claude per computer</b>. Contiene <b>Chat</b>, <b>Cowork</b> e <b>Claude Code</b>, senza installare altro.</p>` + stepsL(TOOLS.claude.c,[
+ claude: `<p><b>Strumento: l’app Claude per computer</b>. Contiene la <b>Chat</b> (che da settembre 2026 comprende anche i lavori sulle cartelle, prima nella scheda <b>Cowork</b>) e <b>Claude Code</b>, senza installare altro.</p>` + stepsL(TOOLS.claude.c,[
   'Scarica l’app da <b>claude.com/download</b> (Mac o Windows), installala e accedi.',
-  'In alto trovi le modalità: <b>Chat</b>, <b>Cowork</b> e <b>Code</b>.',
-  '<b>Cowork</b>: nella casella premi <b>Lavora in un progetto o cartella</b> e scegli la cartella. Scegliendola autorizzi Claude a leggere e scrivere lì.',
-  '<b>Modalità di approvazione</b> di Cowork, nella casella: <b>Manuale</b> (predefinita, chiede prima delle azioni) oppure <b>Automatica</b> (procede e controlla la sicurezza di ogni azione). <b>All’inizio usa Manuale.</b> Quando scegli una cartella puoi aggiungere anche <b>istruzioni per quella cartella</b>.',
+  'In alto trovi le modalità: <b>Chat</b> e <b>Code</b> (se la tua versione mostra ancora <b>Cowork</b>, è la scheda per i lavori sulle cartelle).',
+  '<b>Per lavorare sui tuoi file</b>: nella casella premi <b>Lavora in un progetto o cartella</b> e scegli la cartella. Scegliendola autorizzi Claude a leggere e scrivere lì.',
+  '<b>Modalità di approvazione</b>, nella casella: <b>Manuale</b> (predefinita, chiede prima delle azioni) oppure <b>Automatica</b> (procede e controlla la sicurezza di ogni azione). <b>All’inizio usa Manuale.</b> Quando scegli una cartella puoi aggiungere anche <b>istruzioni per quella cartella</b>.',
   '<b>Code</b>: scegli una cartella e chiedi di creare app, programmi, automazioni.'
- ]) + rule('<b>Chat</b> per file che puoi allegare. <b>Cowork</b> per lavorare su cartelle e documenti. <b>Code</b> per creare app e programmi.'),
+ ]) + rule('<b>Chat</b> per i file che alleghi e per i lavori sulle cartelle del computer. <b>Code</b> per creare app e programmi.'),
  gemini: `<p><b>Strumento: Google Antigravity</b>, l’app di Google con agenti che lavorano sulle cartelle del computer. Dal 18 giugno 2026 ha sostituito Gemini CLI per gli account personali.</p>` + stepsL(TOOLS.gemini.c,[
   'Scarica l’app da <b>antigravity.google/download</b> (Mac con processore Apple, Windows 10/11 a 64 bit, Linux) e installala lasciando le opzioni predefinite.',
   'Accedi con lo stesso account Google.',
@@ -878,13 +888,13 @@ agent:{
   'Work mostra i passi e i file che crea; prima delle azioni importanti chiede conferma. Puoi fermarlo in ogni momento.',
   'A fine lavoro trovi i file nella cartella <b>risultati</b>. Leggi il report finale.'
  ]) + `<h3>Work nel browser</h3><p>Su chatgpt.com Work lavora online: invece di scegliere una cartella <b>carichi i file</b> nella conversazione o nel progetto (e al posto di “cartella originali” scrivi “file allegati”). Per le attività sui siti web Work usa il browser integrato. <b>Codex</b> invece usalo quando il lavoro diventa un programma o un’app.</p>`,
- claude: `<h3 style="margin-top:0">Cowork nell’app per computer (consigliato)</h3>` + stepsL(TOOLS.claude.c,[
-  'Apri l’app Claude per computer → <b>Cowork</b>.',
+ claude: `<h3 style="margin-top:0">Claude nell’app per computer (consigliato)</h3>` + stepsL(TOOLS.claude.c,[
+  'Apri l’app Claude per computer. Se vedi ancora la scheda <b>Cowork</b> usala; nelle versioni nuove si fa tutto dalla <b>Chat</b>.',
   'Premi <b>Lavora in un progetto o cartella</b> e scegli la cartella di prova: Claude vedrà <b>solo quella</b>.',
   'Imposta la modalità di approvazione su <b>Manuale</b>, incolla il prompt e invia.',
   'Claude mostra il piano e l’avanzamento. Quando chiede un permesso, leggi e decidi. Per fermarlo premi <b>Stop</b>.',
   'Tieni l’app aperta e il computer collegato finché non ha finito. I file creati sono nella cartella <b>risultati</b>.'
- ]) + `<h3>Altre possibilità con Claude</h3><ul><li><b>Cowork su claude.ai</b> (web e telefono): lavora sui file che carichi, senza accedere alle cartelle del computer.</li><li><b>Claude in Chrome</b> (estensione del browser): compiti sui siti web, come raccogliere dati o compilare moduli.</li><li><b>Claude Code</b>: quando il lavoro deve diventare un programma o un’app da riusare.</li></ul>`,
+ ]) + `<h3>Altre possibilità con Claude</h3><ul><li><b>Claude sul sito e sul telefono</b>: lavora sui file che carichi, senza accedere alle cartelle del computer.</li><li><b>Claude in Chrome</b> (estensione del browser): compiti sui siti web, come raccogliere dati o compilare moduli.</li><li><b>Claude Code</b>: quando il lavoro deve diventare un programma o un’app da riusare.</li></ul>`,
  gemini: `<h3 style="margin-top:0">Antigravity sul computer</h3>` + stepsL(TOOLS.gemini.c,[
   'Apri <b>Antigravity</b> → <b>New Project</b> → <b>Add Folder</b> e scegli la cartella di prova.',
   'Scrivi (o incolla) il prompt nella chat e premi Invio.',
@@ -902,7 +912,7 @@ agentMd:{
  ]),
  claude: stepsL(TOOLS.claude.c,[
   '<b>Claude Code</b> legge il file <code>CLAUDE.md</code> nella cartella di lavoro a ogni avvio. Scrivi <code>/init</code> e Claude Code lo crea analizzando la cartella.',
-  `<b>Cowork</b>: metti le regole generali in ${mp('Impostazioni › Cowork › Istruzioni globali')}; quando lavori su una cartella locale puoi aggiungere istruzioni specifiche per quella cartella.`,
+  `<b>Lavori sulle cartelle</b>: metti le regole generali in ${mp('Impostazioni › Cowork › Istruzioni globali')}, dove presente; quando scegli una cartella puoi aggiungere istruzioni specifiche per quella cartella.`,
   'Oppure scarica il file generato qui sotto e mettilo nella cartella con il nome esatto <code>CLAUDE.md</code>.',
   'Nella <b>chat</b> di Claude le stesse regole vanno nelle Istruzioni del Progetto.'
  ]),
@@ -942,7 +952,7 @@ function flowSVG(){
 /* Dove fare un lavoro, in base allo strumento scelto */
 const WHERE = {
  chat:    {chatgpt:'💬 Chat di ChatGPT', claude:'💬 Chat di Claude', gemini:'💬 App Gemini', any:'💬 Chat'},
- local:   {chatgpt:'🗂️ Work (app ChatGPT per computer)', claude:'🤝 Cowork', gemini:'🚀 Antigravity', any:'💻 Agente sul computer'},
+ local:   {chatgpt:'🗂️ Work (app ChatGPT per computer)', claude:'💬 Claude nell’app per computer, sulla cartella', gemini:'🚀 Antigravity', any:'💻 Agente sul computer'},
  docs:    {chatgpt:'📁 Progetto di ChatGPT con i documenti', claude:'📁 Progetto di Claude con i documenti', gemini:'📚 Gemini Notebook', any:'📁 Progetto con i documenti'},
  web:     {chatgpt:'🔎 Deep research', claude:'🔎 Ricerca', gemini:'🔎 Deep Research', any:'🔎 Ricerca approfondita'},
  agentweb:{chatgpt:'🗂️ Work con il browser integrato', claude:'🌐 Claude in Chrome', gemini:'🚀 Antigravity con il browser', any:'🔁 Agente online'},
@@ -993,7 +1003,8 @@ const L = o => LESSONS.push(o);
 /* ---------- INIZIA ---------- */
 L({id:'benvenuto', p:null, t:'Benvenuto', sub:'Scegli la tua AI e scopri cosa imparerai', min:4, body:()=>`
  ${card('1 · Quale AI usi?', `<p>Scegli lo strumento che usi, o quello che ti ha dato la tua azienda. In tutta la guida vedrai <b>le istruzioni passo passo per quello strumento</b>. Puoi cambiarlo quando vuoi dal selettore in alto.</p>
-  <div class="toolpick">${Object.entries(TOOLS).map(([k,x])=>`<button class="tp${S.tool===k?' on':''}" style="--tc:${x.c}" data-act="set-tool" data-tool="${k}"><b>${x.l}</b><small>di ${x.by}</small><span>${TOOL_INTRO[k]}</span><i>${S.tool===k?'✓ Selezionato':'Scegli'}</i></button>`).join('')}</div>
+  <div class="toolpick">${Object.entries(TOOLS).map(([k,x])=>`<button class="tp${S.tool===k?' on':''}" style="--tc:${x.c}" data-act="set-tool" data-tool="${k}"><b>${x.l}</b><small>di ${x.by}</small><span>${TOOL_INTRO[k]}</span><span class="tp-mod"><b>Modelli</b> ${TOOL_MODELS[k]}</span><i>${S.tool===k?'✓ Selezionato':'Scegli'}</i></button>`).join('')}</div>
+  <p class="hint" style="margin:10px 0 0">🗓️ Descrizioni e modelli verificati il <b>${AGG_DATA}</b>. Nomi dei modelli e menu cambiano spesso: se trovi qualcosa di diverso, fidati di quello che vedi nello strumento.</p>
   ${note('Usi Microsoft Copilot o un altro strumento?','<p style="margin:4px 0 0">I concetti sono gli stessi: scegli lo strumento più simile e cerca nei menu le voci equivalenti.</p>')}`)}
  ${card('2 · Dalle domande al lavoro vero sui file', `
   <p>Probabilmente oggi usi l’AI come un motore di ricerca più bravo: fai una domanda e leggi la risposta. È solo il <b>primo gradino</b>. Gli stessi strumenti possono aprire i tuoi file Excel, leggere 30 contratti, creare una presentazione PowerPoint o compilare un report, e controllare da soli il risultato.</p>
@@ -1053,7 +1064,8 @@ L({id:'parole', p:null, t:'Le parole che incontrerai', sub:'Un piccolo vocabolar
   ['chatgpt','<b>Codex</b> (nell’app ChatGPT per computer)','Agente per creare mini-app, app e programmi'],
   ['claude','<b>Chat</b>','Domande, testi, analisi di file allegati, creazione di file'],
   ['claude','<b>Progetti · Skill · Artifact</b>','Contesto fisso, procedure riutilizzabili, piccole app nella chat'],
-  ['claude','<b>Cowork</b>','Agente per documenti e cartelle del computer, senza terminale'],
+  ['claude','<b>Lavori sulle cartelle</b> (ex Cowork)','Documenti e cartelle del computer, dalla chat dell’app, senza terminale'],
+  ['claude','<b>Docs · Slides</b>','Scrivere documenti e presentazioni insieme a Claude'],
   ['claude','<b>Claude Code</b>','Agente per creare app, programmi e automazioni'],
   ['gemini','<b>App Gemini</b>','Domande, testi, analisi di file allegati'],
   ['gemini','<b>Gem · Notebook · Canvas</b>','Assistenti, spazi per tema, documenti e piccole app con anteprima'],
@@ -1423,7 +1435,7 @@ L({id:'p1-token', p:'p1', t:'Usare meno token (e non finire i limiti)', sub:'Com
   <li><b>Un messaggio completo, non dieci piccoli.</b> Un prompt CRAFT chiaro evita giri di correzioni.</li>
   <li><b>Chiedi solo ciò che serve.</b> “Solo la tabella, senza introduzione né conclusioni.”</li>
   <li><b>Modifiche puntuali.</b> “Riscrivi solo il paragrafo 3” invece di “rifai tutto il documento”.</li>
-  <li><b>Il modello giusto.</b> Veloce per compiti semplici; quello con ragionamento solo per analisi difficili.</li>
+  <li><b>Il modello giusto.</b> Veloce per compiti semplici; quello con ragionamento solo per analisi difficili. I nomi dei modelli del tuo strumento sono nella pagina <button class="btn" data-act="go" data-to="benvenuto">Benvenuto</button>.</li>
   <li><b>File leggeri.</b> Allega solo le pagine o i fogli che servono; togli immagini e fogli inutili; per grandi tabelle usa CSV.</li>
   <li><b>Non ricaricare lo stesso file.</b> Nella stessa chat o nel progetto è già lì: fai riferimento a quello.</li>
   <li><b>Istruzioni personali brevi; il resto in skill.</b> Le istruzioni personali si leggono a ogni messaggio, le skill solo quando servono.</li>
@@ -2435,7 +2447,7 @@ L({id:'p4-regole', p:'p4', t:'Le 5 regole per non sbagliare', sub:'Come ottenere
 L({id:'p4-computer', p:'p4', t:'Portare l’AI sul tuo computer', sub:'Installare lo strumento che lavora sulle cartelle', min:10, body:()=>`
  ${card('Perché serve', `<p>La chat nel browser è comoda, ma lavora su una copia dei file che carichi, pochi alla volta. Per <b>elaborare cartelle intere</b>, <b>tenere i dati sul computer</b>, creare <b>mini-app</b> e usare gli <b>agenti</b> ti serve lo strumento che lavora direttamente sul computer.</p>
  <p>Lo installi una volta sola. Poi lo userai sia per le mini-app (questo pilastro) sia per gli agenti (Pilastro V).</p>`)}
- ${card(`Installazione e primo avvio: ${hasTool() ? byTool({chatgpt:'app ChatGPT per computer (Work e Codex)', claude:'app Claude per computer (Cowork e Code)', gemini:'Antigravity'}) : 'scegli il tuo strumento'}`, howBox('install'))}
+ ${card(`Installazione e primo avvio: ${hasTool() ? byTool({chatgpt:'app ChatGPT per computer (Work e Codex)', claude:'app Claude per computer (Chat sulle cartelle e Code)', gemini:'Antigravity'}) : 'scegli il tuo strumento'}`, howBox('install'))}
  
  ${card('Prepara la tua cartella di lavoro', `<p>Prima di far lavorare l’AI sul computer, crea un posto ordinato e sicuro:</p>
  <div class="tree"><b>lavoro-ai/</b>                <i>← in Documenti</i>
@@ -2637,7 +2649,7 @@ L({id:'p5-chatbot', p:'p5', t:'Chatbot o agente?', sub:'La differenza che quasi 
    ['💻 <b>Codex</b> (app ChatGPT per computer)','Sul tuo computer, nella cartella scelta','Mini-app, app, programmi, automazioni']],
   claude:[
    ['💬 <b>Chat</b> (non è un agente)','Online, sui file caricati','Domande e lavori su 1–10 file'],
-   ['🤝 <b>Cowork</b>','Sul tuo computer, nella cartella scelta','Documenti, fogli, presentazioni, PDF, organizzare cartelle: il più adatto a chi non è tecnico'],
+   ['💬 <b>Chat dell’app per computer</b> (ex Cowork)','Sul tuo computer, nella cartella scelta','Documenti, fogli, presentazioni, PDF, organizzare cartelle: il più adatto a chi non è tecnico'],
    ['💻 <b>Claude Code</b>','Sul tuo computer, nella cartella scelta','Mini-app, programmi, automazioni, lavori tecnici'],
    ['🌐 <b>Claude in Chrome</b>','Nel tuo browser','Raccogliere dati dai siti, compilare moduli']],
   gemini:[
@@ -3012,7 +3024,7 @@ Mostrami il testo prima di salvarlo.`, `Questo prompt va incollato <b>direttamen
 
 /* ---------- CONCLUSIONE ---------- */
 /* Versione della guida: aggiornarla a ogni modifica */
-const REV = '1.0';
+const REV = '1.1';
 const RIC_CAT = {tutti:'Tutti', excel:'📊 Excel e dati', documenti:'📄 Word e PDF', ppt:'📽️ Presentazioni', testi:'✉️ Email e testi', ricerca:'🔎 Ricerca e decisioni', app:'🛠️ App e strumenti', agenti:'🔁 Agenti e automazioni', organizzazione:'🗓️ Riunioni, progetti, persone'};
 const RIC_LVL = {tutti:{l:'Tutti i livelli'}, base:{l:'Base', c:'#16a34a'}, intermedio:{l:'Intermedio', c:'#d97706'}, avanzato:{l:'Avanzato', c:'#dc2626'}};
 const RICETTE = [
@@ -3595,7 +3607,8 @@ const QZ_ARG = {
  frizione:{l:'Progetti, assistenti e skill', ic:'🧩', go:'p2-skill'},
  workflow:{l:'Mappa delle attività', ic:'🗺️', go:'p3-perche'},
  app:{l:'Mini-app e app', ic:'🛠️', go:'p4-app'},
- agenti:{l:'Agenti', ic:'🔁', go:'p5-chatbot'}
+ agenti:{l:'Agenti', ic:'🔁', go:'p5-chatbot'},
+ strumenti:{l:'Il tuo strumento', ic:'🧭', go:'strumenti'}
 };
 /* La risposta corretta è sempre la prima: le opzioni vengono mescolate a ogni giro */
 const QZ = [
@@ -3660,15 +3673,25 @@ const QZ = [
  {a:'agenti', go:'p5-primo', q:'Prima di usare un agente su 500 file…', o:['Lo provi su 5 file e controlli il report','Lo lanci subito su tutti','Gli dai accesso a tutto il disco','Disattivi le richieste di permesso'], e:'Un errore su 5 file costa poco, su 500 costa tanto.'},
  {a:'agenti', go:'p5-primo', q:'Quale permesso non va concesso “per sempre” a un agente?', o:['Cancellare file, inviare email o fare acquisti','Leggere i file della cartella di lavoro','Creare file nella cartella risultati','Mostrare il piano di lavoro'], e:'Le azioni irreversibili vanno sempre confermate a mano.'},
  {a:'agenti', go:'p5-controlli', q:'Quando l’agente deve fermarsi e chiederti (human in the loop)?', o:['Nei casi che definisci tu, es. dati contraddittori o azioni irreversibili','Mai','A ogni singola riga','Solo a fine anno'], e:'Decidi tu in anticipo i momenti in cui serve una persona.'},
+ {a:'strumenti', t:'chatgpt', go:'strumenti', q:'Nell’app ChatGPT per computer, quale modalità usi per un lavoro lungo su documenti e cartelle?', o:['Work','Chat','Codex','Canvas'], e:'Chat per domande e pochi file, Work per i lavori lunghi (anche sulle cartelle), Codex per creare app e programmi.'},
+ {a:'strumenti', t:'chatgpt', go:'p4-crea', q:'Vuoi che ChatGPT crei un’app o un programma sul tuo computer. Dove lavori?', o:['Codex, nell’app per computer','Nella chat normale','In Canvas','In un Progetto'], e:'Codex vede i file della cartella, esegue e corregge; la chat e Canvas vanno bene solo per app in un unico file.'},
+ {a:'strumenti', t:'chatgpt', go:'benvenuto', q:'Qual è oggi il modello più potente di ChatGPT, da usare solo per i lavori difficili?', o:['GPT-6 Astra','GPT-5.6 Luna','GPT-4o','GPT-5.6 Terra'], e:'GPT-6 Astra (settembre 2026) è il più potente e consuma di più; per l’uso quotidiano bastano le versioni GPT-5.6.'},
+ {a:'strumenti', t:'claude', go:'strumenti', q:'Da settembre 2026, come fai lavorare Claude su una cartella del tuo computer?', o:['Dalla chat dell’app per computer, scegliendo la cartella','Aprendo la scheda Cowork, che è l’unica strada','Solo con Claude Code','Non è possibile'], e:'Le funzioni di Cowork sono entrate nella chat: scegli la cartella e chiedi il lavoro. Se la tua versione mostra ancora la scheda Cowork, funziona allo stesso modo.'},
+ {a:'strumenti', t:'claude', go:'p4-crea', q:'Quale modalità di Claude resta separata per creare app e programmi?', o:['Claude Code','Artifact','Docs','Progetti'], e:'Claude Code è la modalità per app, programmi e automazioni; il resto si fa dalla chat.'},
+ {a:'strumenti', t:'claude', go:'benvenuto', q:'Su un piano a pagamento, quale modello di Claude scegli per un lavoro difficile?', o:['Opus 5','Haiku 4.5','Sonnet 3','Il primo della lista, sempre'], e:'Sonnet 5 è il predefinito, Haiku 4.5 è il più rapido ed economico, Opus 5 è quello da usare per i lavori difficili.'},
+ {a:'strumenti', t:'gemini', go:'strumenti', q:'Con Gemini, cosa usi per lavorare sulle cartelle del tuo computer?', o:['Antigravity, l’app per computer','Gemini Spark','L’app Gemini nel browser','Gemini Notebook'], e:'Antigravity ha sostituito Gemini CLI per gli account personali. Gemini Spark non è disponibile in Italia e nell’UE.'},
+ {a:'strumenti', t:'gemini', go:'p2-progetti', q:'Devi fare domande su 12 manuali e volere risposte con le citazioni. Cosa usi?', o:['Gemini Notebook','Canvas','Un Gem qualsiasi','La ricerca di Google'], e:'Gemini Notebook (prima NotebookLM) risponde solo con i documenti caricati e mostra il punto esatto da cui prende ogni frase.'},
+ {a:'strumenti', t:'gemini', go:'benvenuto', q:'Nel selettore dell’app Gemini, quale voce conviene per un lavoro difficile?', o:['Pro','Flash-Lite','Flash','Nessuna: sono uguali'], e:'Flash-Lite per le cose semplici, Flash per l’uso normale, Pro per i lavori difficili: ha meno richieste al giorno.'},
  {a:'agenti', go:'p5-prova', q:'Un lavoro con l’agente ormai funziona sempre bene. Passo successivo?', o:['Trasformarlo in una skill da riusare','Buttare il prompt','Rifarlo a mano','Cambiare strumento'], e:'Così il metodo resta e anche i colleghi possono usarlo.'}
 ];
 const QZ_STORE = 'guida-ai-5-pilastri-quiz';
 const qzLoad = () => { try{ const d = JSON.parse(localStorage.getItem(QZ_STORE) || 'null'); return d && Array.isArray(d.storico) ? d : {storico:[], viste:{}}; }catch(e){ return {storico:[], viste:{}}; } };
 const qzSave = d => { try{ localStorage.setItem(QZ_STORE, JSON.stringify(d)); }catch(e){} };
 const shuffle = arr => { const a = [...arr]; for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; };
+const qzPool = () => QZ.map((q,i)=>i).filter(i=>!QZ[i].t || QZ[i].t===S.tool);
 function qzPick(){
  const viste = qzLoad().viste, byArg = {};
- shuffle(QZ.map((q,i)=>i)).forEach(i=>{ (byArg[QZ[i].a] = byArg[QZ[i].a] || []).push(i); });
+ shuffle(qzPool()).forEach(i=>{ (byArg[QZ[i].a] = byArg[QZ[i].a] || []).push(i); });
  Object.values(byArg).forEach(l=>l.sort((x,y)=>(viste[x]||0)-(viste[y]||0)));
  const out = [], args = shuffle(Object.keys(byArg));
  while(out.length < 10){ let added = false; for(const a of args){ if(out.length >= 10) break; const l = byArg[a]; if(l.length){ out.push(l.shift()); added = true; } } if(!added) break; }
@@ -3690,13 +3713,13 @@ function qzHome(){
  const arg = {}; st.forEach(x=>Object.entries(x.arg||{}).forEach(([k,[ok,tot]])=>{ arg[k] = arg[k] || [0,0]; arg[k][0]+=ok; arg[k][1]+=tot; }));
  const last = st.slice(-12);
  const weak = Object.entries(arg).filter(([,[ok,tot]])=>tot>=2).sort((a,b)=>a[1][0]/a[1][1]-b[1][0]/b[1][1])[0];
- return `<section class="qz-hero"><div class="qz-hero-ic">🎓</div><div><div class="qz-kick">QUIZ FINALE · 10 DOMANDE PER GIRO</div><h2>Quanto hai imparato?</h2><p>${QZ.length} domande su tutti gli argomenti della guida. A ogni giro ne escono 10 diverse, dando la precedenza a quelle che non hai ancora visto. Alla fine ricevi un voto e i consigli su cosa ripassare.</p>
+ return `<section class="qz-hero"><div class="qz-hero-ic">🎓</div><div><div class="qz-kick">QUIZ FINALE · 10 DOMANDE PER GIRO</div><h2>Quanto hai imparato?</h2><p>${qzPool().length} domande su tutti gli argomenti della guida${hasTool()?', comprese quelle su '+toolName():''}. A ogni giro ne escono 10 diverse, dando la precedenza a quelle che non hai ancora visto. Alla fine ricevi un voto e i consigli su cosa ripassare.</p>
   <div class="actions"><button class="qz-start" data-act="qz-start">${n ? '🔄 Nuovo giro di domande' : '🚀 Inizia il quiz'}</button></div></div></section>
  ${n ? `<div class="qz-stats">
   <div><b>${n}</b><span>giri completati</span></div>
   <div><b style="color:${qzColor(best)}">${best}/10</b><span>voto migliore</span></div>
   <div><b style="color:${qzColor(Math.round(media))}">${fmt1(media)}</b><span>media dei voti</span></div>
-  <div><b>${viste}/${QZ.length}</b><span>domande viste</span></div></div>
+  <div><b>${viste}/${qzPool().length}</b><span>domande viste</span></div></div>
  ${card('I tuoi ultimi giri', `<div class="qz-bars">${last.map((x,i)=>`<div class="qz-bar" title="${new Date(x.t).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}"><i style="height:${Math.max(6,x.voto*10)}%;background:${qzColor(x.voto)}"><em>${x.voto}</em></i><span>${n-last.length+i+1}°</span></div>`).join('')}</div>`)}
  ${card('Come vai per argomento', `<div class="qz-args">${Object.entries(QZ_ARG).map(([k,x])=>{ const [ok,tot] = arg[k] || [0,0], p = tot ? Math.round(ok/tot*100) : null;
    return `<div class="qz-arg"><div class="qz-arg-h"><span>${x.ic} ${x.l}</span><b>${p===null ? '—' : p+'%'}</b></div><div class="meter-bar"><i style="width:${p||0}%;background:${p===null?'#e2e8f0':qzColor(Math.round(p/10))}"></i></div></div>`; }).join('')}</div>
@@ -3766,7 +3789,8 @@ L({id:'fine-glossario', p:'fine', t:'Glossario completo', sub:'Tutte le parole d
   ['chatgpt','<b>Work</b>','Agente di ChatGPT per lavori lunghi su documenti, fogli, presentazioni, cartelle e siti.'],
   ['chatgpt','<b>Sites</b>','Funzione di ChatGPT per creare e pubblicare siti e web app.'],
   ['chatgpt','<b>Codex</b>','Agente di OpenAI, incluso nell’app ChatGPT per computer, che lavora sulle cartelle e crea app.'],
-  ['claude','<b>Cowork</b>','Agente di Claude per lavorare su documenti e cartelle del computer, senza terminale.'],
+  ['claude','<b>Cowork</b>','Nome della modalità di Claude per lavorare su documenti e cartelle del computer. Da settembre 2026 le sue funzioni sono dentro la chat dell’app.'],
+  ['claude','<b>Docs e Slides</b>','Documenti e presentazioni che scrivi insieme a Claude dentro la conversazione.'],
   ['claude','<b>Claude Code</b>','Agente di Claude per creare app, programmi e automazioni.'],
   ['claude','<b>Claude in Chrome</b>','Estensione del browser con cui Claude svolge compiti sui siti web.'],
   ['gemini','<b>Antigravity</b>','App di Google con agenti che lavorano sulle cartelle del computer e creano app.'],
