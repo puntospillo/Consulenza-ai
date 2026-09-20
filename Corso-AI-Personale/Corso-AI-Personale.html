@@ -313,7 +313,10 @@ code,.path{overflow-wrap:anywhere}
 <div id="toast"></div>
 <script>
 'use strict';
-const REV = '1.2';
+const REV = '1.3';
+/* Data dell’ultimo controllo delle funzioni di ChatGPT, Claude e Gemini */
+const AGG = '20 settembre 2026';
+const AGG_BREVE = '20/09/2026';
 
 /* ============ I 5 PILASTRI (versione vita quotidiana) ============ */
 const PILLARS = {
@@ -561,7 +564,7 @@ const TOOL_INTRO_LV = {
  claude:{
   1:'Il più bravo a scrivere e a leggere documenti lunghi. Si usa dal sito o dall’app del telefono. Non crea fotografie, ma prepara testi, tabelle e file da scaricare.',
   2:'Bravo con i testi lunghi e i documenti. Ha i <b>Progetti</b> per tenere insieme documenti e regole di un tema, gli <b>Artifact</b> (pagine e strumenti creati al volo) e crea file Excel, Word e PDF da scaricare. Non crea fotografie.',
-  3:'Chat, Progetti e <b>Artifact</b>. Nell’app per computer: <b>Cowork</b> per lavorare sulle cartelle e <b>Claude Code</b> per creare programmi. C’è anche dentro Excel, Word e PowerPoint. Non crea fotografie.'},
+  3:'Chat, Progetti, <b>Artifact</b> e i nuovi <b>Docs</b> e <b>Slides</b>. Da settembre 2026 non si sceglie più fra chat e lavoro lungo: decide Claude. Con l’app per computer lavora anche sulle cartelle; <b>Claude Code</b> resta separato per i programmi. C’è anche dentro Excel, Word e PowerPoint. Non crea fotografie.'},
  gemini:{
   1:'Quello di Google: se hai Gmail ce l’hai già. È dentro la posta e i documenti di Google, funziona benissimo dal telefono e con la fotocamera, ed è molto forte sulle immagini.',
   2:'Quello di Google, già dentro Gmail, Drive, Documenti e Fogli. Ha i <b>Gem</b> (assistenti per compiti fissi), i <b>Notebook</b> per i temi che durano e <b>Gemini Notebook</b> per studiare tanti documenti con le citazioni. Molto forte sulle immagini.',
@@ -607,6 +610,7 @@ modes:{
   [2,'Scrivere un testo lungo o creare un piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
   ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Ricerca</b> / <b>Deep research</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
   ['Immagini: crearle o modificarle','🎨 <b>Chat</b>, allegando o chiedendo un’immagine','“Fammi un invito per la festa di Anna, 8 anni”'],
+  [2,'Lavorare dentro un documento Word già aperto','📄 <b>ChatGPT dentro Word</b> (barra laterale)','“Accorcia questa lettera e correggi il tono”'],
   [3,'Lavoro lungo che produce documenti, fogli e presentazioni, anche su una <b>cartella del computer</b>','🗂️ <b>Work</b> (per le cartelle: app per computer)'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
   [3,'Creare mini-app e programmi su misura','💻 <b>Codex</b> (app ChatGPT per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
  ]) + rule('Una domanda al volo o un documento da capire → <b>Chat</b>, dal computer o dal telefono. Ti serve una cosa aggiornata (prezzi, leggi, orari) → chiedi la <b>ricerca sul web</b>.', 0, 1)
@@ -620,11 +624,12 @@ modes:{
   [2,'Un piccolo strumento o una pagina da usare subito','✨ <b>Artifact</b> (appare accanto alla chat)','“Fammi un calcolatore delle spese di viaggio”'],
   ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Ricerca</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
   ['Ottenere un Excel, un Word o un PDF vero da scaricare','💬 <b>Chat</b> con “Esecuzione codice e creazione file” attiva','“Fammi il budget di casa in un file .xlsx”'],
-  [3,'Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','🤝 <b>Cowork</b> (app Claude per computer)'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
+  [2,'Scrivere un documento o preparare una presentazione insieme a lui','📄 <b>Docs</b> e <b>Slides</b> (in prova sui piani a pagamento)','“Prepariamo la relazione per l’assemblea di condominio”'],
+  [3,'Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','🤝 <b>App Claude per computer</b>: chiedi e basta, ci pensa lui'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
   [3,'Creare mini-app e programmi su misura','💻 <b>Claude Code</b> (app Claude per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
  ]) + rule('Una domanda al volo o un documento da capire → <b>Chat</b>, dal computer o dal telefono. Ti serve una cosa aggiornata (prezzi, leggi, orari) → chiedi la <b>ricerca sul web</b>.', 0, 1)
    + rule('File che puoi allegare → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>.', 2, 2)
-   + rule('File che puoi allegare → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>. Una cartella piena di file → <b>Cowork</b>.', 3),
+   + rule('File che puoi allegare → <b>Chat</b>. Un tema che dura settimane → <b>Progetto</b>. Una cartella piena di file → <b>app per computer</b> aperta sulla cartella.', 3),
  gemini: modeTbl([
   ['Domande, email, lettere, traduzioni, idee','💬 <b>App Gemini</b> (sito, telefono, computer)','“Riscrivi questo reclamo in tono fermo ma educato”'],
   ['Far leggere una bolletta, un contratto, un referto, una foto di un documento','💬 <b>App Gemini</b> con il file allegato','“Questa bolletta è più alta del solito: dimmi perché”'],
@@ -634,7 +639,7 @@ modes:{
   [2,'Restare per settimane sullo stesso tema, con chat e file insieme','📓 <b>Notebook</b> (nell’app Gemini)','Notebook “Ristrutturazione bagno”'],
   [2,'Studiare tanti documenti con risposte citate riga per riga','📚 <b>Gemini Notebook</b> (prima NotebookLM)','“Nel manuale della caldaia, cosa dice l’errore E4?”'],
   [2,'Testo lungo o piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
-  ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Deep Research</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
+  ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Deep Research</b> (può usare anche Gmail e Drive)','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
   [3,'Lavorare sulle cartelle del computer o creare programmi','🚀 <b>Antigravity</b>'+DL+' · <i>Gemini Spark non è disponibile in Italia</i>','“Da queste 30 bollette PDF fammi un Excel dei consumi”']
  ]) + rule('Una domanda al volo o un documento da capire → <b>app Gemini</b>, dal computer o dal telefono. File che stanno su Google Drive → aprili e usa <b>Gemini dentro Documenti e Fogli</b>.', 0, 1)
    + rule('File su Google Drive → <b>Gemini dentro Documenti e Fogli</b>. Tanti documenti da consultare → <b>Gemini Notebook</b>.', 2, 2)
@@ -730,7 +735,7 @@ file:{
   '<b>Chiedi un file in uscita</b>: con “Esecuzione codice e creazione file” attiva, chiedi <i>“ridammi un .xlsx da scaricare”</i>.',
   '<b>Tabelle e conti</b>: aggiungi <i>“fai i calcoli eseguendo il codice”</i>, così i totali sono esatti.',
   [2,'<b>Tanti file insieme</b> (per esempio tutte le bollette dell’anno): invece di allegarli a ogni chat, mettili in un <b>Progetto</b>.'],
-  [3,'<b>Una cartella intera di file</b>: usa <b>Cowork</b> sulla cartella del computer.'+DL]
+  [3,'<b>Una cartella intera di file</b>: apri l’<b>app Claude per computer</b> sulla cartella.'+DL]
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
   `<b>Allega</b>: usa il ${mp('+')} nell’app Gemini (PDF, Word, Excel, foto, scansioni) oppure prendi il file direttamente dal tuo <b>Drive</b>. Dal telefono puoi <b>fotografare</b> una bolletta o un modulo.`,
@@ -816,8 +821,8 @@ progetti:{
 /* ---- Assistenti ---- */
 assistenti:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
-  '<b>Come si fa oggi</b>: i GPT personalizzati sono in via di dismissione. Per un compito sempre uguale conviene un <b>Progetto dedicato</b> con le istruzioni scritte bene.',
-  [3,'Se hai un piano aziendale puoi usare anche una <b>Skill</b>: la trovi nel Pilastro II, più avanti.'],
+  '<b>Come si fa oggi</b>: i GPT personalizzati stanno chiudendo (annuncio dell’11 settembre 2026; non se ne possono più creare di nuovi). Per un compito sempre uguale conviene un <b>Progetto dedicato</b> con le istruzioni scritte bene.',
+  [3,'In alternativa c’è una <b>Skill</b> dentro un <b>Plugin</b>: dal 2026 non serve più un piano aziendale. La trovi nel Pilastro II, più avanti.'],
   '<b>Crea il progetto “assistente”</b>: nome del compito (“Correttore delle mie mail”), istruzioni fisse, ed eventuali esempi caricati come file.',
   '<b>Aggiungi 2–3 esempi</b> di risultato giusto: è quello che fa la differenza.',
   '<b>Usalo</b>: apri una chat nel progetto e incolla solo il testo da lavorare, senza rispiegare le regole.',
@@ -842,7 +847,7 @@ assistenti:{
 /* ---- Skill (livello avanzato) ---- */
 skill:{
  chatgpt: stepsL(TOOLS.chatgpt.c,[
-  `<b>Dove sono</b>: ${mp('barra laterale › Plugin › Skill')}, ma sono disponibili <b>solo nei piani aziendali</b>. Con un account personale ottieni lo stesso risultato con un <b>Progetto dedicato</b> o con <b>Codex</b>.`+DL,
+  `<b>Dove sono</b>: ${mp('barra laterale › Plugin')}. Dal luglio 2026 il vecchio elenco delle app è diventato il <b>Plugin Directory</b>, che raccoglie app e skill insieme: è disponibile anche sui piani personali (sul piano gratuito con qualche limite). ChatGPT usa da sola la skill giusta quando la description corrisponde alla richiesta.`,
   '<b>Struttura</b>: una cartella con dentro <code>SKILL.md</code> (nome, quando usarla, procedura) ed eventuali modelli in <code>assets/</code>.',
   '<b>Provala su un caso vero</b> prima di considerarla finita.',
   '<b>Con Codex</b>: metti il file <code>SKILL.md</code> nella cartella di lavoro: verrà letto quando serve.',
@@ -897,9 +902,9 @@ computer:{
   '<b>Controlla il risultato</b> prima di sostituire i file veri. La prima volta provalo su 3–4 file.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
-  '<b>Installa l’app per computer</b> da <b>claude.com/download</b> (Mac e Windows): contiene <b>Cowork</b> e <b>Claude Code</b>.'+DL,
+  '<b>Installa l’app per computer</b> da <b>claude.com/download</b> (Mac e Windows): serve perché Claude possa aprire le cartelle. La scheda <b>Code</b> (Claude Code) resta a parte, per i programmi.'+DL,
   '<b>Prepara una cartella dedicata</b>, per esempio <code>Documenti/AI-lavori</code>, e metti dentro <b>copie</b> dei file, mai gli originali.',
-  '<b>Apri Cowork e collega quella cartella</b>. Scegli la modalità <b>Manuale</b> le prime volte: ti chiede conferma a ogni passo.',
+  '<b>Collega quella cartella</b> nell’app. Non devi scegliere nessuna modalità: descrivi il lavoro e Claude capisce da solo se è una domanda veloce o un lavoro lungo. Tieni i permessi su <b>Manuale</b> le prime volte: ti chiede conferma a ogni passo.',
   '<b>Chiedi in italiano</b> cosa fare: <i>“leggi tutti i PDF delle bollette e fammi un Excel con data, consumo e importo”</i>.',
   '<b>Controlla il risultato</b> prima di sostituire i file veri. La prima volta provalo su 3–4 file.'
  ]),
@@ -945,10 +950,10 @@ agenti:{
   '<b>Parti in piccolo</b>: prova su 3–5 file, leggi il riepilogo di cosa ha fatto, poi allarga.'
  ]),
  claude: stepsL(TOOLS.claude.c,[
-  '<b>Quale usare</b>: <b>Cowork</b> per documenti e cartelle (senza terminale); <b>Claude Code</b> per programmi e automazioni.'+DL,
+  '<b>Quale usare</b>: l’<b>app Claude per computer</b> per documenti e cartelle (senza terminale); la scheda <b>Code</b> per programmi e automazioni.'+DL,
   '<b>Cartella dedicata con copie</b> dei file. Mai l’originale, mai tutto il disco.',
   '<b>Scrivi obiettivo, passi e controlli</b> (il prompt lo prepari nella lezione “Il tuo primo agente”).',
-  '<b>Modalità</b>: in Cowork usa <b>Manuale</b> finché non ti fidi; passa ad Automatica solo per lavori già collaudati.',
+  '<b>Permessi</b>: tieni <b>Manuale</b> finché non ti fidi (conferma prima di ogni azione); passa ad <b>Auto</b> solo per lavori già collaudati. Puoi fermarlo in qualsiasi momento.',
   '<b>Parti in piccolo</b>: prova su 3–5 file, leggi il riepilogo di cosa ha fatto, poi allarga.'
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
@@ -970,7 +975,7 @@ agentmd:{
  ]),
  claude: stepsL(TOOLS.claude.c,[
   'Crea un file <code>CLAUDE.md</code> <b>dentro la cartella</b> di lavoro (in Claude Code puoi generarlo con <code>/init</code>).',
-  'Viene letto a ogni avvio: contiene le regole permanenti di quella cartella. Vale anche per Cowork, che ha in più le istruzioni per cartella.',
+  'Viene letto a ogni avvio: contiene le regole permanenti di quella cartella. Vale anche quando lavori sulle cartelle dall’app, non solo nella scheda Code.',
   'Tienilo corto: 20–40 righe. Regole chiare, non racconti.',
   'Scrivi cosa <b>non</b> deve fare: non cancellare, non toccare la sottocartella “Originali”, non inviare niente.',
   'Aggiornalo quando scopri un errore ricorrente.'
@@ -1014,15 +1019,15 @@ const AGENT_MD = {chatgpt:'AGENTS.md', claude:'CLAUDE.md', gemini:'GEMINI.md', a
 const WHERE = {
  chat:{chatgpt:'Chat', claude:'Chat', gemini:'App Gemini', any:'la chat'},
  file:{chatgpt:'Chat con il file allegato', claude:'Chat con il file allegato', gemini:'App Gemini con il file allegato (o Gemini dentro Documenti e Fogli)', any:'la chat con il file allegato'},
- tanti:{chatgpt:()=>lvNow()>=3?'Progetto, oppure Work su una cartella':'Progetto', claude:()=>lvNow()>=3?'Progetto, oppure Cowork su una cartella':'Progetto', gemini:()=>lvNow()>=3?'Gemini Notebook, oppure Antigravity su una cartella':'Gemini Notebook', any:'un progetto'},
+ tanti:{chatgpt:()=>lvNow()>=3?'Progetto, oppure Work su una cartella':'Progetto', claude:()=>lvNow()>=3?'Progetto, oppure l’app per computer su una cartella':'Progetto', gemini:()=>lvNow()>=3?'Gemini Notebook, oppure Antigravity su una cartella':'Gemini Notebook', any:'un progetto'},
  proj:{chatgpt:'Progetti', claude:'Progetti', gemini:'Notebook nell’app Gemini', any:'i progetti'},
- asst:{chatgpt:()=>lvNow()>=3?'Progetto dedicato (o Skill nei piani aziendali)':'Progetto dedicato', claude:()=>lvNow()>=3?'Progetto dedicato (o Skill)':'Progetto dedicato', gemini:'Gem', any:'un assistente personalizzato'},
- skill:{chatgpt:'Skill (piani aziendali) o Progetto dedicato', claude:'Personalizza › Skill', gemini:'Gem con istruzioni dettagliate', any:'le skill'},
+ asst:{chatgpt:()=>lvNow()>=3?'Progetto dedicato (o una Skill dentro un Plugin)':'Progetto dedicato', claude:()=>lvNow()>=3?'Progetto dedicato (o Skill)':'Progetto dedicato', gemini:'Gem', any:'un assistente personalizzato'},
+ skill:{chatgpt:'Plugin › Skill, oppure un Progetto dedicato', claude:'Personalizza › Skill', gemini:'Gem con istruzioni dettagliate', any:'le skill'},
  web:{chatgpt:'Ricerca / Deep research', claude:'Ricerca', gemini:'Deep Research', any:'la ricerca sul web'},
  img:{chatgpt:'Chat (immagini)', claude:'Chat (Artifact per grafiche e schemi)', gemini:'App Gemini (immagini)', any:'la chat'},
- local:{chatgpt:'Work (app ChatGPT per computer)', claude:'Cowork (app Claude per computer)', gemini:'Antigravity', any:'l’AI installata sul computer'},
+ local:{chatgpt:'Work (app ChatGPT per computer)', claude:'App Claude per computer', gemini:'Antigravity', any:'l’AI installata sul computer'},
  app:{chatgpt:'Canvas, poi Codex per le app vere', claude:'Artifact, poi Claude Code per le app vere', gemini:'Canvas, poi AI Studio o Antigravity', any:'la chat con anteprima'},
- agent:{chatgpt:'Work (documenti e cartelle) o Codex (programmi)', claude:'Cowork (documenti e cartelle) o Claude Code (programmi)', gemini:'Antigravity', any:'un agente sul computer'}
+ agent:{chatgpt:'Work (documenti e cartelle) o Codex (programmi)', claude:'App Claude per computer (documenti e cartelle) o Claude Code (programmi)', gemini:'Antigravity', any:'un agente sul computer'}
 };
 const where = k => { const w = WHERE[k][curTool()]; return typeof w === 'function' ? w() : w; };
 const NEED = {
@@ -1031,7 +1036,7 @@ const NEED = {
  tanti:{chatgpt:'', claude:'', gemini:'', any:''},
  proj:{chatgpt:'', claude:'', gemini:'', any:''},
  asst:{chatgpt:'', claude:'', gemini:'', any:''},
- skill:{chatgpt:'⬇ Con account personale serve un Progetto dedicato', claude:'', gemini:'', any:''},
+ skill:{chatgpt:'', claude:'', gemini:'', any:''},
  web:{chatgpt:'', claude:'', gemini:'', any:''},
  img:{chatgpt:'', claude:'', gemini:'', any:''},
  local:{chatgpt:'⬇ App ChatGPT per computer', claude:'⬇ App Claude per computer', gemini:'⬇ Antigravity', any:'⬇ Un’app da installare'},
@@ -1207,6 +1212,7 @@ L({id:'strumenti', p:null, lv:1, t:'Scegli il tuo strumento', sub:'ChatGPT, Clau
   <p>Sono tre servizi che fanno quasi le stesse cose, con nomi diversi per le stesse funzioni. Usarne tre insieme significa non imparare bene nessuno dei tre.</p>
   <p><b>Scegline uno adesso.</b> Da questo momento in poi, in tutto il corso, vedrai le istruzioni <b>solo per quello</b>: dove cliccare, come si chiama quella funzione, cosa serve installare. Potrai cambiarlo quando vuoi dalla barra in alto, e tutte le lezioni si riscriveranno da sole.</p>
   <div class="toolpick">${Object.entries(TOOLS).map(([k,x])=>`<button class="tp${S.tool===k?' on':''}" style="--tc:${x.c}" data-act="set-tool" data-tool="${k}"><b>${x.l}</b><small>di ${x.by}</small><span>${toolIntro(k)}</span><i>${S.tool===k?'✓ È il tuo strumento':'Scegli questo →'}</i></button>`).join('')}</div>
+  ${note('Informazioni verificate il ' + AGG, '<p style="margin:4px 0 0">Le funzioni dei tre strumenti cambiano di continuo: nomi, menu e piani. Quelle scritte qui sono state controllate il <b>' + AGG + '</b>. Se sullo schermo vedi qualcosa di diverso, fidati di quello che vedi: il nome sarà cambiato, il modo di lavorare quasi mai.</p>')}
   ${hasTool() ? note('Scelto: ' + TOOLS[S.tool].l, '<p style="margin:4px 0 0">Da qui in avanti tutte le istruzioni saranno per ' + TOOLS[S.tool].l + '. Se cambi idea, usa i tre pulsanti in alto a destra.</p>') : warn('Non hai ancora scelto','<p style="margin:4px 0 0">Puoi continuare a leggere, ma al posto delle istruzioni pratiche troverai tre pulsanti per scegliere. Fallo adesso: ci metti un secondo.</p>')}
  `)}
  ${tryBox('Quale fa per te? Cinque domande', `
@@ -3094,6 +3100,7 @@ L({id:'fine-glossario', p:'fine', lv:1, t:'Glossario', sub:'Tutte le parole del 
   [2,'gemini','<b>Notebook</b>','Spazio dell’app Gemini che raccoglie chat, fonti e istruzioni su un tema.'],
   [2,'gemini','<b>Gemini Notebook</b>','Strumento Google (prima NotebookLM) per fare domande solo sui documenti caricati, con citazioni.'],
   [2,'claude','<b>Artifact</b>','Documento o piccolo strumento creato da Claude, visibile e utilizzabile accanto alla chat.'],
+  [2,'claude','<b>Docs e Slides</b>','Spazi di Claude per scrivere un documento o preparare una presentazione insieme a lui, esportabili in Word, PowerPoint o PDF (in prova, piani a pagamento).'],
   [2,'chatgpt','<b>Deep research</b>','Ricerca lunga sul web che produce un report con le fonti.'],
   [2,'gemini','<b>Deep Research</b>','Ricerca lunga sul web che produce un report con le fonti.'],
   [2,'claude','<b>Ricerca</b>','Ricerca sul web con le fonti citate nella risposta.'],
@@ -3107,8 +3114,9 @@ L({id:'fine-glossario', p:'fine', lv:1, t:'Glossario', sub:'Tutte le parole del 
   [3,'chatgpt','<b>Work</b>','Funzione di ChatGPT per lavori lunghi su documenti, fogli, presentazioni e cartelle.'],
   [3,'chatgpt','<b>Codex</b>','Agente di OpenAI, nell’app ChatGPT per computer, che lavora sulle cartelle e crea programmi.'],
   [3,'chatgpt','<b>Sites</b>','Funzione di ChatGPT per creare e pubblicare siti e pagine web.'],
+  [3,'chatgpt','<b>Plugin</b>','Pacchetto che mette insieme app e skill. Dal luglio 2026 ha preso il posto dell’elenco delle app, ed è disponibile anche sui piani personali.'],
   [3,'chatgpt','<b>AGENTS.md</b>','Istruzioni permanenti di una cartella, lette da Codex a ogni avvio.'],
-  [3,'claude','<b>Cowork</b>','Funzione di Claude per lavorare su documenti e cartelle del computer, senza terminale.'],
+  [3,'claude','<b>App Claude per computer</b>','L’app da installare con cui Claude apre le cartelle e lavora sui file. Da settembre 2026 ha assorbito quella che si chiamava <b>Cowork</b>: non si sceglie più una modalità, decide Claude.'],
   [3,'claude','<b>Claude Code</b>','Strumento di Claude per creare programmi e automazioni.'],
   [3,'claude','<b>CLAUDE.md</b>','Istruzioni permanenti di una cartella, lette da Claude Code a ogni avvio.'],
   [3,'gemini','<b>Antigravity</b>','App di Google con agenti che lavorano sulle cartelle del computer e creano programmi.'],
@@ -3140,7 +3148,7 @@ function renderToolSel(){
 const pc = l => l.p && PILLARS[l.p] ? PILLARS[l.p].c : l.p==='fine' ? '#16a34a' : '#38bdf8';
 function renderSide(){
  const V = vis();
- $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Corso AI</b><small>Personale</small><div class="rev-line"><span class="by-tag">App by Pippo</span><span class="rev-tag">Rev. ${REV}</span></div></div></div>` +
+ $('#side').innerHTML = `<div class="brand"><div class="brand-logo">AI</div><div><b>Corso AI</b><small>Personale</small><div class="rev-line"><span class="by-tag">App by Pippo</span><span class="rev-tag">Rev. ${REV}</span><span class="by-tag" title="Funzioni di ChatGPT, Claude e Gemini verificate il ${AGG}">Agg. ${AGG_BREVE}</span></div></div></div>` +
   `<div class="side-lv"><b>${lvInfo().ic} Livello ${lvInfo().l}</b>${S.lv ? V.length + ' lezioni su ' + LESSONS.length : 'Non hai ancora fatto il test'}<button data-act="go" data-to="livello">${S.lv ? 'Cambia livello' : 'Fai il test →'}</button></div>` +
   GROUPS.map(([k,label,c,n])=>{ const all = LESSONS.filter(l=>l.p===k); if(!all.length) return '';
    const ls = all.filter(l=>l.lv <= lvNow()), lock = all.length - ls.length;
