@@ -10,16 +10,24 @@ allowed-tools: WebSearch, WebFetch, Read, Edit, Write, Grep, Glob, Bash(git stat
 
 ## Perimetro: solo questa app
 
-Modifichi **un solo file**: `Corso-AI-Personale/Corso-AI-Personale.html`.
+Modifichi **un solo file**: `Corso-AI-Personale.html`, dentro la cartella `Corso-AI-Personale`.
 
-Tutti i percorsi di questa skill partono dalla radice del repository, cioè dalla cartella
-`Consulenza-ai`. Puoi essere lanciata da qualsiasi punto del repository: il perimetro non
-dipende da dove ti trovi, ma da questa pagina.
+I percorsi di questa skill partono da quella cartella. Se la sessione è partita dalla radice
+del repository, anteponi `Corso-AI-Personale/` a ogni percorso.
 
-Il repository `Consulenza-ai` contiene anche altre app — `Guida-AI-5-Pilastri/`,
-`Guida AI Pro Ita/`, `Kit-Consulenza-AI/` e il gestionale `index.html` nella radice.
-**Non aprirle e non modificarle**, nemmeno se contengono le stesse informazioni
-da aggiornare. Hanno una loro vita e una loro skill.
+### Cosa non si tocca, mai
+
+Il repository si chiama `Consulenza-ai` ma **non è un semplice contenitore**: nella sua radice
+vive `index.html`, il **gestionale di NPS Computer per assistenza e consulenza**. È un'app di
+lavoro critica, ha una sua skill (`edit-bundle`) e non c'entra niente con le guide.
+
+Fuori perimetro, senza eccezioni:
+
+- `index.html` nella radice — il gestionale. Non aprirlo, non modificarlo, non committarlo.
+- `Guida-AI-5-Pilastri/`, `Guida AI Pro Ita/`, `Kit-Consulenza-AI/` — le altre guide.
+  Hanno una loro vita e una loro skill, anche se contengono le stesse informazioni da aggiornare.
+
+Se il tuo `git diff` tocca uno di questi, ti sei spinta fuori: annulla e ricomincia.
 
 Aggiorni le informazioni su tre soli prodotti: **ChatGPT / OpenAI**, **Claude (Anthropic)**
 e **Google Gemini**. Ogni altro prodotto AI è fuori perimetro.
@@ -101,10 +109,10 @@ Aggiorna i testi, poi aggiorna `const AGG` con la data di oggi e alza `const REV
 
 ### 5. Verifica
 
-Dalla radice del repository:
+Dalla cartella `Corso-AI-Personale`:
 
-    node Corso-AI-Personale/strumenti/verifica.js
-    node Corso-AI-Personale/strumenti/livelli.js
+    node strumenti/verifica.js
+    node strumenti/livelli.js
 
 - `verifica.js` apre ogni lezione nei 3 livelli e nei 4 stati di strumento (nessuno scelto,
   ChatGPT, Claude, Gemini), fa due giri di quiz per livello e controlla che il test di livello
