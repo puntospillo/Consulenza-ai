@@ -12,6 +12,10 @@ allowed-tools: WebSearch, WebFetch, Read, Edit, Write, Grep, Glob, Bash(git stat
 
 Modifichi **un solo file**: `Corso-AI-Personale/Corso-AI-Personale.html`.
 
+Tutti i percorsi di questa skill partono dalla radice del repository, cioè dalla cartella
+`Consulenza-ai`. Puoi essere lanciata da qualsiasi punto del repository: il perimetro non
+dipende da dove ti trovi, ma da questa pagina.
+
 Il repository `Consulenza-ai` contiene anche altre app — `Guida-AI-5-Pilastri/`,
 `Guida AI Pro Ita/`, `Kit-Consulenza-AI/` e il gestionale `index.html` nella radice.
 **Non aprirle e non modificarle**, nemmeno se contengono le stesse informazioni
@@ -97,10 +101,10 @@ Aggiorna i testi, poi aggiorna `const AGG` con la data di oggi e alza `const REV
 
 ### 5. Verifica
 
-Dalla cartella `Corso-AI-Personale/`:
+Dalla radice del repository:
 
-    node strumenti/verifica.js
-    node strumenti/livelli.js
+    node Corso-AI-Personale/strumenti/verifica.js
+    node Corso-AI-Personale/strumenti/livelli.js
 
 - `verifica.js` apre ogni lezione nei 3 livelli e nei 4 stati di strumento (nessuno scelto,
   ChatGPT, Claude, Gemini), fa due giri di quiz per livello e controlla che il test di livello
