@@ -1,4 +1,4 @@
-# Stato degli strumenti — verificato il 20 settembre 2026
+# Stato degli strumenti — verificato il 23 settembre 2026
 
 Da ricontrollare sul web prima di scrivere istruzioni operative: cambia ogni poche settimane.
 Nel file la data è in `const AGG_DATA` (mostrata nella pagina Benvenuto).
@@ -10,7 +10,7 @@ Nel file la data è in `const AGG_DATA` (mostrata nella pagina Benvenuto).
 - **Skill**: *barra laterale › Plugin › scheda Skill*, solo piani aziendali (Business, Enterprise, Edu). Piani personali: Progetto dedicato o Codex. Richiamo con `@` in chat, `$` in Codex. Skill di Codex in `.agents/skills/`.
 - **GPT personalizzati** in dismissione. **Sites** pubblica siti e web app.
 - Comandi Codex: `/status` nell'app, `/compact` nella versione a riga di comando.
-- Modelli: **GPT-6 Astra** (3 settembre 2026, il più potente, piani a pagamento) e **GPT-5.6** nelle versioni Sol, Terra, Luna.
+- Modelli: **GPT-6 Astra** (3 settembre 2026, il più potente; in chat appare come GPT-6 Pro sui piani Pro, Business, Enterprise; con Plus solo in Work e Codex) e, dal 22 settembre 2026, **GPT-6 Sol** e **GPT-6 Luna** (sostituiscono GPT-5.6; solo in Work e Codex; Luna anche per Free e Go nell'app per computer).
 
 ## Claude (Anthropic)
 
@@ -20,7 +20,7 @@ Nel file la data è in `const AGG_DATA` (mostrata nella pagina Benvenuto).
 - **Skill**: *Personalizza › Skill* → `+` → Crea skill → Carica una skill (.zip). Condivisione su Team ed Enterprise dal menu ⋯.
 - Altre voci: *Impostazioni › Funzionalità* (Esecuzione codice e creazione file, memoria), *Impostazioni › Profilo* (preferenze), *Impostazioni › Utilizzo* (limite di 5 ore e settimanale), *Impostazioni › Privacy*, chat in incognito.
 - Claude Code: `/init`, `/clear`, `/compact`, `/context`. Componenti aggiuntivi per Excel, Word, PowerPoint; Claude in Chrome.
-- Modelli: **Fable 5.1** (il più potente, in Claude Code), **Opus 5** (lavori difficili), **Sonnet 5** (predefinito), **Haiku 4.5** (rapido).
+- Modelli: **Fable 5.1** (il più potente, in Claude Code), **Opus 5.5** (22 settembre 2026, lavori difficili), **Sonnet 5** (predefinito), **Haiku 4.5** (rapido). Sonnet 5.5 e Haiku 5.5 annunciati "nelle prossime settimane": aggiornare quando escono.
 
 ## Gemini (Google)
 
