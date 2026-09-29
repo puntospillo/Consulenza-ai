@@ -30,7 +30,7 @@ Anagrafica clienti: ragione sociale, codice cliente, referente, P.IVA, indirizzo
 ### 2.3 Contratti
 Elenco contratti di assistenza per cliente. Ogni contratto definisce un monte ore per tipologia (Assistenza Tecnica, Sistemistico, Specialistico, Consulenza) e un costo totale.
 
-- **Barra "Ore residue"**: un'unica barra per contratto, con segmento verde per le ore di assistenza usate e segmento blu per le ore di consulenza/contratto usate. A fianco delle ore è sempre indicato anche il numero di **ticket** corrispondente (1 ora = 4 ticket).
+- **Barra "Ore residue"**: un'unica barra per contratto, con segmento verde per le ore di assistenza usate e segmento blu per le ore di consulenza/contratto usate. A fianco delle ore è sempre indicato anche il numero di **ticket** corrispondente (1 ora = 4 ticket). Per gli interventi **a contratto** il consumo corrisponde esattamente alle ore impiegate, senza arrotondamenti; gli arrotondamenti per blocco (es. minimo 4h per il sistemistico) si applicano solo agli interventi fuori contratto, dove rappresentano la tariffa minima fatturata al cliente.
 - Un contratto viene segnalato **"Esaurito"** (bordo/badge rosso) quando le ore residue totali sono ≤ 0, **"In scadenza"** (badge giallo) quando restano ≤15% delle ore.
 - Cliccando su un contratto si apre il **dettaglio**: ore contrattate/usate/residue (con conversione in ticket), utilizzo per tipologia, elenco di tutti gli interventi collegati (con N°, N° Ticket, descrizione, costo, incasso, margine, margine%) e i bottoni Chiudi/Riapri/Modifica/Stampa.
 - **Stampa contratto**: report HTML con N°/Data/Tecnico/Tipo/Onsite/Stato/Ore/**Richiesta intervento**/Descrizione per ogni intervento collegato.
