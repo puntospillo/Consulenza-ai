@@ -61,6 +61,25 @@ Sintesi in `references/convenzioni.md`. Le tre irrinunciabili:
 
 `references/strumenti-2026.md`: cosa è stato verificato e quando. **Prima di scrivere istruzioni operative, ricontrolla sul web**: ChatGPT, Claude e Gemini cambiano ogni poche settimane.
 
+### Aggiornare i modelli (checklist, per non rileggere tutto il file)
+
+Quando esce un nuovo modello (GPT, Claude, Gemini), i punti da toccare sono sempre questi — tutti con chiavi di traduzione **fisse** (non content-addressed), quindi cambiare il testo italiano non rompe il lookup nelle altre lingue, ma le traduzioni esistenti restano vecchie finché non le aggiorni a mano:
+
+| Punto nell'HTML | grep | Chiave in `traduzioni/*.json` |
+|---|---|---|
+| Riquadro modelli nella scelta strumento | `const TOOL_MODELS` | `tool.chatgpt.mod`, `tool.claude.mod`, `tool.gemini.mod` |
+| Lezione token/consumo | `how.tokens.chatgpt.1` / `how.tokens.claude.2` (grep su `HOW =` → `tokens:`) | stessa chiave |
+| Data di verifica mostrata in Benvenuto | `const AGG_DATA` | `ui.dataVerifica` (il valore di AGG_DATA stesso è la chiave italiana da tradurre) |
+| Due domande del quiz (indice dinamico: conta le righe da `const QZ = [` incluso, parti da 0) | cerca il testo del modello dentro `const QZ = [` | `qz.<indice>.q`, `.o0..o3`, `.e` — oggi sono gli indici **63** (ChatGPT) e **66** (Claude); se aggiungi/togli domande gli indici cambiano, riconta |
+
+Procedura:
+1. Ricontrolla sul web i modelli attuali (nomi, date, piani).
+2. Modifica l'HTML nei 4 punti sopra (schema `rep()` di `SKILL.md`).
+3. Modifica le stesse chiavi in `traduzioni/en.json`, `es.json`, `fr.json` (lo script di costruzione non traduce da solo: va fatto a mano o con `scripts/aggiungi-multi.py`).
+4. `python3 scripts/costruisci.py` poi `scripts/verifica.py`.
+5. Aggiorna `references/strumenti-2026.md` (data in testa + la riga del produttore cambiato).
+6. Bump `const REV`, verifica nel browser (sweep + residui italiano, `references/verifica-browser.md`), poi pubblica solo su richiesta.
+
 ## Verifica (obbligatoria prima di consegnare)
 
 ```bash

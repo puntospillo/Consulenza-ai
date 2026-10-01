@@ -7,7 +7,7 @@ Ordine dei blocchi in `Guida-AI-5-Pilastri.html` (i numeri di riga cambiano: cer
 | CSS | `<style>` … `</style>` in testa |
 | Struttura pagina | `<div class="app">` (indice `#side`, barra `.topbar`, `#page`) |
 | Lingue e traduzioni | `const LANGS`, `const TXT`, `function t(` |
-| Strumenti | `const TOOLS = {`, `TOOL_INTRO`, `TOOL_MODELS`, `AGG_DATA` |
+| Strumenti | `const TOOLS = {`, `TOOL_INTRO`, `TOOL_MODELS`, `AGG_DATA` (per aggiornare i modelli: checklist completa in `SKILL.md` § "Aggiornare i modelli") |
 | Stato | `function initState()` |
 | Helper testo/HTML | `const esc =`, `function fld(`, `const card =`, `const aiMake =` |
 | Schemi SVG | `function pillarsSVG(`, `hierSVG`, `chainSVG`, `chatVsAgentSVG`, `loopSVG`, `flowSVG`, `mapBars` |
