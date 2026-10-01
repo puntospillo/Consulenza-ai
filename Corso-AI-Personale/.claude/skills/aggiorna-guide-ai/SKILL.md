@@ -72,6 +72,43 @@ Con Grep, individua nell'HTML tutti i punti che parlano dei tre strumenti. Ecco 
 
 Scrivi l'inventario in una tabella: punto del file → cosa afferma oggi.
 
+### Modelli: la mappa è già fatta, non riscandagliare il file
+
+**L'app non nomina nessun modello, di proposito.** Niente GPT-5.6, niente Opus, niente Gemini 3:
+parla di «modello veloce» e «modello che ragiona», formule che restano vere quando esce un modello
+nuovo o ne viene ritirato uno. Verificato il 1° ottobre 2026: erano usciti due modelli e ne era
+stato ritirato uno, e non una riga era diventata falsa.
+
+Quindi, quando ti chiedono di «aggiornare i modelli», il risultato più probabile è **nessuna
+modifica**. Non aggiungere numeri di versione di tua iniziativa: è una scelta di progetto, e
+cambiarla si decide insieme a Maurizio.
+
+I punti che parlano di modelli sono **nove**, tutti verificati e qui elencati. Vai dritto a questi:
+
+| Dove | Come trovarlo | Cosa dice |
+|---|---|---|
+| `HOW.setup.chatgpt` | `<b>Gratis o a pagamento</b>: con il piano gratuito` | dopo un po' di messaggi passi a un modello più leggero |
+| `HOW.setup.claude` | `<b>Gratis o a pagamento</b>: il piano gratuito ha un tetto` | tetto che si ricarica ogni poche ore |
+| `HOW.setup.gemini` | `<b>Gratis o a pagamento</b>: gratis hai già` | con AI Pro aumentano limiti e funzioni |
+| `HOW.tokens.chatgpt` | `<b>Scegli il modello</b>: quello veloce per le cose semplici, quello` | veloce contro «con ragionamento» |
+| `HOW.tokens.claude` | `<b>Scegli il modello</b>: quello leggero` | leggero contro potente, ragionamento esteso |
+| `HOW.tokens.gemini` | `<b>Scegli il modello</b>: quello veloce per le cose semplici;` | i più potenti hanno meno richieste al giorno |
+| lezione `parole` (liv. 1) | `<b>Modello</b>','Il “motore” dell’AI` | voce di vocabolario iniziale |
+| lezione `fine-glossario` (liv. 1) | `<b>Modello</b>','Il motore dell’AI` | voce di glossario finale |
+| quiz liv. 2 | `quale modello conviene?` e `Cambi solo modello` | domanda e distrattore |
+
+Per ritrovarli in un colpo solo, da `Corso-AI-Personale`:
+
+    grep -c "GPT-\|Opus\|Sonnet\|Haiku\|Gemini [0-9]" Corso-AI-Personale.html   # deve dare 0
+    grep -o "<b>Scegli il modello</b>[^']*" Corso-AI-Personale.html
+    grep -o "<b>Gratis o a pagamento</b>[^']*" Corso-AI-Personale.html
+
+Il primo comando è il controllo che conta: **se non dà zero, qualcuno ha introdotto un nome di
+versione** e va valutato se tenerlo.
+
+Attenzione a due falsi positivi: nella ricetta sull'elettrodomestico «modello» è il modello della
+lavatrice, e nella domanda di quiz sulle skill «modelli» sono i file di esempio. Non c'entrano.
+
 ### 2. Ricerca delle novità
 
 Una ricerca separata per fornitore. Per ciascuno: nuovi prodotti e funzioni delle app di uso
