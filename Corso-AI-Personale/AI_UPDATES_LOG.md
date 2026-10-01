@@ -6,6 +6,44 @@ dentro l'app, in `const AGG`, e si vede in cima alla lezione "Scegli il tuo stru
 
 ---
 
+## 1 ottobre 2026 — nessuna modifica
+
+Controllo mirato sui modelli, chiesto perché sembravano uscite GPT-5.5 e GPT-6.1.
+
+### Cosa risulta davvero
+
+- **GPT-5.5 non è nuova: viene ritirata il 14 ottobre 2026** da ChatGPT, Work e Codex su tutti
+  i piani (era di aprile 2026). Le conversazioni già aperte migrano da sole; le chiamate via
+  API non sono toccate. Fonte: https://gizchina.it/2026/09/openai-ritira-gpt-5-5-dal-14-ottobre/
+- **GPT-6.1 esiste solo come "Sol"**, dal 29 settembre 2026, per Plus, Pro, Business, Enterprise
+  ed Edu, ma **solo dentro Work e Codex, non in Chat**.
+  Fonte: https://techcrunch.com/2026/09/29/openai-launches-gpt-6-1-sol-says-it-nearly-matches-gpt-6-astra-and-costs-less
+- **GPT-6.1 Astra ritirata prima del lancio** per motivi di sicurezza.
+  Fonte: https://tech-insider.org/openai-dots-agent-gpt-6-1-astra-safety-delay-2026/
+
+### Perché non è stato cambiato niente
+
+L'app non nomina nessun modello, di proposito. Le sei frasi generiche che parlano di modelli
+(tre volte "scegli il modello" nelle istruzioni dei consumi, la voce di glossario, la domanda
+di quiz di livello 2, la riga sul piano gratuito nel setup di ChatGPT) sono state controllate
+una per una e sono tutte ancora vere. Decisione di Maurizio: lasciare così.
+
+Vale la pena notarlo: sono usciti due modelli e ne è stato ritirato uno, e non una riga
+dell'app è diventata falsa. La scelta di non nominare le versioni sta reggendo.
+
+### Da verificare la prossima volta
+
+- Nel setup di ChatGPT c'è scritto «con il piano gratuito fai già moltissimo, ma dopo un po' di
+  messaggi passi a un modello più leggero». Dal 14 ottobre il predefinito del piano gratuito
+  cambia. Una fonte secondaria parlava di conversazioni testuali senza limiti di frequenza, ma
+  **non è confermato da una fonte primaria**: non è stato scritto niente. Da ricontrollare dopo
+  il 14 ottobre, quando il cambio sarà effettivo.
+- Il selettore dei modelli ora usa nomi (Luna, Terra, Sol) invece dei soli numeri: se un giorno
+  si volesse aiutare il lettore a orientarsi, la strada consigliata è una riga durevole sul
+  "come leggere i nomi nel selettore", senza numeri di versione.
+
+---
+
 ## 20 settembre 2026 — Rev. 1.3
 
 Primo controllo delle funzioni nominate nell'app.
