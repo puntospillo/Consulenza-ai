@@ -14,6 +14,7 @@ L'app è il gestionale "Assistenza & Consulenza" di NPS Computer:
 - Login Microsoft (MSAL/Azure AD), dati su OneDrive/Excel via Microsoft Graph
 - Pubblicato anche su GitHub Pages: `https://puntospillo.github.io/Consulenza-ai/`
 - Repo: `github.com/puntospillo/Consulenza-ai`, branch `main`
+- **Cartella di lavoro locale (dal 03/10/2026)**: `~/Library/CloudStorage/OneDrive-NPSCOMPUTERSRL/Lavoro/_AI Progetti/Claude/Consulenza-ai` (OneDrive › Lavoro › _AI Progetti › Claude › Consulenza-ai). La vecchia copia in `~/Desktop/Claude_Code/Consulenza-ai` NON è più quella di riferimento.
 
 ## Workflow per ogni modifica
 
@@ -53,7 +54,7 @@ L'app è il gestionale "Assistenza & Consulenza" di NPS Computer:
 
 5. **Testa in locale** prima di pubblicare:
    ```bash
-   cd "/Users/mauriziopagani/Desktop/Claude_Code/Consulenza-ai" && python3 -m http.server 8765 &
+   cd "/Users/mauriziopagani/Library/CloudStorage/OneDrive-NPSCOMPUTERSRL/Lavoro/_AI Progetti/Claude/Consulenza-ai" && python3 -m http.server 8765 &
    ```
    poi apri `http://localhost:8765/index.html`.
 
