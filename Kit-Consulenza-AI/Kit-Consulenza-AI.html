@@ -300,7 +300,7 @@ code,.path{overflow-wrap:anywhere}
    KIT CONSULENZA AI — banco di lavoro tecnico per il consulente
    File unico, offline, nessuna libreria esterna.
    ========================================================= */
-const REV = '2.7';
+const REV = '2.8';
 
 /* I 5 pilastri, più partenza, chiusura e librerie */
 const GRP = {
@@ -503,6 +503,8 @@ function caricaModelli(){
 let MODELLI = caricaModelli();
 const modGiorni = () => { const t = Date.parse(MODELLI.verificato); return isNaN(t) ? 999 : Math.round((Date.now()-t)/86400000); };
 const modData = () => { const d = new Date(Date.parse(MODELLI.verificato)); return isNaN(d.getTime()) ? MODELLI.verificato : d.toLocaleDateString('it-IT'); };
+/* data dell'ultima verifica fatta sull'app: non cambia se incolli una tabella tua */
+const dataApp = () => { const d = new Date(Date.parse(MODELLI_DEF.verificato)); return isNaN(d.getTime()) ? MODELLI_DEF.verificato : d.toLocaleDateString('it-IT'); };
 const modStato = () => MODELLI.mio
  ? `<span class="mod-ok">✅ aggiornata da te il ${MODELLI.quando || modData()}</span>${MODELLI.soloSessione ? ' <span class="mod-std">solo per questa sessione: il browser non consente di salvarla</span>' : ''}`
  : `<span class="mod-std">tabella dell’app, verificata il ${modData()}</span>${MODELLI.superata ? ` <span class="mod-ok">l’app è più aggiornata della tua tabella del ${MODELLI.superata}: usa la sua</span>` : ''}`;
@@ -576,9 +578,9 @@ L({id:'base-strumento', p:'base', t:'Scegli lo strumento', sub:'La scelta dipend
  ${card('I quattro', `
   <div class="toolpick">
    <button class="tp${S.tool==='chatgpt'?' on':''}" style="--tc:#0f9d76" data-act="set-tool" data-tool="chatgpt"><b>ChatGPT</b><small>OpenAI</small><span>Chat + <b>Work</b> (documenti, fogli, cartelle locali) + <b>Codex</b> (app e automazioni). Skill sui piani aziendali.</span><i>Cliente misto cloud/locale</i></button>
-   <button class="tp${S.tool==='claude'?' on':''}" style="--tc:#c2410c" data-act="set-tool" data-tool="claude"><b>Claude</b><small>Anthropic</small><span>Progetti + <b>Skill</b> in .zip + <b>Cowork</b> (cartelle senza terminale) + <b>Claude Code</b>. Add-in Excel, Word, PowerPoint.</span><i>Procedure ripetibili, documenti lunghi</i></button>
-   <button class="tp${S.tool==='gemini'?' on':''}" style="--tc:#3b82f6" data-act="set-tool" data-tool="gemini"><b>Gemini</b><small>Google</small><span>Dentro Gmail, Drive, Documenti, Fogli. <b>Gem</b>, <b>Notebook</b> (risposte con citazione), <b>Antigravity</b> (cartelle), AI Studio (app).</span><i>Cliente su Google Workspace</i></button>
-   <button class="tp${S.tool==='copilot'?' on':''}" style="--tc:#0078d4" data-act="set-tool" data-tool="copilot"><b>Copilot</b><small>Microsoft 365</small><span>Dentro Word, Excel, Outlook, Teams. <b>Agent Mode</b> nei file, <b>Agent Builder</b> per gli agenti. Lavora su SharePoint e OneDrive.</span><i>Azienda tutta Microsoft</i></button>
+   <button class="tp${S.tool==='claude'?' on':''}" style="--tc:#c2410c" data-act="set-tool" data-tool="claude"><b>Claude</b><small>Anthropic</small><span>Progetti + <b>Skill</b> in .zip + <b>Cowork</b> (cartelle senza terminale) + <b>Claude Code</b> (personalizzabile con le <b>mod</b>). Add-in Excel, Word, PowerPoint.</span><i>Procedure ripetibili, documenti lunghi</i></button>
+   <button class="tp${S.tool==='gemini'?' on':''}" style="--tc:#3b82f6" data-act="set-tool" data-tool="gemini"><b>Gemini</b><small>Google</small><span>Dentro Gmail, Drive, Documenti, Fogli. <b>Skill</b> (prima Gem), <b>Notebook</b> (risposte con citazione), <b>Antigravity</b> (cartelle, anche dentro l’app su Mac), AI Studio (app).</span><i>Cliente su Google Workspace</i></button>
+   <button class="tp${S.tool==='copilot'?' on':''}" style="--tc:#0078d4" data-act="set-tool" data-tool="copilot"><b>Copilot</b><small>Microsoft 365</small><span>Dentro Word, Excel, Outlook, Teams. <b>Cowork</b> (agente che esegue un piano), <b>Agent Mode</b> nei file, <b>Agent Builder</b>. Lavora su SharePoint e OneDrive.</span><i>Azienda tutta Microsoft</i></button>
   </div>
  `, '', '🧰')}
  ${card('La domanda che decide', `
@@ -594,12 +596,12 @@ L({id:'base-strumento', p:'base', t:'Scegli lo strumento', sub:'La scelta dipend
   ['Contenitore per cliente','Progetti','Progetti','Notebook','Copilot Notebooks'],
   ['Attività ripetitiva','Skill / Progetto','Skill','Skill (sostituiscono i Gem)','Agent Builder'],
   ['Procedura con materiali','Skill con assets/','Skill con assets/','Skill Antigravity','Agente + SharePoint'],
-  ['Cartelle del computer','Work, Codex' + DL,'Cowork, Claude Code' + DL,'Antigravity' + DL,'<b>Non previsto</b>'],
+  ['Cartelle del computer','Work, Codex' + DL,'Cowork, Claude Code' + DL,'Antigravity' + DL,'<b>Non previsto</b>: Cowork lavora sul cloud aziendale, non sul disco'],
   ['Ricerca con citazioni','Progetto con file','Progetto con file','Gemini Notebook','Agente con fonti SharePoint'],
   ['Mini-app','Codex, Canvas, Sites','Artifact, Claude Code','AI Studio, Antigravity','Copilot Studio, Power Apps'],
   ['Distribuire al team','Skill aziendali','Skill .zip','Skill condivise','Agent Store interno, Prompt Gallery']
  ]), '', '📊')}
- ${warn('Le interfacce cambiano','<p style="margin:4px 0 0">I percorsi di menu di questo kit sono verificati a settembre 2026. Se una voce si è spostata, il metodo resta: cambia solo dove si clicca.</p>')}
+ ${warn('Le interfacce cambiano',`<p style="margin:4px 0 0">Modelli, funzioni e percorsi di menu di questo kit sono verificati al ${dataApp()}. Se una voce si è spostata, il metodo resta: cambia solo dove si clicca.</p>`)}
 `});
 
 L({id:'base-modelli', p:'base', t:'Quale modello usare', sub:'Tabella per tipo di azione, aggiornabile con un prompt quando i nomi cambiano', min:7, body:()=>`
