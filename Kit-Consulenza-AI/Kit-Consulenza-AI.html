@@ -300,7 +300,7 @@ code,.path{overflow-wrap:anywhere}
    KIT CONSULENZA AI — banco di lavoro tecnico per il consulente
    File unico, offline, nessuna libreria esterna.
    ========================================================= */
-const REV = '2.5';
+const REV = '2.6';
 
 /* I 5 pilastri, più partenza, chiusura e librerie */
 const GRP = {
@@ -446,39 +446,39 @@ const TIPI_AZIONE = {
  ricerca:     {l:'Ricerca con fonti',          d:'normativa, mercato, fornitori, benchmark'}
 };
 const MODELLI_DEF = {
- verificato:'2026-09-17',
- chatgpt:{dove:'Selettore del modello sopra la casella di scrittura (assente sui piani gratuiti: si usa GPT-5.6 Luna).', m:{
-  veloce:['GPT-5.6 Sol · ragionamento Medium','Su compiti brevi alzare il ragionamento fa solo consumare di più.'],
-  standard:['GPT-5.6 Sol','Predefinito dei piani a pagamento. Instant e Thinking sono un unico modello con un cursore di ragionamento.'],
-  ragionamento:['GPT-5.6 Sol · High o Extra High','Sui piani Pro e Business puoi passare a GPT-6 Astra (GPT-6 Pro).'],
-  lungo:['GPT-5.6 Sol dentro un Progetto','Conta più l’organizzazione dei file che il modello.'],
-  agente:['GPT-6 Astra in Work o Codex','Su Plus è incluso lì con quota limitata, ma non compare nel selettore della chat.'],
+ verificato:'2026-10-20',
+ chatgpt:{dove:'Selettore del modello sopra la casella: GPT-6 ha preso il posto di «Latest». Il cursore Thinking sceglie lo sforzo (Instant, Medium, High, Extra High, Pro). Sui piani gratuiti e Go non c\u2019\u00e8 selettore: si usa il modello Luna.', m:{
+  veloce:['GPT-6 \u00b7 Instant','Risposte immediate. Su compiti brevi alzare lo sforzo fa solo consumare di pi\u00f9.'],
+  standard:['GPT-6 \u00b7 Medium','In chat GPT-6 \u00e8 mosso da GPT-6 Sol da Instant a Extra High. Disponibile con Plus, Pro, Business ed Enterprise.'],
+  ragionamento:['GPT-6 \u00b7 High (Extra High dove c\u2019\u00e8)','Extra High e Pro non sono inclusi nel Plus. Su Pro, Business ed Enterprise lo sforzo Pro usa GPT-6 Pro, mosso da GPT-6 Astra.'],
+  lungo:['GPT-6 dentro un Progetto','Conta pi\u00f9 l\u2019organizzazione dei file che il modello.'],
+  agente:['GPT-6 Astra in Work o Codex','Incluso in Work e Codex anche con il Plus, pur non comparendo nel selettore della chat. In Work e Codex c\u2019\u00e8 anche l\u2019opzione GPT-6.1 Sol.'],
   codice:['GPT-6 Astra in Codex','Per le app usa Codex, non la chat: vede i file, esegue e corregge.'],
-  ricerca:['GPT-5.6 Sol con Ricerca approfondita','Produce un report con le fonti.']}},
+  ricerca:['GPT-6 con Ricerca approfondita','Produce un report con le fonti.']}},
  claude:{dove:'Selettore sotto la casella di scrittura. In Claude Code: /model e /effort.', m:{
-  veloce:['Haiku 4.5','Il più rapido ed economico, ma legge meno contesto: non per i fascicoli lunghi.'],
-  standard:['Sonnet 5','Predefinito dei piani Pro: equilibrio fra qualità e consumo.'],
-  ragionamento:['Opus 5','Predefinito dei piani Max e aziendali. Da usare quando devi fidarti del risultato.'],
-  lungo:['Sonnet 5 o Opus 5','Reggono finestre molto ampie. Evita Haiku sui documenti lunghi.'],
-  agente:['Opus 5 in Cowork o Claude Code','Per lavori lunghissimi esiste Fable 5.1, più capace e più costoso.'],
-  codice:['Opus 5','Fable 5.1 solo se Opus 5 non arriva al risultato.'],
-  ricerca:['Opus 5 con ricerca web','Chiedi sempre link e data delle fonti.']}},
- gemini:{dove:'Selettore in alto nell’app Gemini. Deep Think solo sui piani Ultra.', m:{
+  veloce:['Haiku 5.5','Il pi\u00f9 rapido ed economico della famiglia. Dal 7 ottobre 2026 regge lo stesso contesto degli altri, quindi non \u00e8 pi\u00f9 escluso dai fascicoli lunghi.'],
+  standard:['Sonnet 5.5','Il miglior equilibrio fra velocit\u00e0 e capacit\u00e0: predefinito anche sui piani base.'],
+  ragionamento:['Opus 5.5','Il modello da cui partire per i lavori che devono reggere: analisi, contratti, progettazione.'],
+  lungo:['Sonnet 5.5 o Opus 5.5','Tutta la famiglia attuale legge finestre molto ampie: scegli per capacit\u00e0, non per lunghezza.'],
+  agente:['Opus 5.5 in Cowork o Claude Code','Pensato per i lavori lunghi in autonomia. Per quelli lunghissimi c\u2019\u00e8 Fable 5.1, pi\u00f9 capace e molto pi\u00f9 costoso.'],
+  codice:['Opus 5.5','Fable 5.1 solo quando Opus 5.5, anche a sforzo alto, non arriva al risultato.'],
+  ricerca:['Opus 5.5 con ricerca web','Chiedi sempre link e data delle fonti.']}},
+ gemini:{dove:'Selettore in alto nell\u2019app Gemini: Flash-Lite, Flash, Pro e, con Google AI Pro e Ultra, Gemini 4 Argon. Deep Think solo sui piani Ultra.', m:{
   veloce:['Flash-Lite','Pensato per i compiti di tutti i giorni, a costo minimo.'],
-  standard:['Flash','L’opzione centrale: copre semplice e buona parte del complesso restando veloce.'],
-  ragionamento:['Pro','Il modello di punta dell’app. Deep Think è una modalità in più, riservata a Ultra.'],
-  lungo:['Pro','Per citazioni puntuali usa Gemini Notebook, non la chat.'],
-  agente:['Pro dentro Antigravity','Antigravity è l’ambiente che lavora sulle cartelle.'],
-  codice:['Pro in Antigravity o AI Studio','AI Studio per le app online, Antigravity per gli strumenti locali.'],
-  ricerca:['Pro con Deep Research','Poi «Ricontrolla la risposta» prima di consegnare.']}},
- copilot:{dove:'Selettore in Copilot Chat: modalità (Auto, Quick response, Think deeper) e famiglia (GPT oppure Opus, cioè Claude). In Word, menu dei modelli.', m:{
+  standard:['Flash','L\u2019opzione centrale: copre il semplice e buona parte del complesso restando veloce.'],
+  ragionamento:['Gemini 4 Argon','Il modello di punta, dal 13 ottobre 2026 con Google AI Pro e Ultra. Senza quei piani resta Pro. Deep Think \u00e8 una modalit\u00e0 in pi\u00f9, riservata a Ultra.'],
+  lungo:['Gemini 4 Argon, o Pro','Per citazioni puntuali usa Gemini Notebook, non la chat.'],
+  agente:['Gemini 4 Argon dentro Antigravity','Antigravity lavora sulle cartelle del computer; nell\u2019app per macOS si avvia dall\u2019alto. Con il piano personale pi\u00f9 basso il modello di punta pu\u00f2 non essere disponibile.'],
+  codice:['Gemini 4 Argon in Antigravity o AI Studio','AI Studio per le app online, Antigravity per gli strumenti che stanno sul computer.'],
+  ricerca:['Pro o Gemini 4 Argon con Deep Research','Poi \u00abRicontrolla la risposta\u00bb prima di consegnare.']}},
+ copilot:{dove:'In Copilot Chat lo sforzo si sceglie fra Auto, Quick response e Think deeper; a fine risposta, da \u00abAltre opzioni\u00bb, Cambia modello mostra la stessa domanda risolta da un altro modello. In Word il modello si sceglie dal menu dei modelli.', m:{
   veloce:['Quick response','Risponde subito senza ragionare a lungo.'],
   standard:['Auto','Lascia scegliere a Copilot: per il lavoro corrente basta.'],
-  ragionamento:['Think deeper','Ragiona più a lungo: analisi, confronti, documenti che devono reggere una revisione.'],
-  lungo:['Famiglia Opus (Claude), in Chat e in Word','Sui documenti lunghi e strutturati è la scelta più solida.'],
-  agente:['Agent Mode nei file, o agente da Agent Builder','Il modello lo gestisce Microsoft: tu governi istruzioni, fonti e permessi.'],
+  ragionamento:['Think deeper','Ragiona pi\u00f9 a lungo: analisi, confronti, documenti che devono reggere una revisione.'],
+  lungo:['Famiglia Claude in Chat e in Word','Sui documenti lunghi e strutturati \u00e8 la scelta pi\u00f9 solida; in Word \u00e8 il modello predefinito per i compiti di ragionamento.'],
+  agente:['Cowork nell\u2019app Copilot, Agent Mode dentro i file, o un agente di Agent Builder','Il modello lo gestisce Microsoft: tu governi obiettivo, fonti, permessi e approvazione del piano.'],
   codice:['Copilot Studio, o un altro strumento','Copilot costruisce agenti e flussi, non applicazioni su misura.'],
-  ricerca:['Agente Researcher','Ricerca in più passaggi con report e fonti.']}},
+  ricerca:['Agente Researcher','Ricerca in pi\u00f9 passaggi con report e fonti.']}},
  any:{dove:'', m:{
   veloce:['un modello veloce e leggero','Costa poco e risponde subito.'],
   standard:['il modello predefinito del piano','Per il lavoro quotidiano basta quasi sempre.'],
@@ -526,6 +526,7 @@ const PROBLEMI = [
  ['📎','Far lavorare l’AI sui file','Excel, Word, PDF, presentazioni','t-file','#4f46e5'],
  ['🎯','Evitare risposte inventate','fonti, citazioni, verifiche','t-affidabilita','#4f46e5'],
  ['🧮','Scegliere il modello giusto','per tipo di azione','base-modelli','#0ea5e9'],
+ ['📣','Capire che cosa è cambiato','novità e come si usano','base-novita','#0ea5e9'],
  ['⚡','Non rispiegare il contesto ogni volta','progetti per cliente','c-progetti','#0d9488'],
  ['🤖','Automatizzare un’attività ripetitiva','assistenti','c-assistente','#0d9488'],
  ['🧩','Pacchettizzare una procedura complessa','skill con materiali','c-skill','#0d9488'],
@@ -587,12 +588,12 @@ L({id:'base-strumento', p:'base', t:'Scegli lo strumento', sub:'La scelta dipend
  `, '', '❓')}
  ${card('Che cosa ti dà ciascuno', tbl(['Serve…','ChatGPT','Claude','Gemini','Copilot'],[
   ['Contenitore per cliente','Progetti','Progetti','Notebook','Copilot Notebooks'],
-  ['Attività ripetitiva','Skill / Progetto','Skill','Gem','Agent Builder'],
+  ['Attività ripetitiva','Skill / Progetto','Skill','Skill (sostituiscono i Gem)','Agent Builder'],
   ['Procedura con materiali','Skill con assets/','Skill con assets/','Skill Antigravity','Agente + SharePoint'],
   ['Cartelle del computer','Work, Codex' + DL,'Cowork, Claude Code' + DL,'Antigravity' + DL,'<b>Non previsto</b>'],
   ['Ricerca con citazioni','Progetto con file','Progetto con file','Gemini Notebook','Agente con fonti SharePoint'],
   ['Mini-app','Codex, Canvas, Sites','Artifact, Claude Code','AI Studio, Antigravity','Copilot Studio, Power Apps'],
-  ['Distribuire al team','Skill aziendali','Skill .zip','Gem condivisi','Agent Store interno, Prompt Gallery']
+  ['Distribuire al team','Skill aziendali','Skill .zip','Skill condivise','Agent Store interno, Prompt Gallery']
  ]), '', '📊')}
  ${warn('Le interfacce cambiano','<p style="margin:4px 0 0">I percorsi di menu di questo kit sono verificati a settembre 2026. Se una voce si è spostata, il metodo resta: cambia solo dove si clicca.</p>')}
 `});
@@ -627,6 +628,85 @@ L({id:'base-modelli', p:'base', t:'Quale modello usare', sub:'Tabella per tipo d
   <div id="mod-msg"></div>
  `, 'AGGIORNAMENTO')}
 `});
+
+/* ---------- NOVITÀ (verificate sulle pagine ufficiali) ---------- */
+const NOVITA = {
+ chatgpt:[
+  {t:'GPT-6 nel selettore, al posto di «Latest»', q:'7 ottobre 2026',
+   cosa:'Il menu dei modelli non elenca più versioni: scegli <b>GPT-6</b> e poi quanto deve ragionare, con il cursore Thinking (Instant, Medium, High, Extra High, Pro).',
+   serve:'Smetti di scegliere il modello e scegli lo <b>sforzo</b>, che è la decisione che conta davvero: basso sul volume, alto dove l’errore costa.',
+   usa:'Con il Plus hai Medium e High; Extra High e Pro arrivano con Pro, Business ed Enterprise. Lo sforzo Pro usa GPT-6 Pro (mosso da GPT-6 Astra). Chi aveva «Latest» si ritrova su GPT-6 allo stesso sforzo; chi aveva scelto un modello preciso resta dov’era.'},
+  {t:'Intelligent UI: risposte che si usano, non solo si leggono', q:'7 ottobre 2026',
+   cosa:'La risposta può contenere elementi visivi e <b>interattivi</b>, non solo testo.',
+   serve:'Per far vedere un confronto o una simulazione al cliente senza costruire nulla: la risposta stessa diventa lo strumento.',
+   usa:'Nessun prompt speciale, si attiva da sola quando serve. Non funziona allo sforzo Pro. Se preferisci il testo asciutto: Impostazioni → disattiva «Layout e visivi». Le vecchie app per computer non la supportano: usa ChatGPT dal browser.'},
+  {t:'GPT-6.1 Sol in Work e Codex', q:'ottobre 2026',
+   cosa:'Un’opzione di modello in più, solo dentro Work e Codex: è separata dalle scelte della chat.',
+   serve:'È il posto dove girano i lavori lunghi sui file e le automazioni: qui conta avere il modello più adatto, non quello della chat.',
+   usa:'Si sceglie dentro Work o Codex. GPT-6 Astra è incluso lì anche con il piano Plus, pur non comparendo nel selettore della chat. Consumi e limiti di Work e Codex sono contati a parte.'}
+ ],
+ claude:[
+  {t:'Famiglia 5.5: Opus, Sonnet e Haiku rinnovati', q:'settembre-ottobre 2026',
+   cosa:'<b>Opus 5.5</b> per i lavori che devono reggere, <b>Sonnet 5.5</b> come equilibrio, <b>Haiku 5.5</b> per il volume. <b>Fable 5.1</b> resta il più capace e il più costoso.',
+   serve:'Cambia una regola che davi per buona: oggi <b>anche Haiku legge documenti lunghi</b>, quindi sul materiale voluminoso scegli per capacità, non più per paura che tagli.',
+   usa:'Si cambia dal selettore sotto la casella; in Claude Code con <code>/model</code>, e <code>/effort</code> regola quanto ragiona. I modelli della generazione precedente restano disponibili ma non sono più il predefinito.'},
+  {t:'Mod: Claude Code si modifica', q:'ottobre 2026',
+   cosa:'Una <b>mod</b> è un’estensione che gira <i>dentro</i> Claude Code e ne cambia comportamento e schermata: può disegnare un pannello, aggiungere un comando tuo, o fermare un’azione prima che parta.',
+   serve:'Per il consulente è il modo di mettere dei <b>paracadute</b> nei lavori sui file del cliente: una mod può bloccare un comando pericoloso e mostrarti che cosa cambierebbe prima di procedere, oppure tenere sott’occhio quanto contesto stai consumando.',
+   usa:'Si installa come plugin: <code>/plugin install nome@marketplace</code> dentro una sessione, oppure <code>claude plugin install nome@marketplace</code> da terminale; <code>/plugin</code> mostra quali sono attive. Servono Claude Code 2.1.287 o successivo (2.1.286 nell’app). <b>Attenzione:</b> una mod è codice che gira con i tuoi permessi — legge e scrive i tuoi file e può approvare azioni. Installa solo da autori di cui ti fidi; <code>claude plugin validate</code> elenca che cosa fa prima di installarla, e <code>--safe-mode</code> le spegne tutte per una sessione.'},
+  {t:'Mod, skill o hook: quale scegliere', q:'',
+   cosa:'Tre cose diverse che spesso vengono confuse.',
+   serve:'Scegliere lo strumento sbagliato è il modo più rapido per complicarsi la vita.',
+   usa:'<b>Skill</b> = istruzioni scritte: la usi quando ti ritrovi a reincollare sempre le stesse indicazioni. <b>Hook</b> = uno script che si attiva a un certo evento: quando vuoi bloccare o registrare qualcosa con uno script che hai già. <b>Mod</b> = codice dentro Claude Code: quando vuoi un pannello, un comando tuo o cambiare il comportamento. Per il lavoro di consulenza, nove volte su dieci serve una skill.'}
+ ],
+ gemini:[
+  {t:'Le Skill sostituiscono i Gem', q:'30 settembre 2026',
+   cosa:'Le <b>Skill</b> stanno prendendo il posto dei <b>Gem</b> come strumento per dare istruzioni su un’attività ricorrente. I Gem esistenti vengono convertiti in automatico.',
+   serve:'Si allinea a come funzionano gli altri strumenti: una procedura scritta una volta, richiamabile dove serve. E non devi rifare a mano il lavoro già fatto sui Gem del cliente.',
+   usa:'Se il cliente ha dei Gem, non toccarli: aspetta la conversione e poi verifica che le istruzioni siano arrivate intatte. Nel kit, dove leggi «assistente», per Gemini intendi una skill.'},
+  {t:'Gemini 4 Argon', q:'13 ottobre 2026',
+   cosa:'Il nuovo modello di punta nell’app, per chi ha Google AI Pro o Ultra.',
+   serve:'È il modello da scegliere per analisi e confronti; sui piani senza Pro o Ultra si resta su Pro.',
+   usa:'Dal selettore in alto. Deep Think resta una modalità a parte, solo con Ultra.'},
+  {t:'Personalizza, e Antigravity dentro l’app', q:'13 ottobre 2026',
+   cosa:'<b>Personalizza</b>, nel menu a sinistra, regola come Gemini risponde e a quali applicazioni è collegato (oltre quaranta). Su macOS, <b>Antigravity</b> si apre dall’alto dell’app Gemini: avvii l’agente, approvi il piano e torni alla chat mentre lavora.',
+   serve:'Il primo è il posto dove impostare il contesto del cliente una volta sola. Il secondo toglie un passaggio: non devi più uscire dall’app per far lavorare l’agente sulle cartelle.',
+   usa:'Personalizza è su web, telefono e app per computer, per tutti i piani. L’agente nell’app è in inglese, per account personali e account di lavoro abilitati. Su Windows l’app si apre da qualsiasi punto con Alt + barra spaziatrice.'}
+ ],
+ copilot:[
+  {t:'Cowork: l’agente che mancava', q:'23 settembre 2026',
+   cosa:'Nell’app Copilot si passa da Chat a <b>Cowork</b>: descrivi il risultato che vuoi, lui propone un piano, tu lo approvi e lavora in più passaggi sui dati Microsoft 365 e su fonti esterne.',
+   serve:'Finora con Copilot potevi delegare un compito, non un flusso. Questo cambia la risposta da dare al cliente Microsoft che chiede «e un agente?».',
+   usa:'App Copilot su Windows, Mac, web, telefono. Resta dentro il cloud aziendale: le cartelle del computer non le vede, quindi i file vanno in OneDrive o SharePoint. Il piano si approva prima dell’esecuzione: tienilo come punto di controllo umano.'},
+  {t:'Cambia modello e Riprova', q:'6 ottobre 2026',
+   cosa:'A fine risposta, da «Altre opzioni»: <b>Riprova</b> rifà la risposta, <b>Cambia modello</b> la fa rifare a un altro modello.',
+   serve:'È il modo più rapido per fare la revisione incrociata: stessa domanda, secondo modello, e confronti. Utile sui documenti che escono verso il cliente finale.',
+   usa:'Copilot sul web. Non ti dice quale modello userà: confronta le due risposte, non fidarti dell’etichetta.'},
+  {t:'Notebooks rinnovati e connettori federati', q:'23 settembre 2026',
+   cosa:'I <b>Copilot Notebooks</b> hanno un impianto nuovo che tiene insieme chat, risultati e fonti in uno spazio che resta. I <b>connettori federati</b> (standard MCP) sono ora disponibili a tutti.',
+   serve:'Il notebook è il contenitore per cliente di cui parla il kit. I connettori federati aprono le fonti esterne senza copiare i dati dentro Microsoft: è l’argomento che serve quando l’IT del cliente chiede dove finiscono i dati.',
+   usa:'Aggiungi una fonte dal menu … di un elemento → Aggiungi a → Notebook. I connettori si attivano dall’amministratore e funzionano in Researcher, in chat e dentro Excel.'}
+ ]
+};
+L({id:'base-novita', p:'base', t:'Le novità e come si usano', sub:'Che cosa è cambiato negli strumenti, a che cosa ti serve e come si usa davvero', min:9, tag:'Aggiornato il ' + modData(), body:()=>{
+ const ordine = hasTool() ? [S.tool].concat(Object.keys(TOOLS).filter(k=>k!==S.tool)) : Object.keys(TOOLS);
+ return `
+ ${card('Come leggere questa scheda', `
+  <p>Solo novità verificate sulle pagine ufficiali dei quattro fornitori, aggiornate al <b>${modData()}</b>. Per ognuna trovi tre righe: <b>che cos’è</b>, <b>a che cosa ti serve</b> in consulenza, <b>come si usa</b>.</p>
+  ${hasTool() ? `<p class="hint" style="margin:0">Hai scelto ${toolName()}: le sue novità sono le prime. Le altre restano in fondo, perché su clienti diversi usi strumenti diversi.</p>` : `<div class="actions">${toolButtons()}</div>`}
+ `, '', '📣')}
+ ${ordine.map(k=>{ const T = TOOLS[k];
+  return `<section class="card acc" style="--pc:${T.c}">
+   <h2><span class="ic">${k===S.tool?'★':'•'}</span>${T.l}<span class="hint" style="font-weight:400;margin-left:6px">${T.casa}</span></h2>
+   ${NOVITA[k].map(n=>`<div class="box" style="--bc:${T.c};margin-bottom:10px">
+    ${n.q?`<em>${n.q}</em>`:''}<b>${n.t}</b>
+    ${kv([['Che cos’è',n.cosa],['A che cosa ti serve',n.serve],['Come si usa',n.usa]])}
+   </div>`).join('')}
+  </section>`; }).join('')}
+ ${warn('Le date e i piani cambiano in fretta','<p style="margin:4px 0 0">Prima di mostrare un percorso a un cliente, aprilo una volta da solo: le voci di menu si spostano. Quando una novità invecchia, aggiorna la tabella dei modelli dalla scheda <b>Quale modello usare</b>: il prompt lì dentro rifà la ricerca e ti restituisce il blocco da incollare.</p>')}
+ <div class="actions"><button class="btn" data-act="go" data-to="base-modelli">→ Tabella dei modelli e aggiornamento</button></div>
+ ${keys(['Le novità si valutano per quello che cambia nel lavoro, non per l’annuncio.','Quello che oggi è un limite di uno strumento domani può non esserlo: ricontrolla prima di dire «non si può».','Ogni nuova funzione va collaudata su un caso vero prima di portarla da un cliente.'])}
+`;}});
 
 /* ---------- 1 · TECNICHE ---------- */
 const PR_PRESETS = {
@@ -930,7 +1010,7 @@ L({id:'t-consumi', p:'t', t:'Consumi e limiti', sub:'Si consuma per testo rilett
 /* ---------- ISTRUZIONI PER STRUMENTO ---------- */
 Object.assign(WHERE, {
  progetti:{chatgpt:'Progetti (barra laterale)', claude:'Progetti (barra laterale)', gemini:'Notebook nell’app Gemini', copilot:'Copilot Notebooks', any:'Il contenitore per cliente'},
- assistenti:{chatgpt:'Skill (piani aziendali) o Progetto dedicato', claude:'Personalizza › Skill', gemini:'Gem', copilot:'Agent Builder', any:'L’assistente dello strumento'},
+ assistenti:{chatgpt:'Skill (piani aziendali) o Progetto dedicato', claude:'Personalizza › Skill', gemini:'Skill (prima: Gem)', copilot:'Agent Builder o Cowork', any:'L’assistente dello strumento'},
  skill:{chatgpt:'Barra laterale › Plugin › Skill', claude:'Personalizza › Skill', gemini:'.agents/skills per Antigravity', copilot:'Agente con istruzioni e fonti', any:'Le skill dello strumento'},
  locale:{chatgpt:'Work o Codex sulla cartella', claude:'Cowork o Claude Code', gemini:'Antigravity', copilot:'Non previsto: i file vanno in OneDrive o SharePoint', any:'Un agente da cartella'},
  app:{chatgpt:'Codex (o Canvas per cose semplici)', claude:'Artifact in chat, Claude Code per app vere', gemini:'AI Studio, Canvas o Antigravity', copilot:'Copilot Studio o Power Apps', any:'L’ambiente di costruzione'},
@@ -990,8 +1070,8 @@ Object.assign(HOW, {
   <p>Crea una <b>Skill</b> in ${mp('Personalizza › Skill')} e richiamala dentro i progetti.</p>
   <p>Per attività molto semplici basta un progetto dedicato; la skill conviene quando servono modelli, esempi o script.</p>`,
  gemini:`
-  <p>Diventa un <b>Gem</b>: nome, istruzioni su come si fa quel lavoro, e lo richiami quando serve.</p>
-  <p>Il Gem sa <i>come</i>; il notebook del cliente sa <i>di chi</i>. Separarli è ciò che permette di riusare il Gem su tutti i clienti.</p>`,
+  <p>Diventa una <b>Skill</b>: nome, istruzioni su come si fa quel lavoro, e la richiami quando serve. Dal 30 settembre 2026 le Skill stanno prendendo il posto dei <b>Gem</b>, che vengono convertiti in automatico: se il cliente ha dei Gem, non si rifà nulla a mano.</p>
+  <p>La skill sa <i>come</i>; il notebook del cliente sa <i>di chi</i>. Separarli è ciò che permette di riusare la stessa procedura su tutti i clienti.</p>`,
  copilot:`
   <p>Diventa un <b>agente</b> con Agent Builder: nuovo agente, poi istruzioni e fonti (file, cartelle, siti SharePoint, una lista).</p>
   <p>Per i prompt ricorrenti che non meritano un agente c’è la <b>Prompt Gallery</b> aziendale.</p>`},
@@ -1003,7 +1083,7 @@ Object.assign(HOW, {
   <p><code>SKILL.md</code> sotto le 500 righe: i dettagli vanno in <code>references/</code>.</p>`,
  gemini:`
   <p>Per Antigravity: cartelle in <code>.agents/skills</code>, stesso schema.</p>
-  <p>Nell’app Gemini l’equivalente pratico è il <b>Gem</b>, senza la parte di file eseguibili.</p>`,
+  <p>Nell’app Gemini l’equivalente sono le <b>Skill</b> (che hanno sostituito i Gem), senza la parte di file eseguibili.</p>`,
  copilot:`
   <p>Non esiste il formato <code>SKILL.md</code>: l’equivalente è un <b>agente</b> con istruzioni e fonti collegate.</p>
   <p>Quello che altrove metti in <code>assets/</code> qui sta in una cartella SharePoint collegata come fonte.</p>
@@ -1022,6 +1102,7 @@ Object.assign(HOW, {
   <p>Istruzioni permanenti: file <code>GEMINI.md</code> (o <code>AGENTS.md</code>).</p>`,
  copilot:`
   <p><b>Limite strutturale:</b> Copilot non lavora sulle cartelle locali. Agent Mode richiede file su OneDrive o SharePoint.</p>
+  <p>Dal 23 settembre 2026 c’è però <b>Cowork</b> nell’app Copilot: gli descrivi il risultato che vuoi, lui propone un piano, tu lo approvi e lavora in più passaggi sui dati Microsoft 365 e su fonti esterne. È l’agente che prima mancava, ma resta dentro il cloud aziendale: le cartelle del computer non le vede.</p>
   <p>Due strade: <b>(a)</b> portare la cartella in SharePoint riordinando i permessi — è un progetto a sé; <b>(b)</b> usare per quel processo un secondo strumento da cartella, e tenere Copilot per il resto.</p>`},
  app:{tit:'costruire una mini-app', chatgpt:`
   <p><b>Codex</b> nell’app per computer${DL}: vede la cartella, scrive i file, esegue e corregge. Per prove rapide: <b>Canvas</b>.</p>
@@ -2916,18 +2997,24 @@ L({id:'lib-glossario', p:'lib', t:'Glossario tecnico', sub:'Le definizioni che r
   ['chatgpt','<b>Work</b>','Modalità di ChatGPT per lavori lunghi su documenti, fogli, presentazioni e cartelle locali.'],
   ['chatgpt','<b>Codex</b>','Ambiente per costruire app e automazioni lavorando sulle cartelle.'],
   ['chatgpt','<b>Sites</b>','Funzione per pubblicare siti e applicazioni web.'],
+  ['chatgpt','<b>Intelligent UI</b>','Risposte che oltre al testo contengono elementi visivi e interattivi. Dal 7 ottobre 2026 con GPT-6, non allo sforzo Pro; si riduce da Impostazioni.'],
   ['chatgpt','<b>AGENTS.md</b>','File di istruzioni permanenti di una cartella.'],
   ['claude','<b>Cowork</b>','Modalità che lavora su documenti e cartelle senza terminale, con approvazione manuale o automatica.'],
   ['claude','<b>Claude Code</b>','Ambiente per costruire applicazioni e automazioni sulle cartelle.'],
+  ['claude','<b>Mod</b>','Estensione che gira dentro Claude Code e ne cambia comportamento e schermata: pannelli, comandi propri, controlli sulle azioni. Si installa come plugin ed è codice che gira con i tuoi permessi.'],
   ['claude','<b>Artifact</b>','Documento o piccola applicazione creata in chat e utilizzabile accanto alla conversazione.'],
   ['claude','<b>CLAUDE.md</b>','File di istruzioni permanenti di una cartella.'],
-  ['gemini','<b>Gem</b>','Assistente personalizzato: stessa attività, stesse istruzioni.'],
+  ['gemini','<b>Skill</b>','Istruzioni salvate per un’attività ricorrente. Dal 30 settembre 2026 sostituiscono i <b>Gem</b>, convertiti in automatico.'],
+  ['gemini','<b>Gemini 4 Argon</b>','Il modello di punta dell’app dal 13 ottobre 2026, con i piani Google AI Pro e Ultra.'],
+  ['gemini','<b>Personalizza</b>','Voce del menu a sinistra: regola come Gemini risponde e a quali applicazioni è collegato.'],
   ['gemini','<b>Gemini Notebook</b>','Risponde solo sui documenti caricati, citando il punto esatto. Per ritrovare, non per creare.'],
   ['gemini','<b>Antigravity</b>','Ambiente con agenti che lavorano sulle cartelle del computer.'],
   ['gemini','<b>AI Studio</b>','Servizio per costruire e pubblicare applicazioni descrivendole.'],
   ['gemini','<b>GEMINI.md</b>','File di istruzioni permanenti di una cartella.'],
   ['copilot','<b>Copilot Chat</b>','Con licenza completa vede i documenti aziendali rispettando i permessi di ciascuno.'],
   ['copilot','<b>Agent Mode</b>','Esegue più passaggi dentro Word, Excel o PowerPoint. Richiede file su OneDrive o SharePoint.'],
+  ['copilot','<b>Cowork</b>','Modalità agentica dell’app Copilot (dal 23 settembre 2026): descrivi il risultato, approvi il piano, lui esegue in più passaggi sui dati aziendali e su fonti esterne.'],
+  ['copilot','<b>Cambia modello</b>','A fine risposta, da «Altre opzioni»: rifà la stessa risposta con un altro modello, per confrontarle.'],
   ['copilot','<b>Agent Builder</b>','Strumento per creare agenti con istruzioni e fonti (file, cartelle, siti SharePoint, liste).'],
   ['copilot','<b>Copilot Notebooks</b>','Raccoglie file, mail e riunioni di un progetto e ne produce documenti, fogli e presentazioni.'],
   ['copilot','<b>Prompt Gallery</b>','Raccolta aziendale di prompt pubblicati dall’amministratore.'],
@@ -2947,7 +3034,7 @@ const SEZIONI = [
 ];
 /* Riassegnazione delle schede ai pilastri e ordine di scorrimento */
 const GRPOF = {
- 'base-uso':'base','base-strumento':'base','base-modelli':'base',
+ 'base-uso':'base','base-strumento':'base','base-modelli':'base','base-novita':'base',
  't-prompt':'p1','t-contesto':'p1','t-affidabilita':'p1','t-file':'p1','t-consumi':'p1',
  'c-scelta':'p2','c-progetti':'p2','c-assistente':'p2','c-skill':'p2',
  'w-fasi':'p3','w-mappa':'p3','w-architettura':'p3',
@@ -2956,7 +3043,7 @@ const GRPOF = {
  'w-collaudo':'fine','w-consegna':'fine',
  'lib-ricettario':'lib','lib-deliverable':'lib','lib-meta':'lib','lib-glossario':'lib'
 };
-const ORDINE = ['base-uso','base-strumento','base-modelli',
+const ORDINE = ['base-uso','base-strumento','base-modelli','base-novita',
  't-prompt','t-contesto','t-affidabilita','t-file','t-consumi',
  'c-scelta','c-progetti','c-assistente','c-skill',
  'w-fasi','w-mappa','w-architettura',
@@ -2981,7 +3068,8 @@ const kick = l => (GRP[l.p] || GRP.base).t;
 const KW = {
  'base-uso':'indice inizio home partenza problema mappa del kit sezioni',
  'base-strumento':'chatgpt claude gemini copilot microsoft 365 scelta strumento licenze sharepoint onedrive drive dove stanno i dati confronto',
- 'base-modelli':'modello modelli opus sonnet haiku fable gpt astra sol flash pro think deeper ragionamento veloce quale usare aggiornare',
+ 'base-modelli':'modello modelli opus sonnet haiku fable gpt astra sol luna argon flash pro think deeper ragionamento veloce quale usare aggiornare',
+ 'base-novita':'novita aggiornamenti cosa cambia mod claude code plugin intelligent ui gpt-6 argon skill gemini gem cowork copilot personalizza antigravity notebooks connettori nuove funzioni',
  't-prompt':'prompt richiesta craft contesto ruolo azione formato target controlli stop scrivere generatore brief formula',
  't-contesto':'contesto finestra token istruzioni file caricati progetto chat lunga riassunto passaggio consegne context engineering',
  't-affidabilita':'allucinazioni invenzioni errori fonti citazioni non trovato revisione revisore verifica affidabilita controllo qualita',
