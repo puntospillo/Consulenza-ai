@@ -328,9 +328,9 @@ code,.path{overflow-wrap:anywhere}
 <div id="toast"></div>
 <script>
 'use strict';
-const REV = '1.7';
+const REV = '1.8';
 /* Data dell’ultimo controllo delle funzioni di ChatGPT, Claude e Gemini */
-const AGG = '20 settembre 2026';
+const AGG = '19 novembre 2026';
 
 /* ============ I 5 PILASTRI (versione vita quotidiana) ============ */
 const PILLARS = {
@@ -581,8 +581,8 @@ const TOOL_INTRO_LV = {
   3:'Chat, Progetti, <b>Artifact</b> e i nuovi <b>Docs</b> e <b>Slides</b>. Da settembre 2026 non si sceglie più fra chat e lavoro lungo: decide Claude. Con l’app per computer lavora anche sulle cartelle; <b>Claude Code</b> resta separato per i programmi. C’è anche dentro Excel, Word e PowerPoint. Non crea fotografie.'},
  gemini:{
   1:'Quello di Google: se hai Gmail ce l’hai già. È dentro la posta e i documenti di Google, funziona benissimo dal telefono e con la fotocamera, ed è molto forte sulle immagini.',
-  2:'Quello di Google, già dentro Gmail, Drive, Documenti e Fogli. Ha i <b>Gem</b> (assistenti per compiti fissi), i <b>Notebook</b> per i temi che durano e <b>Gemini Notebook</b> per studiare tanti documenti con le citazioni. Molto forte sulle immagini.',
-  3:'App Gemini con <b>Gem</b>, <b>Notebook</b> e <b>Canvas</b>, dentro Gmail, Drive, Documenti e Fogli. <b>Gemini Notebook</b> per studiare tanti documenti, <b>Antigravity</b> per le cartelle del computer e i programmi.'}
+  2:'Quello di Google, già dentro Gmail, Drive, Documenti e Fogli. Ha le <b>skill</b> (istruzioni salvate per i compiti che tornano sempre uguali), i <b>Notebook</b> per i temi che durano e <b>Gemini Notebook</b> per studiare tanti documenti con le citazioni. Molto forte sulle immagini.',
+  3:'App Gemini con <b>skill</b>, <b>Notebook</b> e <b>Canvas</b>, dentro Gmail, Drive, Documenti e Fogli. <b>Gemini Notebook</b> per studiare tanti documenti, <b>Antigravity</b> per le cartelle del computer e i programmi, ora anche dentro l’app Gemini per Mac.'}
 };
 const toolIntro = k => TOOL_INTRO_LV[k][lvNow()];
 const hasTool = () => !!TOOLS[S.tool];
@@ -638,7 +638,7 @@ modes:{
   [2,'Un piccolo strumento o una pagina da usare subito','✨ <b>Artifact</b> (appare accanto alla chat)','“Fammi un calcolatore delle spese di viaggio”'],
   ['Cercare sul web con fonti e un riassunto finale','🔎 <b>Ricerca</b>','“Confronta 3 lavastoviglie sotto i 500 €, con fonti”'],
   ['Ottenere un Excel, un Word o un PDF vero da scaricare','💬 <b>Chat</b> con “Esecuzione codice e creazione file” attiva','“Fammi il budget di casa in un file .xlsx”'],
-  [2,'Scrivere un documento o preparare una presentazione insieme a lui','📄 <b>Docs</b> e <b>Slides</b> (in prova sui piani a pagamento)','“Prepariamo la relazione per l’assemblea di condominio”'],
+  [2,'Scrivere un documento o preparare una presentazione insieme a lui','📄 <b>Docs</b> e <b>Slides</b> (su tutti i piani, anche gratis)','“Prepariamo la relazione per l’assemblea di condominio”'],
   [3,'Lavorare su una cartella del computer con tanti file, <b>senza terminale</b>','🤝 <b>App Claude per computer</b>: chiedi e basta, ci pensa lui'+DL,'“Da queste 30 bollette PDF fammi un Excel dei consumi”'],
   [3,'Creare mini-app e programmi su misura','💻 <b>Claude Code</b> (app Claude per computer)'+DL,'“Un’app che rinomina le foto delle vacanze per data”']
  ]) + rule('Una domanda al volo o un documento da capire → <b>Chat</b>, dal computer o dal telefono. Ti serve una cosa aggiornata (prezzi, leggi, orari) → chiedi la <b>ricerca sul web</b>.', 0, 1)
@@ -649,7 +649,7 @@ modes:{
   ['Far leggere una bolletta, un contratto, un referto, una foto di un documento','💬 <b>App Gemini</b> con il file allegato','“Questa bolletta è più alta del solito: dimmi perché”'],
   ['Parlare invece di scrivere, o inquadrare qualcosa con la fotocamera','📱 <b>App Gemini sul telefono</b>','“Che cos’è questo tasto della lavatrice?”'],
   ['Lavorare dentro Gmail, Documenti, Fogli, Presentazioni, Drive','📂 <b>Gemini dentro Google</b> (icona in alto a destra)','“In questo foglio calcola quanto spendo al mese”'],
-  [2,'Un compito sempre uguale (tradurre, correggere, riassumere)','💎 <b>Gem</b>','Gem “Correttore delle mie mail”'],
+  [2,'Un compito sempre uguale (tradurre, correggere, riassumere)','💎 <b>Skill</b> (Personalizza › Skill)','Skill “Correttore delle mie mail”'],
   [2,'Restare per settimane sullo stesso tema, con chat e file insieme','📓 <b>Notebook</b> (nell’app Gemini)','Notebook “Ristrutturazione bagno”'],
   [2,'Studiare tanti documenti con risposte citate riga per riga','📚 <b>Gemini Notebook</b> (prima NotebookLM)','“Nel manuale della caldaia, cosa dice l’errore E4?”'],
   [2,'Testo lungo o piccolo strumento con anteprima','📝 <b>Canvas</b>','“Fammi un calcolatore delle spese di viaggio”'],
@@ -706,7 +706,7 @@ personal:{
   `<b>Chat passate</b>: sempre in ${mp('Contesto personale')} decidi se Gemini può usare le conversazioni precedenti per risponderti in modo più personale.`,
   '<b>Insegnare al volo</b>: in chat scrivi <i>“Ricorda che sono celiaco”</i> oppure <i>“Ricorda che i miei figli hanno 6 e 9 anni”</i>.',
   '<b>Chat temporanea</b>: non compare nella cronologia e non viene usata per personalizzare. Usala per cose delicate.',
-  '<b>Gem</b>: se un compito torna sempre uguale (tradurre, correggere, riassumere) creane uno con istruzioni proprie: le trovi nella lezione sugli assistenti.'
+  [2,'<b>Skill</b>: se un compito torna sempre uguale (tradurre, correggere, riassumere) salvane le istruzioni in una skill: la trovi nella lezione sugli assistenti.']
  ])
 },
 /* ---- Contro gli errori ---- */
@@ -851,11 +851,12 @@ assistenti:{
   '<b>Migliora</b>: quando una risposta non va, aggiungi una riga alle istruzioni invece di correggere a mano ogni volta.'
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
-  `<b>Crea un Gem</b>: nell’app Gemini apri ${mp('Gem › Nuovo Gem')}.`,
+  `<b>Crea una skill</b>: nell’app Gemini apri ${mp('Personalizza › Skill')} — se non vedi “Personalizza”, guarda prima in ${mp('Altro')} — e creane una nuova. Serve avere almeno 18 anni.`,
   '<b>Dai un nome e le istruzioni</b>: cosa deve fare, con quali regole, in che formato. Il testo pronto lo prepari qui sotto.',
-  '<b>Carica gli esempi</b> nella sezione <b>Conoscenza</b>: 2–3 risultati giusti valgono più di dieci righe di spiegazioni.',
-  '<b>Provalo e correggi</b>: modifica le istruzioni del Gem invece di correggere a mano ogni volta.',
-  '<b>Usalo</b>: lo trovi sempre nell’elenco dei Gem, anche dal telefono.'
+  '<b>Carica gli esempi</b> come file della skill: 2–3 risultati giusti valgono più di dieci righe di spiegazioni.',
+  '<b>Provala e correggi</b>: modifica le istruzioni della skill invece di correggere a mano ogni volta.',
+  '<b>Usala</b>: scrivi <b>/</b> seguito dal nome, oppure lasciala riconoscere da sola a Gemini quando la richiesta corrisponde.',
+  '<b>Se avevi dei Gem</b>: dal 17 novembre 2026 non si usano più e Google li ha convertiti da solo in skill. Il 17 dicembre vengono tolti del tutto.'
  ])
 },
 /* ---- Skill (livello avanzato) ---- */
@@ -875,7 +876,7 @@ skill:{
   '<b>Tienila corta</b>: sotto le 500 righe; i dettagli lunghi in <code>references/</code>.'
  ]),
  gemini: stepsL(TOOLS.gemini.c,[
-  '<b>Con Gemini</b> l’equivalente della skill è un <b>Gem</b> con istruzioni dettagliate e file di esempio nella Conoscenza.',
+  `<b>Dove sono</b>: ${mp('Personalizza › Skill')} nell’app Gemini. Puoi partire da un modello, farti aiutare da Gemini a scriverla, oppure caricare una cartella con dentro un file <code>SKILL.md</code>.`,
   '<b>Per le cartelle del computer</b>: con <b>Antigravity</b>'+DL+' puoi mettere le istruzioni in un file <code>GEMINI.md</code> dentro la cartella: viene letto a ogni avvio.',
   '<b>Struttura consigliata</b>: descrivi quando usarla, i passaggi, il formato del risultato e i controlli finali.',
   '<b>Carica i modelli</b> (il tuo foglio tipo, la tua lettera tipo) come file: l’AI li seguirà.',
@@ -1035,8 +1036,8 @@ const WHERE = {
  file:{chatgpt:'Chat con il file allegato', claude:'Chat con il file allegato', gemini:'App Gemini con il file allegato (o Gemini dentro Documenti e Fogli)', any:'la chat con il file allegato'},
  tanti:{chatgpt:()=>lvNow()>=3?'Progetto, oppure Work su una cartella':'Progetto', claude:()=>lvNow()>=3?'Progetto, oppure l’app per computer su una cartella':'Progetto', gemini:()=>lvNow()>=3?'Gemini Notebook, oppure Antigravity su una cartella':'Gemini Notebook', any:'un progetto'},
  proj:{chatgpt:'Progetti', claude:'Progetti', gemini:'Notebook nell’app Gemini', any:'i progetti'},
- asst:{chatgpt:()=>lvNow()>=3?'Progetto dedicato (o una Skill dentro un Plugin)':'Progetto dedicato', claude:()=>lvNow()>=3?'Progetto dedicato (o Skill)':'Progetto dedicato', gemini:'Gem', any:'un assistente personalizzato'},
- skill:{chatgpt:'Plugin › Skill, oppure un Progetto dedicato', claude:'Personalizza › Skill', gemini:'Gem con istruzioni dettagliate', any:'le skill'},
+ asst:{chatgpt:()=>lvNow()>=3?'Progetto dedicato (o una Skill dentro un Plugin)':'Progetto dedicato', claude:()=>lvNow()>=3?'Progetto dedicato (o Skill)':'Progetto dedicato', gemini:'Skill (Personalizza › Skill)', any:'un assistente personalizzato'},
+ skill:{chatgpt:'Plugin › Skill, oppure un Progetto dedicato', claude:'Personalizza › Skill', gemini:'Skill (Personalizza › Skill)', any:'le skill'},
  web:{chatgpt:'Ricerca / Deep research', claude:'Ricerca', gemini:'Deep Research', any:'la ricerca sul web'},
  img:{chatgpt:'Chat (immagini)', claude:'Chat (Artifact per grafiche e schemi)', gemini:'App Gemini (immagini)', any:'la chat'},
  local:{chatgpt:'Work (app ChatGPT per computer)', claude:'App Claude per computer', gemini:'Antigravity', any:'l’AI installata sul computer'},
@@ -1188,7 +1189,7 @@ L({id:'parole', p:null, lv:1, t:'Le parole che incontrerai', sub:'Poche parole, 
  ].concat(lvNow()>=2 ? [
   ['<b>Token</b>','L’unità con cui si misura quanto testo l’AI legge e scrive. Più lunga è la chat, più ne consuma: per questo a un certo punto rallenta o si blocca.'],
   ['<b>Contesto</b>','Tutto quello che l’AI ha davanti agli occhi in quel momento: la chat, gli allegati, le tue istruzioni. È limitato, come una scrivania.'],
-  ['<b>Assistente / Gem</b>','Un aiutante che prepari una volta per un compito che torna sempre uguale (tradurre, correggere, riassumere).'],
+  ['<b>Assistente</b>','Un aiutante che prepari una volta per un compito che torna sempre uguale (tradurre, correggere, riassumere). In Gemini si chiama <b>skill</b> e ha preso il posto dei vecchi Gem.'],
   ['<b>Esecuzione di codice</b>','L’AI scrive e fa girare un piccolo programma per calcolare. Serve per avere totali esatti invece che stime.']
  ] : []).concat(lvNow()>=3 ? [
   ['<b>Skill</b>','Una cartella con un file di istruzioni (<code>SKILL.md</code>) che insegna all’AI a fare un lavoro complesso sempre nello stesso modo.'],
@@ -3110,11 +3111,11 @@ L({id:'fine-glossario', p:'fine', lv:1, t:'Glossario', sub:'Tutte le parole del 
   [2,'*','<b>Assistente</b>','Istruzioni fisse per un compito che torna sempre uguale.'],
   [2,'chatgpt','<b>Canvas</b>','Spazio di ChatGPT per testi lunghi o piccoli strumenti con anteprima.'],
   [2,'gemini','<b>Canvas</b>','Spazio di Gemini per testi lunghi o piccoli strumenti con anteprima.'],
-  [2,'gemini','<b>Gem</b>','Assistente personalizzato di Gemini.'],
+  [2,'gemini','<b>Skill</b>','Istruzioni salvate di Gemini per un compito che torna sempre uguale. Hanno preso il posto dei Gem, tolti il 17 dicembre 2026.'],
   [2,'gemini','<b>Notebook</b>','Spazio dell’app Gemini che raccoglie chat, fonti e istruzioni su un tema.'],
   [2,'gemini','<b>Gemini Notebook</b>','Strumento Google (prima NotebookLM) per fare domande solo sui documenti caricati, con citazioni.'],
   [2,'claude','<b>Artifact</b>','Documento o piccolo strumento creato da Claude, visibile e utilizzabile accanto alla chat.'],
-  [2,'claude','<b>Docs e Slides</b>','Spazi di Claude per scrivere un documento o preparare una presentazione insieme a lui, esportabili in Word, PowerPoint o PDF (in prova, piani a pagamento).'],
+  [2,'claude','<b>Docs e Slides</b>','Spazi di Claude per scrivere un documento o preparare una presentazione insieme a lui, esportabili in Word, PowerPoint o PDF (su tutti i piani, anche gratis).'],
   [2,'chatgpt','<b>Deep research</b>','Ricerca lunga sul web che produce un report con le fonti.'],
   [2,'gemini','<b>Deep Research</b>','Ricerca lunga sul web che produce un report con le fonti.'],
   [2,'claude','<b>Ricerca</b>','Ricerca sul web con le fonti citate nella risposta.'],
